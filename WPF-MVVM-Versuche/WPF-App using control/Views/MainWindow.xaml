@@ -1,0 +1,58 @@
+﻿<catel:Window x:Class="WPF_App_using_control.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:templatedCustomControl="clr-namespace:TemplatedCustomControl;assembly=TemplatedCustomControl"
+        xmlns:views="clr-namespace:WPF_App_using_control.Views"
+        xmlns:vm="clr-namespace:WPF_App_using_control.ViewModels"
+        xmlns:catel="http://schemas.catelproject.com"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Width="600"
+        Title="MainWindow" SizeToContent="Width"
+        d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type={x:Type vm:MainWindowViewModel}}"
+        >
+    <Grid>
+        <!--<templatedCustomControl:LedBulb 
+                CheckedColor="Red" 
+                UncheckedColor="ForestGreen" 
+                IsChecked="True"
+                HorizontalAlignment="Left" 
+                Content="Checked / Enabled / Red"
+                />
+        <templatedCustomControl:LedBulb 
+                Content ="Checked / Disabled / Red"
+                IsEnabled="False"
+                CheckedColor="Red" 
+                UncheckedColor="ForestGreen" 
+                IsChecked="True"
+                HorizontalAlignment="Left" 
+                 />
+
+        <templatedCustomControl:LedBulb 
+                   CheckedColor="Green"
+                   UncheckedColor="LightGray"
+                   IsChecked="True" 
+                   HorizontalAlignment="Left" 
+                   Content ="Checked / Enabled / Green" />
+
+        <templatedCustomControl:LedBulb 
+                   CheckedColor="Green"
+                   UncheckedColor="DimGray"
+                   IsChecked="False" 
+                   HorizontalAlignment="Left" 
+                   Content ="Unchecked / Enabled / Green" />
+        <templatedCustomControl:LedBulb 
+                   CheckedColor="Green"
+                   UncheckedColor="DimGray"
+                   IsChecked="False" 
+                   IsEnabled="False"
+                   HorizontalAlignment="Left" 
+                   Content ="Unchecked / Disabled / Green" />-->
+
+        <Grid>
+            <views:DataTabControl />
+        </Grid>
+    </Grid>
+</catel:Window>
