@@ -20,50 +20,61 @@
 
             <DataTemplate x:Key="LedTemplate">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="LedTemplate: (Register =" />
-                    <TextBlock Text="{Binding RegisterNumber}" Margin="6,0,0,0"/>
-                    <TextBlock Text=", Coil No ="/>
-                    <TextBlock Text="{Binding CoilNumber}" Margin="6,0,0,0"/>
-                    <TextBlock Text="):"/>
+                    <StackPanel Orientation="Horizontal" MinWidth="70" VerticalAlignment="Center" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding RegisterNumber}" />
+                        <TextBlock Text="{Binding CoilNumber, StringFormat={}(Coil {0}):}" Margin="6,0,0,0"/>
+                    </StackPanel>
                     <cc:LedBulb VerticalAlignment="Center"
                                 CheckedColor="Green"
                                 UncheckedColor="DarkGray"
                                 IsChecked="{Binding BoolValue}" 
-                                HorizontalAlignment="Left" 
-                                Content ="{Binding BoolValue}" />
-                    <TextBlock Text="{Binding StringRepresentation}" Margin="6,0,0,0"/>
-                </StackPanel>
-            </DataTemplate>
-            <DataTemplate x:Key="BinaryTemplate">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Binary (Register =" />
-                    <TextBlock Text="{Binding RegisterNumber}" Margin="6,0,0,0"/>
-                    <TextBlock Text="):"/>
-                    <TextBlock Text="{Binding StringRepresentation}" Margin="6,0,0,0" />
-                </StackPanel>
-            </DataTemplate>
-            <DataTemplate x:Key="HexTemplate">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Hex (Register =" />
-                    <TextBlock Text="{Binding RegisterNumber}" Margin="6,0,0,0"/>
-                    <TextBlock Text="):"/>
-                    <TextBlock Text="{Binding StringRepresentation}" Margin="6,0,0,0" />
-                </StackPanel>
-            </DataTemplate>
-            <DataTemplate x:Key="FloatReverseTemplate">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Float (Register =" />
-                    <TextBlock Text="{Binding RegisterNumber}" Margin="6,0,0,0"/>
-                    <TextBlock Text="):"/>
-                    <TextBlock Text="{Binding StringRepresentation}" Margin="6,0,0,0" />
+                                HorizontalAlignment="Left"
+                                Height="14" 
+                                />
+                    <TextBlock Text="(Led)" FontSize="8" Margin="3,0,0,0" VerticalAlignment="Center"/>
                 </StackPanel>
             </DataTemplate>
             <DataTemplate x:Key="UshortTemplate">
                 <StackPanel Orientation="Horizontal" Margin="6,0,6,6">
-                    <TextBlock Text="{Binding RegisterNumber, StringFormat={}{0}:}" MinWidth="20"/>
-                    <!--<TextBlock Text="{Binding StringRepresentation}" Margin="6,0,0,0" />-->
-                    <cc:ReturnKeyTextBox Text="{Binding TargetRegisterValue, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Margin="12,0,0,0"  MinWidth="20"/>
+                    <Label Content="{Binding RegisterNumber}" ContentStringFormat="{}{0}:" MinWidth="40" HorizontalContentAlignment="Right"/>
+                    <cc:ReturnKeyTextBox 
+                        Text="{Binding TargetRegisterValue, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                        Margin="12,0,0,0" 
+                        MinWidth="40" />
                     <TextBlock Text="(Ushort)" FontSize="8" Margin="3,0,0,0" VerticalAlignment="Center"/>
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate x:Key="BinaryTemplate">
+                <StackPanel Orientation="Horizontal" Margin="6,0,6,6" >
+                    <Label 
+                        Content="{Binding RegisterNumber}" 
+                        ContentStringFormat="{}{0}:"
+                        MinWidth="40" 
+                        HorizontalContentAlignment="Right"
+                        VerticalContentAlignment="Center"/>
+                    <cc:ReturnKeyTextBox Text="{Binding BinaryString}" 
+                                         Margin="6,0,0,0" />
+                    <TextBlock Text="(binary)" FontSize="8" Margin="3,0,0,0" VerticalAlignment="Center"/>
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate x:Key="HexTemplate">
+                <StackPanel Orientation="Horizontal" Margin="6,0,6,6">
+                    <Label Content="{Binding RegisterNumber}" ContentStringFormat="{}{0}:" MinWidth="40" HorizontalContentAlignment="Right"/>
+                    <cc:ReturnKeyTextBox 
+                        Text="{Binding HexString, 
+                                        Mode=TwoWay, 
+                                        UpdateSourceTrigger=LostFocus,
+                                        StringFormat={}0x{0:x4}}"
+                        Margin="12,0,0,0" MinWidth="50" />
+                    <TextBlock Text="(Hex)" FontSize="8" Margin="3,0,0,0" VerticalAlignment="Center"/>
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate x:Key="FloatReverseTemplate">
+                <StackPanel Orientation="Horizontal" Margin="6,0,6,6" >
+                    <Label Content="{Binding RegisterNumber}" ContentStringFormat="{}{0}:" MinWidth="40" HorizontalContentAlignment="Right"/>
+                    <cc:ReturnKeyTextBox MinWidth="80"
+                                         Text="{Binding FloatReverseString}" Margin="6,0,0,0"/>
+                    <TextBlock Text="(rFloat)" FontSize="8" Margin="3,0,0,0" VerticalAlignment="Center"/>
                 </StackPanel>
             </DataTemplate>
 
@@ -86,7 +97,7 @@
             </Grid.RowDefinitions>
             <DockPanel Grid.Row="0" >
                 <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Label Content="Start Address:" />
+                    <Label Content="Start Address:" MinWidth="100" />
                     <cc:ReturnKeyTextBox VerticalContentAlignment="Center" 
                                              Text="{Binding StartAddress, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"
                                              Margin="12,0,0,0" />
@@ -96,7 +107,7 @@
                                  />
                     <Label Content="Data Format:" Margin="24,0,0,0" Visibility="{Binding ShowDataLength, Converter={StaticResource BooleanToCollapsingVisibilityConverter}}"/>
                     <ComboBox ItemsSource="{Binding DisplayFormatItemSource}" 
-                                  SelectedValue="{Binding DisplayFormat, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                              SelectedValue="{Binding DisplayFormat, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
                 </StackPanel>
                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
@@ -107,12 +118,19 @@
                 </StackPanel>
             </DockPanel>
             <GroupBox Header="Data Elements" Grid.Row="1">
-                <ScrollViewer>
-                    <ItemsControl 
+                <DockPanel>
+                    <!--<ScrollViewer  VerticalScrollBarVisibility="Disabled">-->
+                        <ItemsControl 
                         ItemsSource="{Binding RegisterModels}"
                         ItemTemplateSelector="{StaticResource RegisterDisplayTemplateSelector}">
-                    </ItemsControl>
-                </ScrollViewer>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Vertical" MaxWidth="800" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    <!--</ScrollViewer>-->
+                </DockPanel>
             </GroupBox>
         </Grid>
     </GroupBox>

@@ -27,7 +27,6 @@ namespace WPF_App_using_control.ViewModels
             ClearDataCommand = new TaskCommand(() => ClearDataExecuteAsync());
             DisplayFormatItemSource = EnumHelpers.EnumTypeDescriptionToItemSourceArray(typeof(DisplayFormat));
 
-
             if (registerDataService is null)
             {
                 registerDataService = new RegisterDataService();
@@ -52,7 +51,7 @@ namespace WPF_App_using_control.ViewModels
 
         #region Properties
         public ushort DataLength { get; set; } = 32;
-        public ushort StartAddress { get; set; } = 0;
+        public int StartAddress { get; set; } = 0;
 
         public bool ShowDataLength { get; set; } = true;
 
@@ -90,7 +89,10 @@ namespace WPF_App_using_control.ViewModels
         private Task ApplyAddressSelectionExecuteAsync()
         {
             RegisterModels.Clear();
-            for (ushort i = StartAddress; i < RegisterDataService.RegisterData.Length && i < DataLength+StartAddress; i++)
+            for (var i = StartAddress;
+                i < RegisterDataService.RegisterData.Length &&
+                i < DataLength + StartAddress;
+                i++)
             {
                 var nCoils = DisplayFormat == DisplayFormat.LED ? 16 : 1;
 

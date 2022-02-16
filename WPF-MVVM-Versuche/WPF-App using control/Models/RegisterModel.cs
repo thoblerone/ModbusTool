@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Globalization;
+using System.Linq;
 using Catel.Data;
 using Modbus.Common;
 using WPF_App_using_control.Helpers;
@@ -36,7 +38,7 @@ namespace WPF_App_using_control.Models
 
         /// <summary>
         /// The lower register number for the current data representation
-        /// (which actually may need more than one 16 bit register, as of float)
+        /// (which actually may need consecutive registers, as of float)
         /// </summary>
         public int RegisterNumber
         {
@@ -48,7 +50,12 @@ namespace WPF_App_using_control.Models
                 {
                     if (RegisterDataService is not null)
                     {
+                        if (RegisterDataService.RegisterData.Length < value + 1)
+                            throw new IndexOutOfRangeException();
+
+                        // remove register value changed handlers
                         RegisterDataService.RegisterData[_registerNumber].RegisterValueChanged -= OnRegisterValueChanged;
+
                         if (RegisterNumber < RegisterDataService.RegisterData.Length - 1)
                             RegisterDataService.RegisterData[_registerNumber+1].RegisterValueChanged -= OnNextRegisterValueChanged;
                     }
@@ -67,19 +74,37 @@ namespace WPF_App_using_control.Models
 
         private void OnRegisterValueChanged(ushort oldValue, ushort newValue)
         {
+            switch (RepresentationKind)
+            {
+                case DisplayFormat.LED:
+                    RaisePropertyChanged(nameof(BoolValue));
+                    break;
+                case DisplayFormat.Binary:
+                    RaisePropertyChanged(nameof(BinaryString));
+                    break;
+                case DisplayFormat.Hex:
+                    RaisePropertyChanged(nameof(HexString));
+                    break;
+                case DisplayFormat.Integer:
+                    RaisePropertyChanged(nameof(TargetRegisterValue));
+                    break;
+                case DisplayFormat.FloatReverse:
+                    RaisePropertyChanged(nameof(FloatReverseString));
+                    break;
+            }
             RaisePropertyChanged(nameof(StringRepresentation));
-            RaisePropertyChanged(nameof(BoolValue));
-            RaisePropertyChanged(nameof(TargetRegisterValue));
-            RaisePropertyChanged(nameof(FloatReverseValue));
-            RaisePropertyChanged(nameof(FloatValue));
+            //RaisePropertyChanged(nameof(FloatString));
         }
 
         // for floating point representations (requiring two registers)
         private void OnNextRegisterValueChanged(ushort oldValue, ushort newValue)
         {
-            RaisePropertyChanged(nameof(StringRepresentation));
-            RaisePropertyChanged(nameof(FloatReverseValue));
-            RaisePropertyChanged(nameof(FloatValue));
+            if (RepresentationKind == DisplayFormat.FloatReverse)
+            {
+                RaisePropertyChanged(nameof(StringRepresentation));
+                RaisePropertyChanged(nameof(FloatReverseString));
+                //RaisePropertyChanged(nameof(FloatString));
+            }
         }
 
         public int CoilNumber { get; set; }
@@ -94,30 +119,19 @@ namespace WPF_App_using_control.Models
         {
             get
             {
-                switch (RepresentationKind)
+                return RepresentationKind switch
                 {
-                    case DisplayFormat.LED:
-                        return $"{RepresentationKind}: {BoolValue}";
-
-                    case DisplayFormat.Binary:
-                        return $"{RepresentationKind}: {Convert.ToString(TargetRegisterValue, 2).PadLeft(16, '0')}";
-
-                    case DisplayFormat.Hex:
-                        return $"{RepresentationKind}: {TargetRegisterValue:x4}";
-
-                    case DisplayFormat.Integer:
-                        return $"{RepresentationKind}: {TargetRegisterValue}";
-
-                    case DisplayFormat.FloatReverse:
-                        return $"{RepresentationKind}: {FloatReverseValue}";
-
+                    DisplayFormat.LED => $"{RepresentationKind}: {BoolValue}",
+                    DisplayFormat.Binary => $"{RepresentationKind}: {Convert.ToString(TargetRegisterValue, 2).PadLeft(16, '0')}",
+                    DisplayFormat.Hex => $"{RepresentationKind}: {TargetRegisterValue:x4}",
+                    DisplayFormat.Integer => $"{RepresentationKind}: {TargetRegisterValue}",
+                    DisplayFormat.FloatReverse => $"{RepresentationKind}: {FloatReverseString}",
                     //case DisplayFormat.TODO_Float:
                     //    break;
                     //case DisplayFormat.TODO_Text:
                     //    break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                    _ => throw new ArgumentOutOfRangeException(),
+                };
             }
         }
 
@@ -139,8 +153,6 @@ namespace WPF_App_using_control.Models
                 {
                     RegisterDataService.RegisterData[RegisterNumber].RegisterValue &= (ushort) ~(1 << CoilNumber);
                 }
-                //RaisePropertyChanged(nameof(StringRepresentation));
-                //RaisePropertyChanged(nameof(TargetRegisterValue));
             }
         }
 
@@ -150,12 +162,12 @@ namespace WPF_App_using_control.Models
             set => RegisterDataService.RegisterData[RegisterNumber].RegisterValue = value;
         }
 
-        public float FloatValue
+        public string FloatString
         {
             get
             {
                 if (RegisterNumber >= RegisterDataService.RegisterData.Length-1)
-                    return float.NaN;
+                    return float.NaN.ToString();
 
                 ushort dataUshort1 = RegisterDataService.RegisterData[RegisterNumber].RegisterValue;
                 ushort dataUshort2 = RegisterDataService.RegisterData[RegisterNumber + 1].RegisterValue;
@@ -167,16 +179,30 @@ namespace WPF_App_using_control.Models
                 bytes[2] = (byte) (dataUshort2 % 255);
                 bytes[3] = (byte) ((dataUshort2 >> 8) % 255);
 
-                return System.BitConverter.ToSingle(bytes, 0);
+                return System.BitConverter.ToSingle(bytes, 0).ToString("e3");
+            }
+            set
+            {
+                if (RegisterNumber >= RegisterDataService.RegisterData.Length - 1)
+                    throw new IndexOutOfRangeException();
+
+                if (!float.TryParse(value, out var fVal))
+                    fVal = 0;
+
+                var bytes = BitConverter.GetBytes(fVal);
+
+                RegisterDataService.RegisterData[RegisterNumber].RegisterValue = (ushort)((bytes[1] << 8) + bytes[0]);
+                RegisterDataService.RegisterData[RegisterNumber + 1].RegisterValue = (ushort)((bytes[3] << 8) + bytes[2]);
             }
         }
 
-        public float FloatReverseValue
+        public string FloatReverseString
         {
             get
             {
                 if (RegisterNumber >= RegisterDataService.RegisterData.Length - 1)
-                    return float.NaN;
+                    return float.NaN.ToString();
+
                 ushort dataUshort1 = RegisterDataService.RegisterData[RegisterNumber].RegisterValue;
                 ushort dataUshort2 = RegisterDataService.RegisterData[RegisterNumber + 1].RegisterValue;
 
@@ -187,8 +213,32 @@ namespace WPF_App_using_control.Models
                 bytes[0] = (byte) (dataUshort2 % 256);
                 bytes[1] = (byte) ((dataUshort2 >> 8) % 256);
 
-                return System.BitConverter.ToSingle(bytes, 0);
+                return System.BitConverter.ToSingle(bytes, 0).ToString("f3");
             }
+            set
+            {
+                if (RegisterNumber >= RegisterDataService.RegisterData.Length - 1)
+                    throw new IndexOutOfRangeException();
+
+                if (!float.TryParse(value, out var fVal))
+                    fVal = 0;
+
+                var bytes = BitConverter.GetBytes(fVal);
+
+                RegisterDataService.RegisterData[RegisterNumber].RegisterValue = (ushort) ((bytes[3] << 8) + bytes[2]);
+                RegisterDataService.RegisterData[RegisterNumber + 1].RegisterValue = (ushort) ((bytes[1] << 8) + bytes[0]);
+            }
+        }
+
+        public string BinaryString
+        {
+            get => Convert.ToString(RegisterDataService.RegisterData[RegisterNumber].RegisterValue, 2).PadLeft(16, '0');
+            set => RegisterDataService.RegisterData[RegisterNumber].RegisterValue = Convert.ToUInt16(value, 2);
+        }
+        public string HexString
+        {
+            get => RegisterDataService.RegisterData[RegisterNumber].RegisterValue.ToString("x4");
+            set => RegisterDataService.RegisterData[RegisterNumber].RegisterValue = Convert.ToUInt16(value, 16);
         }
     }
 }

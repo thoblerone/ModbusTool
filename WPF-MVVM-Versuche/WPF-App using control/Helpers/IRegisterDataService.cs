@@ -1,6 +1,6 @@
-﻿using System;
-using System.CodeDom;
+﻿using System.CodeDom;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using Catel.Data;
 using Catel.MVVM.Converters;
@@ -32,7 +32,6 @@ namespace WPF_App_using_control.Helpers
             {
                 if (value != _registerValue)
                 {
-                    Trace.WriteLine($"Changing Register Value from {_registerValue} to {value}");
                     var oldValue = _registerValue;
 
                     _registerValue = value;
@@ -46,38 +45,18 @@ namespace WPF_App_using_control.Helpers
 
     public class RegisterDataService : IRegisterDataService
     {
-        public static int NumRegistersHeld = 50;
+        public static int NumRegistersHeld = 65600;
 
         public RegisterDataService()
         {
             RegisterData = new RegisterDataValue[NumRegistersHeld];
 
-            for (ushort i = 0; i < NumRegistersHeld; i++)
+            Parallel.For(0, NumRegistersHeld, i =>
             {
-                RegisterData[i] = new RegisterDataValue(i);
-            }
+                RegisterData[i] = new RegisterDataValue((ushort)i);
+            });
         }
 
         public RegisterDataValue[] RegisterData { get; set; }
-    }
-
-
-
-    public class BuyerList 
-    {
-        public delegate void BuyerSelectedEventHandler(object sender, EventArgs e);
-
-        public event BuyerSelectedEventHandler BuyerSelected;
-
-
-        private void OnBuyerSelected(EventArgs e)
-        {
-            BuyerSelected?.Invoke(this, EventArgs.Empty);
-        }
-
-        protected void lbBuyerList_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            OnBuyerSelected(e);
-        }
     }
 }
