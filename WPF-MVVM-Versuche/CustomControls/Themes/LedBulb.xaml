@@ -1,9 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:TemplatedCustomControl">
+                    xmlns:local="clr-namespace:ModbusWpf.CustomControl">
     <Style TargetType="local:LedBulb">
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="BorderBrush" Value="Black"/>
+        <Setter Property="Height" Value="12"/>
         <Setter Property="Margin" Value="5"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -22,7 +23,7 @@
                             <Ellipse x:Name="LedBorder" 
                                     Fill="{TemplateBinding Background}"
                                     Stroke="{TemplateBinding BorderBrush}"
-                                    StrokeThickness="2"
+                                    StrokeThickness="1"
                                     Stretch="Uniform"/>
 
                             <Ellipse x:Name="CenterGlow" Stretch="Uniform">

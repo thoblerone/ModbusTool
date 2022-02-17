@@ -1,6 +1,6 @@
-﻿using WPF_App_using_control.ViewModels;
+﻿using ModbusWpf.Common.ViewModels;
 
-namespace WPF_App_using_control.Views
+namespace ModbusWpf.Common.Views
 {
     /// <summary>
     /// Interaktionslogik für MainWindow.xaml

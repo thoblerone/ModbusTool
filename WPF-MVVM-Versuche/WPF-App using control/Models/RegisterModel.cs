@@ -1,13 +1,9 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
 using Catel.Data;
 using Modbus.Common;
-using WPF_App_using_control.Helpers;
+using ModbusWpf.Common.Helpers;
 
-
-namespace WPF_App_using_control.Models
+namespace ModbusWpf.Common.Models
 {
     public enum RepresentationKinds
     {

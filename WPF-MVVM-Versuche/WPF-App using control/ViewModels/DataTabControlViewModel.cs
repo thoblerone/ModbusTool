@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Net.PeerToPeer.Collaboration;
-using System.Text;
 using System.Threading.Tasks;
-using Catel;
 using Catel.IoC;
 using Catel.MVVM;
 using Modbus.Common;
-using WPF_App_using_control.Helpers;
-using WPF_App_using_control.Models;
+using ModbusWpf.Common.Helpers;
+using ModbusWpf.Common.Models;
 
-namespace WPF_App_using_control.ViewModels
+namespace ModbusWpf.Common.ViewModels
 {
     public class DataTabControlViewModel : ViewModelBase
     {
@@ -26,6 +21,7 @@ namespace WPF_App_using_control.ViewModels
             ApplyAddressSelectionCommand = new TaskCommand(() => ApplyAddressSelectionExecuteAsync());
             ClearDataCommand = new TaskCommand(() => ClearDataExecuteAsync());
             DisplayFormatItemSource = EnumHelpers.EnumTypeDescriptionToItemSourceArray(typeof(DisplayFormat));
+            DisplayFormatIndex = 3;
 
             if (registerDataService is null)
             {
@@ -68,6 +64,8 @@ namespace WPF_App_using_control.ViewModels
         public TaskCommand ApplyAddressSelectionCommand { get; }
 
         public TaskCommand ClearDataCommand { get; }
+
+        public int DisplayFormatIndex { get; set; }
 
         #endregion
 

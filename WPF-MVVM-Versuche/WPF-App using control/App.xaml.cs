@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using Catel.IoC;
-using Catel.MVVM;
-using WPF_App_using_control.ViewModels;
+﻿using System.Windows;
 
-namespace WPF_App_using_control
+namespace ModbusWpf.Common
 {
     /// <summary>
     /// Interaktionslogik für "App.xaml"

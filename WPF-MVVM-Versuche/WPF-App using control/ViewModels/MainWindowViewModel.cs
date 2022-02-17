@@ -1,6 +1,6 @@
 ﻿using Catel.MVVM;
 
-namespace WPF_App_using_control.ViewModels
+namespace ModbusWpf.Common.ViewModels
 {
     class MainWindowViewModel : ViewModelBase
     {

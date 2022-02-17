@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace WPF_App_using_control.Views
+﻿namespace ModbusWpf.Common.Views
 {
     /// <summary>
     /// Interaktionslogik für DataTabControl.xaml

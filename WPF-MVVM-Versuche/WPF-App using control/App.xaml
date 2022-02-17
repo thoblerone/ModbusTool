@@ -1,8 +1,7 @@
-﻿<Application x:Class="WPF_App_using_control.App"
+﻿<Application x:Class="ModbusWpf.Common.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:WPF_App_using_control"
-             StartupUri="Views/MainWindow.xaml">
+             StartupUri="Views/BaseForm.xaml">
     <Application.Resources>
          
     </Application.Resources>

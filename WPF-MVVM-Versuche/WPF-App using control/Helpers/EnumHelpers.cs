@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Catel;
 
-namespace WPF_App_using_control.Helpers
+namespace ModbusWpf.Common.Helpers
 {
     public class EnumHelpers
     {

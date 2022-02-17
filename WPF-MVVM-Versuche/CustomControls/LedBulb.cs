@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace TemplatedCustomControl
+namespace ModbusWpf.CustomControl
 { 
     public class LedBulb : CheckBox
     {

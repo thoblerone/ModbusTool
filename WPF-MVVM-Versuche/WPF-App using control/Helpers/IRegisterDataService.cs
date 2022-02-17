@@ -1,11 +1,7 @@
-﻿using System.CodeDom;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+﻿using System.Threading.Tasks;
 using Catel.Data;
-using Catel.MVVM.Converters;
 
-namespace WPF_App_using_control.Helpers
+namespace ModbusWpf.Common.Helpers
 {
     public interface IRegisterDataService
     {
