@@ -3,6 +3,7 @@ using System.IO.Ports;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using System.Windows;
 using Catel.IoC;
 using Catel.MVVM;
 using Modbus.Common;
@@ -73,142 +74,15 @@ namespace ModbusWpf.Common.ViewModels
 
         public int SlaveDelay { get; set; }
 
-        protected string PortName
-        {
-            get;
-            set;
-            //TODO: get
-            //TODO: {
-            //TODO:     return comboBoxSerialPorts.Text;
-            //TODO: }
-            //TODO: set
-            //TODO: {
-            //TODO:     comboBoxSerialPorts.Text = value;
-            //TODO: }
-        }
+        public string PortName { get; set; }
 
-        protected int Baud
-        {
-            get;
-            set;
-            // TODO: get
-            // TODO: {
-            // TODO:     return Int32.Parse(comboBoxBaudRate.Text);
-            // TODO: }
-            // TODO: set
-            // TODO: {
-            // TODO:     comboBoxBaudRate.SelectedItem = Convert.ToString(value);
-            // TODO: }
-        }
+        public int Baud { get; set; }
 
-        protected Parity Parity
-        { get; set;
-            // TODO: get
-            // TODO: {
-            // TODO:     var parity = Parity.None;
-            // TODO:     if (comboBoxParity.SelectedItem.Equals(Parity.None.ToString()))
-            // TODO:     {
-            // TODO:         parity = Parity.None;
-            // TODO:     }
-            // TODO:     else if (comboBoxParity.SelectedItem.Equals(Parity.Odd.ToString()))
-            // TODO:     {
-            // TODO:         parity = Parity.Odd;
-            // TODO:     }
-            // TODO:     else if (comboBoxParity.SelectedItem.Equals(Parity.Even.ToString()))
-            // TODO:     {
-            // TODO:         parity = Parity.Even;
-            // TODO:     }
-            // TODO:     else if (comboBoxParity.SelectedItem.Equals(Parity.Mark.ToString()))
-            // TODO:     {
-            // TODO:         parity = Parity.Mark;
-            // TODO:     }
-            // TODO:     else if (comboBoxParity.SelectedItem.Equals(Parity.Space.ToString()))
-            // TODO:     {
-            // TODO:         parity = Parity.Space;
-            // TODO:     }
-            // TODO:     return parity;
-            // TODO: }
-            // TODO: set
-            // TODO: {
-            // TODO:     comboBoxParity.SelectedItem = Convert.ToString(value);
-            // TODO: }
-        }
+        public Parity Parity { get; set; }
 
-        protected int DataBits
-        {
-            get;
-            set;
-            //TODO: get
-            //TODO: {
-            //TODO:     int bits = 0;
-            //TODO:     switch (comboBoxDataBits.SelectedIndex)
-            //TODO:     {
-            //TODO:         case 0:
-            //TODO:             bits = 7;
-            //TODO:             break;
-            //TODO:         case 1:
-            //TODO:             bits = 8;
-            //TODO:             break;
-            //TODO:     }
-            //TODO:     return bits;
-            //TODO: }
-            //TODO: set
-            //TODO: {
-            //TODO:     switch (value)
-            //TODO:     {
-            //TODO:         case 7:
-            //TODO:             comboBoxDataBits.SelectedIndex = 0;
-            //TODO:             break;
-            //TODO:         case 8:
-            //TODO:             comboBoxDataBits.SelectedIndex = 1;
-            //TODO:             break;
-            //TODO:     }
-            //TODO: }
-        }
+        public int DataBits { get; set; }
 
-        protected StopBits StopBits
-        {
-            get;
-            set;
-            // TODO: get
-            // TODO: {
-            // TODO:     StopBits bits = StopBits.None;
-            // TODO:     switch (comboBoxStopBits.SelectedIndex)
-            // TODO:     {
-            // TODO:         case 0:
-            // TODO:             bits = StopBits.None;
-            // TODO:             break;
-            // TODO:         case 1:
-            // TODO:             bits = StopBits.One;
-            // TODO:             break;
-            // TODO:         case 2:
-            // TODO:             bits = StopBits.OnePointFive;
-            // TODO:             break;
-            // TODO:         case 3:
-            // TODO:             bits = StopBits.Two;
-            // TODO:             break;
-            // TODO:     }
-            // TODO:     return bits;
-            // TODO: }
-            // TODO: set
-            // TODO: {
-            // TODO:     switch (value)
-            // TODO:     {
-            // TODO:         case StopBits.None:
-            // TODO:             comboBoxStopBits.SelectedIndex = 0;
-            // TODO:             break;
-            // TODO:         case StopBits.One:
-            // TODO:             comboBoxStopBits.SelectedIndex = 1;
-            // TODO:             break;
-            // TODO:         case StopBits.OnePointFive:
-            // TODO:             comboBoxStopBits.SelectedIndex = 2;
-            // TODO:             break;
-            // TODO:         case StopBits.Two:
-            // TODO:             comboBoxStopBits.SelectedIndex = 3;
-            // TODO:             break;
-            // TODO:     }
-            // TODO: }
-        }
+        public StopBits StopBits { get; set; }
 
         private DisplayFormat _displayFormat = DisplayFormat.Integer;
         public DisplayFormat DisplayFormat
@@ -244,8 +118,15 @@ namespace ModbusWpf.Common.ViewModels
 
         public CommunicationMode CommunicationMode { get; set; } = CommunicationMode.TCP;
 
-        #endregion
+        public bool EnableTcpOptions => CommunicationMode is CommunicationMode.TCP or CommunicationMode.UDP;
+        public bool EnableRtuOptions => CommunicationMode == CommunicationMode.RTU;
 
+        public Visibility IpAddressVisibility { get; protected set; } = Visibility.Visible;
+
+        public Visibility SlaveOptionsVisibility { get; protected set; } = Visibility.Visible;
+
+        #endregion // Properties
+        #region Constructors 
         public BaseFormViewModel() : this(null)
         {
         }
@@ -262,15 +143,21 @@ namespace ModbusWpf.Common.ViewModels
                 }
             }
 
-            LoadUserData();
+            DonateCommand = new TaskCommand(OnDonateCommandExecuteAsync);
 
+            LoadUserData();
         }
+
+        #endregion // Constructors
 
         protected override Task OnClosingAsync()
         {
             SaveUserData();
+
             return base.OnClosingAsync();
         }
+
+        #region SettingsHandling
 
         private void LoadUserData()
         {
@@ -311,5 +198,40 @@ namespace ModbusWpf.Common.ViewModels
             Properties.Settings.Default.StopBits = StopBits;
             Properties.Settings.Default.Save();
         }
+        #endregion
+
+        #region Commands
+
+        public TaskCommand DonateCommand { get; }
+
+
+        public string[] ComPortItemsSource => SerialPort.GetPortNames();
+
+        public int[] ComPortBaudRates => new[]
+        { 
+            128000,
+            115200,
+            57600,
+            38400,
+            19200,
+            14400,
+            9600,
+            7200,
+            4800,
+            2400,
+            1800,
+            1200,
+            600,
+            300,
+            150
+        };
+
+        private async Task OnDonateCommandExecuteAsync()
+        {
+            string url = "https://paypal.me/classicdiy?country.x=CA&locale.x=en_US";
+            System.Diagnostics.Process.Start(url);
+        }
+
+        #endregion
     }
 }

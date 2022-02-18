@@ -9,6 +9,7 @@
         xmlns:converters="clr-namespace:ModbusWpf.Common.Converters"
         xmlns:common="clr-namespace:Modbus.Common;assembly=Modbus.Common"
         xmlns:cc="clr-namespace:ModbusWpf.CustomControl;assembly=ModbusWpf.CustomControl"
+        xmlns:ports="clr-namespace:System.IO.Ports;assembly=System"
         mc:Ignorable="d"
         Title="BaseForm" Height="940" Width="885"
         d:DataContext="{d:DesignInstance Type=viewModels:BaseFormViewModel, IsDesignTimeCreatable=True}"
@@ -30,6 +31,10 @@
             </Style>
             <Style TargetType="RadioButton">
                 <Setter Property="Margin" Value="6" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+            </Style>
+            <Style TargetType="ComboBox">
+                <Setter Property="Margin" Value="6" />
                 <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
             </Style>
             <Style TargetType="Label">
@@ -37,6 +42,9 @@
             </Style>
         </ResourceDictionary>
     </catel:Window.Resources>
+    <catel:Window.Background>
+        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
+    </catel:Window.Background>
     <Grid Margin="6">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -68,7 +76,9 @@
                                      IsChecked="{Binding CommunicationMode, UpdateSourceTrigger=PropertyChanged, ConverterParameter={x:Static common:CommunicationMode.RTU}, Converter={StaticResource EnumBooleanConverter}}"/>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox Header="TCP" Grid.Column="1" Padding="12">
+                <GroupBox Header="TCP" Grid.Column="1" Padding="12"
+                          IsEnabled="{Binding EnableTcpOptions}"
+                          Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" >
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition />
@@ -79,12 +89,12 @@
                             <ColumnDefinition Width="Auto" MinWidth="120"/>
                         </Grid.ColumnDefinitions>
                         <Label Content="Port:" Grid.Column="0" Grid.Row="0"/>
-                        <Label Content="IP Address:" Grid.Column="0" Grid.Row="1"/>
-                        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding TCPPort}" />
-                        <cc:IPTextBox Grid.Column="1" Grid.Row="1" Address="{Binding IPAddress, Converter={StaticResource IpAdressStringConverter}}" Margin="6"/>
+                        <Label Content="IP Address:" Grid.Column="0" Grid.Row="1" Visibility="{Binding IpAddressVisibility}" />
+                        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding TCPPort}" HorizontalAlignment="Left"  Width="50"  />
+                        <cc:IPTextBox Grid.Column="1" Grid.Row="1" Address="{Binding IPAddress, Converter={StaticResource IpAdressStringConverter}}" Margin="6" Visibility="{Binding IpAddressVisibility}" />
                     </Grid>
                 </GroupBox>
-                <GroupBox Header="RTU" Grid.Column="2">
+                <GroupBox Header="RTU" Grid.Column="2" IsEnabled="{Binding EnableRtuOptions}">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition />
@@ -99,25 +109,57 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                         <Label Grid.Row="0" Grid.Column="0" Content="Port Name:" />
-                        <TextBox Grid.Row="0" Grid.Column="1" />
+                        <ComboBox Grid.Row="0" Grid.Column="1" 
+                                  ItemsSource="{Binding ComPortItemsSource}"
+                                  SelectedValue="{Binding PortName, UpdateSourceTrigger=LostFocus}"/>
                         <Label Grid.Row="1" Grid.Column="0" Content="Baud:" />
-                        <TextBox Grid.Row="1" Grid.Column="1" />
+                        <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding ComPortBaudRates}"
+                                  SelectedValue="{Binding Baud}"/>
                         <Label Grid.Row="2" Grid.Column="0" Content="Parity:" />
-                        <TextBox Grid.Row="2" Grid.Column="1" />
+                        <ComboBox Grid.Row="2" Grid.Column="1" 
+                                  SelectedValue="{Binding Parity, UpdateSourceTrigger=LostFocus}"
+                                  SelectedValuePath="Content">
+                            <ComboBox.Items>
+                                <ComboBoxItem Content="{x:Static ports:Parity.None}" />
+                                <ComboBoxItem Content="{x:Static ports:Parity.Odd}" />
+                                <ComboBoxItem Content="{x:Static ports:Parity.Even}" />
+                                <ComboBoxItem Content="{x:Static ports:Parity.Mark}" />
+                                <ComboBoxItem Content="{x:Static ports:Parity.Space}" />
+                            </ComboBox.Items>
+                        </ComboBox>
                         <Label Grid.Row="0" Grid.Column="3" Content="Data Bits:" />
-                        <TextBox Grid.Row="0" Grid.Column="4" />
+                        <ComboBox Grid.Row="0" Grid.Column="4" SelectedValuePath="Tag"
+                                  SelectedValue="{Binding DataBits, UpdateSourceTrigger=LostFocus}">
+                            <ComboBox.Items>
+                                <ComboBoxItem Content="8 Bits" Tag="8" />
+                                <ComboBoxItem Content="7 Bits" Tag="7" />
+                            </ComboBox.Items>
+                        </ComboBox>
                         <Label Grid.Row="1" Grid.Column="3" Content="Stop Bits:" />
-                        <TextBox Grid.Row="1" Grid.Column="4" />
+                        <ComboBox Grid.Row="1" Grid.Column="4"
+                                  SelectedValue="{Binding StopBits, UpdateSourceTrigger=LostFocus}"
+                                  SelectedValuePath="Content">
+                            <ComboBox.Items>
+                                <ComboBoxItem Content="{x:Static ports:StopBits.None}" />
+                                <ComboBoxItem Content="{x:Static ports:StopBits.One}" />
+                                <ComboBoxItem Content="{x:Static ports:StopBits.Two}" />
+                                <ComboBoxItem Content="{x:Static ports:StopBits.OnePointFive}" />
+                            </ComboBox.Items>
+                        </ComboBox>
                     </Grid>
                 </GroupBox>
             </Grid>
         </GroupBox>
-        <StackPanel VerticalAlignment="Bottom" Grid.Row="0" Grid.Column="4">
-        <GroupBox Header="Buy me a coffee" >
-                <Button >
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="0" Grid.Column="4">
+            <Button Content="Listen" Visibility="{Binding SlaveOptionsVisibility}" Command="{Binding ListenCommand}"
+                    Margin="48,0,6,3" Padding="0"  Height="24" />
+            <Button Content="Disconnect" Margin="48,2,6,6" Padding="0" Height="24"
+                    Visibility="{Binding SlaveOptionsVisibility}" Command="{Binding DisconnectCommand}" />
+            <GroupBox Header="If you find this useful ..." >
+                <Button Command="{Binding DonateCommand}">
                     <Image Source="btn_donateCC_LG.gif" />
                 </Button>
-        </GroupBox>
+            </GroupBox>
         </StackPanel>
         <GroupBox Header="New Tab Display Format"  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
             <WrapPanel Orientation="Horizontal" Margin="12">
@@ -151,8 +193,8 @@
                     </Grid.RowDefinitions>
                     <Label Content="Slave ID:" Grid.Row="0" Grid.Column="0" />
                     <TextBox Grid.Row="0" Grid.Column="1" MinWidth="30" Text="{Binding SlaveId}"/>
-                    <Label Content="Slave Delay (ms):" Grid.Row="1" Grid.Column="0" />
-                    <TextBox Grid.Row="1" Grid.Column="1" MinWidth="30" Text="{Binding SlaveDelay}" />
+                    <Label Content="Slave Delay (ms):" Grid.Row="1" Grid.Column="0"  Visibility="{Binding SlaveOptionsVisibility}"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" MinWidth="30" Text="{Binding SlaveDelay}"  Visibility="{Binding SlaveOptionsVisibility}"/>
                     <StackPanel Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Orientation="Vertical">
                         <Button Content="Import ..." />
                         <Button Content="Export ..." />
