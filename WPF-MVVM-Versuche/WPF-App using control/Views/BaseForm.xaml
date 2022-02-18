@@ -4,7 +4,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:views="clr-namespace:ModbusWpf.Common.Views"
         xmlns:viewModels="clr-namespace:ModbusWpf.Common.ViewModels"
         xmlns:converters="clr-namespace:ModbusWpf.Common.Converters"
         xmlns:common="clr-namespace:Modbus.Common;assembly=Modbus.Common"
@@ -17,13 +16,15 @@
     <catel:Window.Resources>
         <ResourceDictionary>
             <converters:EnumBooleanConverter x:Key="EnumBooleanConverter" />
-            <converters:IpAddressStringConverter x:Key="IpAdressStringConverter" />
+            <converters:IpAddressStringConverter x:Key="IpAddressStringConverter" />
             <Style TargetType="TextBox">
-                <Setter Property="Margin" Value="6"></Setter>
-                <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+                <Setter Property="Margin" Value="6"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Height" Value="24" />
             </Style>
             <Style TargetType="cc:IPTextBox">
                 <Setter Property="Margin" Value="6" />
+                <Setter Property="Height" Value="24" />
             </Style>
             <Style TargetType="Button">
                 <Setter Property="Margin" Value="6" />
@@ -35,10 +36,14 @@
             </Style>
             <Style TargetType="ComboBox">
                 <Setter Property="Margin" Value="6" />
-                <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
             </Style>
             <Style TargetType="Label">
-                <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+            </Style>
+            <Style TargetType="GroupBox">
+                <Setter Property="BorderBrush" Value="DarkGray" />
+                <Setter Property="Padding" Value="6" />
             </Style>
         </ResourceDictionary>
     </catel:Window.Resources>
@@ -59,14 +64,14 @@
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <GroupBox Header="Communication" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4">
+        <GroupBox Header="Communication" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Margin="0,0,6,0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <GroupBox Header="Mode" Grid.Column="0" Padding="12">
+                <GroupBox Header="Mode" Grid.Column="0" Margin="0,0,6,0">
                     <StackPanel Orientation="Vertical" >
                         <RadioButton GroupName="Mode" Content="TCP" 
                                      IsChecked="{Binding CommunicationMode, UpdateSourceTrigger=PropertyChanged, ConverterParameter={x:Static common:CommunicationMode.TCP}, Converter={StaticResource EnumBooleanConverter}}"/>
@@ -76,9 +81,7 @@
                                      IsChecked="{Binding CommunicationMode, UpdateSourceTrigger=PropertyChanged, ConverterParameter={x:Static common:CommunicationMode.RTU}, Converter={StaticResource EnumBooleanConverter}}"/>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox Header="TCP" Grid.Column="1" Padding="12"
-                          IsEnabled="{Binding EnableTcpOptions}"
-                          Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" >
+                <GroupBox Header="TCP" Grid.Column="1" IsEnabled="{Binding EnableTcpOptions}" Margin="0,0,6,0">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition />
@@ -90,8 +93,8 @@
                         </Grid.ColumnDefinitions>
                         <Label Content="Port:" Grid.Column="0" Grid.Row="0"/>
                         <Label Content="IP Address:" Grid.Column="0" Grid.Row="1" Visibility="{Binding IpAddressVisibility}" />
-                        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding TCPPort}" HorizontalAlignment="Left"  Width="50"  />
-                        <cc:IPTextBox Grid.Column="1" Grid.Row="1" Address="{Binding IPAddress, Converter={StaticResource IpAdressStringConverter}}" Margin="6" Visibility="{Binding IpAddressVisibility}" />
+                        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding TcpPort}" HorizontalAlignment="Left"  Width="50"  />
+                        <cc:IPTextBox Grid.Column="1" Grid.Row="1" Address="{Binding IpAddress, Converter={StaticResource IpAddressStringConverter}}" Margin="6" Visibility="{Binding IpAddressVisibility}" />
                     </Grid>
                 </GroupBox>
                 <GroupBox Header="RTU" Grid.Column="2" IsEnabled="{Binding EnableRtuOptions}">
@@ -151,10 +154,10 @@
             </Grid>
         </GroupBox>
         <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="0" Grid.Column="4">
-            <Button Content="Listen" Visibility="{Binding SlaveOptionsVisibility}" Command="{Binding ListenCommand}"
+            <Button Content="Listen" Visibility="{Binding SlaveOptionsVisibility}" Command="{Binding SlaveListenCommand}"
                     Margin="48,0,6,3" Padding="0"  Height="24" />
             <Button Content="Disconnect" Margin="48,2,6,6" Padding="0" Height="24"
-                    Visibility="{Binding SlaveOptionsVisibility}" Command="{Binding DisconnectCommand}" />
+                    Visibility="{Binding SlaveOptionsVisibility}" Command="{Binding SlaveDisconnectCommand}" />
             <GroupBox Header="If you find this useful ..." >
                 <Button Command="{Binding DonateCommand}">
                     <Image Source="btn_donateCC_LG.gif" />
@@ -180,28 +183,25 @@
             </WrapPanel>
         </GroupBox>
         <GroupBox Header="Slave Settings" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2">
-            <StackPanel Orientation="Horizontal">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition/>
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <Label Content="Slave ID:" Grid.Row="0" Grid.Column="0" />
-                    <TextBox Grid.Row="0" Grid.Column="1" MinWidth="30" Text="{Binding SlaveId}"/>
-                    <Label Content="Slave Delay (ms):" Grid.Row="1" Grid.Column="0"  Visibility="{Binding SlaveOptionsVisibility}"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" MinWidth="30" Text="{Binding SlaveDelay}"  Visibility="{Binding SlaveOptionsVisibility}"/>
-                    <StackPanel Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Orientation="Vertical">
-                        <Button Content="Import ..." />
-                        <Button Content="Export ..." />
-                    </StackPanel>
-                </Grid>
-
-            </StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Label Content="Slave ID:" Grid.Row="0" Grid.Column="0" />
+                <TextBox Grid.Row="0" Grid.Column="1" MinWidth="30" Text="{Binding SlaveId}"/>
+                <Label Content="Slave Delay (ms):" Grid.Row="1" Grid.Column="0"  Visibility="{Binding SlaveOptionsVisibility}"/>
+                <TextBox Grid.Row="1" Grid.Column="1" MinWidth="30" Text="{Binding SlaveDelay}"  Visibility="{Binding SlaveOptionsVisibility}"/>
+                <StackPanel Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Orientation="Vertical" HorizontalAlignment="Right">
+                    <Button Content="Import ..." />
+                    <Button Content="Export ..." />
+                </StackPanel>
+            </Grid>
         </GroupBox>
         <TabControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5"></TabControl>
         <GroupBox Header="Communication Log" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="5">
@@ -211,14 +211,25 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <StackPanel  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" >
-                    <Button Content="Pause" Margin="3" Padding="6" />
-                    <Button Content="Clear" Margin="3" Padding="6" />
+                    <ToggleButton IsChecked="{Binding LogPaused}" Padding="6" Margin="6">
+                        <ToggleButton.Style>
+                            <Style TargetType="{x:Type ToggleButton}">
+                                <Setter Property="Content" Value="Pause" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter Property="Content" Value="Resume" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ToggleButton.Style>
+                    </ToggleButton>
+                    <Button Content="Clear" Margin="6,6,0,6"  Command="{Binding LogClearCommand}" />
                 </StackPanel>
                 <ListBox Grid.Row="1"
-                    x:Name="listBoxCommLog"
+                         ItemsSource="{Binding CommLogEntries}"
+                         SelectedIndex="{Binding SelectedCommLogIndex}"
                     Background ="Black"
-                    Foreground="LimeGreen"
-                    />
+                    Foreground="LimeGreen" />
             </Grid></GroupBox>
     </Grid>
 </catel:Window>

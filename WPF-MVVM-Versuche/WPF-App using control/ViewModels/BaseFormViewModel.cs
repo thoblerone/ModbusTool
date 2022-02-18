@@ -1,23 +1,34 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO.Ports;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
+using Catel;
 using Catel.IoC;
 using Catel.MVVM;
+using Catel.Services;
 using Modbus.Common;
 using ModbusWpf.Common.Helpers;
+using ModbusWpf.Common.Properties;
 
 namespace ModbusWpf.Common.ViewModels
 {
     class BaseFormViewModel : ViewModelBase
     {
+        // used in derived master and slave classes
         protected Socket Socket { get; set; }
 
-        private bool LogPaused { get; set; } = false;
+        private IDispatcherService _dispatcherService;
 
         #region Properties
+
+        public bool LogPaused { get; set; } = false;
+
         private ushort _startAddress;
         protected ushort StartAddress
         {
@@ -66,9 +77,9 @@ namespace ModbusWpf.Common.ViewModels
             }
         }
 
-        public IPAddress IPAddress { get; set; } = IPAddress.None;
+        public IPAddress IpAddress { get; set; } = IPAddress.None;
 
-        public int TCPPort { get; set; }
+        public int TcpPort { get; set; }
 
         public byte SlaveId { get; set; }
 
@@ -125,90 +136,10 @@ namespace ModbusWpf.Common.ViewModels
 
         public Visibility SlaveOptionsVisibility { get; protected set; } = Visibility.Visible;
 
-        #endregion // Properties
-        #region Constructors 
-        public BaseFormViewModel() : this(null)
-        {
-        }
-
-        public BaseFormViewModel(IRegisterDataService registerDataService)
-        {
-            if (registerDataService is null)
-            {
-                registerDataService = ServiceLocator.Default.TryResolveType<IRegisterDataService>();
-                if (registerDataService is null)
-                {
-                    registerDataService = new RegisterDataService();
-                    ServiceLocator.Default.RegisterInstance(registerDataService);
-                }
-            }
-
-            DonateCommand = new TaskCommand(OnDonateCommandExecuteAsync);
-
-            LoadUserData();
-        }
-
-        #endregion // Constructors
-
-        protected override Task OnClosingAsync()
-        {
-            SaveUserData();
-
-            return base.OnClosingAsync();
-        }
-
-        #region SettingsHandling
-
-        private void LoadUserData()
-        {
-            if (Enum.TryParse(Properties.Settings.Default.CommunicationMode, out CommunicationMode mode))
-                CommunicationMode = mode;
-            if (Enum.TryParse(Properties.Settings.Default.DisplayFormat, out DisplayFormat format))
-                DisplayFormat = format;
-            
-            if (IPAddress.TryParse(Properties.Settings.Default.IPAddress, out var ipAddress))
-                IPAddress = ipAddress;
-            
-            TCPPort = Properties.Settings.Default.TCPPort;
-            PortName = Properties.Settings.Default.PortName;
-            Baud = Properties.Settings.Default.Baud;
-            Parity = Properties.Settings.Default.Parity;
-            StartAddress = Properties.Settings.Default.StartAddress;
-            DataLength = Properties.Settings.Default.DataLength;
-            SlaveId = Properties.Settings.Default.SlaveId;
-            SlaveDelay = Properties.Settings.Default.SlaveDelay;
-            DataBits = Properties.Settings.Default.DataBits;
-            StopBits = Properties.Settings.Default.StopBits;
-        }
-
-        private void SaveUserData()
-        {
-            Properties.Settings.Default.CommunicationMode = CommunicationMode.ToString();
-            Properties.Settings.Default.IPAddress = IPAddress.ToString();
-            Properties.Settings.Default.DisplayFormat = DisplayFormat.ToString();
-            Properties.Settings.Default.TCPPort = TCPPort;
-            Properties.Settings.Default.PortName = PortName;
-            Properties.Settings.Default.Baud = Baud;
-            Properties.Settings.Default.Parity = Parity;
-            Properties.Settings.Default.StartAddress = StartAddress;
-            Properties.Settings.Default.DataLength = DataLength;
-            Properties.Settings.Default.SlaveId = SlaveId;
-            Properties.Settings.Default.SlaveDelay = SlaveDelay;
-            Properties.Settings.Default.DataBits = DataBits;
-            Properties.Settings.Default.StopBits = StopBits;
-            Properties.Settings.Default.Save();
-        }
-        #endregion
-
-        #region Commands
-
-        public TaskCommand DonateCommand { get; }
-
-
         public string[] ComPortItemsSource => SerialPort.GetPortNames();
 
         public int[] ComPortBaudRates => new[]
-        { 
+        {
             128000,
             115200,
             57600,
@@ -226,12 +157,190 @@ namespace ModbusWpf.Common.ViewModels
             150
         };
 
+        public ObservableCollection<string> CommLogEntries { get; }
+
+        public int SelectedCommLogIndex { get; set; }
+
+        #endregion // Properties
+
+        #region Constructors 
+        public BaseFormViewModel() : this(null, null)
+        {
+        }
+
+        public BaseFormViewModel(IDispatcherService dispatcherService, IRegisterDataService registerDataService)
+        {
+            if (registerDataService is null)
+            {
+                registerDataService = ServiceLocator.Default.TryResolveType<IRegisterDataService>();
+                if (registerDataService is null)
+                {
+                    registerDataService = new RegisterDataService();
+                    ServiceLocator.Default.RegisterInstance(registerDataService);
+                }
+            }
+
+            if (dispatcherService is null)
+            {
+                dispatcherService = ServiceLocator.Default.ResolveType<IDispatcherService>();
+            }
+
+            _dispatcherService = dispatcherService;
+
+            DonateCommand = new TaskCommand(OnDonateCommandExecuteAsync);
+            LogClearCommand = new TaskCommand(OnLogClearCommandExecuteAsync);
+
+            SlaveListenCommand = new TaskCommand(OnSlaveListenCommandExecuteAsync);
+            SlaveDisconnectCommand = new TaskCommand(OnSlaveDisconnectCommandExecuteAsync);
+
+            CommLogEntries = new ObservableCollection<string>();
+
+            LoadUserData();
+        }
+
+        #endregion // Constructors
+
+        protected override Task OnClosingAsync()
+        {
+            SaveUserData();
+
+            return base.OnClosingAsync();
+        }
+
+        #region SettingsHandling
+
+        private void LoadUserData()
+        {
+            if (Enum.TryParse(Settings.Default.CommunicationMode, out CommunicationMode mode))
+                CommunicationMode = mode;
+            if (Enum.TryParse(Settings.Default.DisplayFormat, out DisplayFormat format))
+                DisplayFormat = format;
+            
+            if (IPAddress.TryParse(Settings.Default.IPAddress, out var ipAddress))
+                IpAddress = ipAddress;
+            
+            TcpPort = Settings.Default.TCPPort;
+            PortName = Settings.Default.PortName;
+            Baud = Settings.Default.Baud;
+            Parity = Settings.Default.Parity;
+            StartAddress = Settings.Default.StartAddress;
+            DataLength = Settings.Default.DataLength;
+            SlaveId = Settings.Default.SlaveId;
+            SlaveDelay = Settings.Default.SlaveDelay;
+            DataBits = Settings.Default.DataBits;
+            StopBits = Settings.Default.StopBits;
+        }
+
+        private void SaveUserData()
+        {
+            Settings.Default.CommunicationMode = CommunicationMode.ToString();
+            Settings.Default.IPAddress = IpAddress.ToString();
+            Settings.Default.DisplayFormat = DisplayFormat.ToString();
+            Settings.Default.TCPPort = TcpPort;
+            Settings.Default.PortName = PortName;
+            Settings.Default.Baud = Baud;
+            Settings.Default.Parity = Parity;
+            Settings.Default.StartAddress = StartAddress;
+            Settings.Default.DataLength = DataLength;
+            Settings.Default.SlaveId = SlaveId;
+            Settings.Default.SlaveDelay = SlaveDelay;
+            Settings.Default.DataBits = DataBits;
+            Settings.Default.StopBits = StopBits;
+            Settings.Default.Save();
+        }
+        #endregion // SettingsHandling
+
+        #region Commands
+
+        public TaskCommand SlaveDisconnectCommand { get; }
+        private async Task OnSlaveDisconnectCommandExecuteAsync()
+        {
+            throw new NotImplementedException("Implement in sub class");
+        }
+
+        public TaskCommand SlaveListenCommand { get; }
+        protected virtual async Task OnSlaveListenCommandExecuteAsync()
+        {
+            throw new NotImplementedException("Implement in sub class");
+        }
+
+        public TaskCommand DonateCommand { get; }
         private async Task OnDonateCommandExecuteAsync()
         {
             string url = "https://paypal.me/classicdiy?country.x=CA&locale.x=en_US";
-            System.Diagnostics.Process.Start(url);
+            Process.Start(url);
+
+            await Task.CompletedTask;
+        }
+
+
+        public TaskCommand LogClearCommand { get; }
+
+        private async Task OnLogClearCommandExecuteAsync()
+        {
+           CommLogEntries.Clear();
+
+           await Task.CompletedTask;
+        }
+        #endregion // Commands
+
+        #region Logging
+
+        public delegate void AppendLogDelegate(string log);
+
+        protected void DriverIncommingData(byte[] data, int len)
+        {
+            if (LogPaused)
+                return;
+
+            var hex = new StringBuilder(len);
+            for (int i = 0; i < len; i++)
+            {
+                hex.AppendFormat("{0:x2} ", data[i]);
+            }
+            AppendLog($"RX: {hex}");
+        }
+
+        protected void DriverOutgoingData(byte[] data)
+        {
+            if (LogPaused)
+                return;
+            var hex = new StringBuilder(data.Length * 2);
+            foreach (byte b in data)
+                hex.AppendFormat("{0:x2} ", b);
+            AppendLog($"TX: {hex}");
+        }
+
+        protected void AppendLog(string log)
+        {
+            if (LogPaused)
+                return;
+
+            if (!Dispatcher.CurrentDispatcher.CheckAccess())
+            {
+                // if required, recursive call on dispatcher thread
+                _dispatcherService.Invoke(new AppendLogDelegate(AppendLog), log);
+                return;
+            }
+
+            var now = DateTime.Now;
+            var logEntry = $">{now.ToLongTimeString()}: {log}";
+            CommLogEntries.Add(logEntry);
+            SelectedCommLogIndex = CommLogEntries.Count - 1;
+            SelectedCommLogIndex = - 1;
+
+            // don't let the log file get huge to conserve memory
+            if (CommLogEntries.Count > 15000)
+            {
+                _dispatcherService.InvokeAsync(() =>
+                {
+                    while(CommLogEntries.Count > 10000)
+                        CommLogEntries.RemoveAt(0);
+                });
+            }
         }
 
         #endregion
+
     }
 }

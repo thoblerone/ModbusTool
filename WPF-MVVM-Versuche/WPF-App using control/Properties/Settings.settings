@@ -41,8 +41,5 @@
     <Setting Name="DisplayFormat" Type="System.String" Scope="User">
       <Value Profile="(Default)">Integer</Value>
     </Setting>
-    <Setting Name="Function" Type="System.Byte" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
   </Settings>
 </SettingsFile>

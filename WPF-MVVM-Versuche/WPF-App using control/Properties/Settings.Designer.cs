@@ -178,17 +178,5 @@ namespace ModbusWpf.Common.Properties {
                 this["DisplayFormat"] = value;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public byte Function {
-            get {
-                return ((byte)(this["Function"]));
-            }
-            set {
-                this["Function"] = value;
-            }
-        }
     }
 }
