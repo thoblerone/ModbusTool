@@ -21,12 +21,15 @@ namespace ModbusWpf.Common.ViewModels
             ApplyAddressSelectionCommand = new TaskCommand(() => ApplyAddressSelectionExecuteAsync());
             ClearDataCommand = new TaskCommand(() => ClearDataExecuteAsync());
             DisplayFormatItemSource = EnumHelpers.EnumTypeDescriptionToItemSourceArray(typeof(DisplayFormat));
-            DisplayFormatIndex = 3;
 
             if (registerDataService is null)
             {
-                registerDataService = new RegisterDataService();
-                ServiceLocator.Default.RegisterInstance(typeof(IRegisterDataService), registerDataService);
+                registerDataService = ServiceLocator.Default.TryResolveType<IRegisterDataService>();
+                if (registerDataService is null)
+                {
+                    registerDataService = new RegisterDataService();
+                    ServiceLocator.Default.RegisterInstance(typeof(IRegisterDataService), registerDataService);
+                }
             }
             
             RegisterDataService = registerDataService;
@@ -64,8 +67,7 @@ namespace ModbusWpf.Common.ViewModels
         public TaskCommand ApplyAddressSelectionCommand { get; }
 
         public TaskCommand ClearDataCommand { get; }
-
-        public int DisplayFormatIndex { get; set; }
+        public bool IsDummyTab = false;
 
         #endregion
 
@@ -86,6 +88,9 @@ namespace ModbusWpf.Common.ViewModels
 
         private Task ApplyAddressSelectionExecuteAsync()
         {
+            if (IsDummyTab)
+                return Task.CompletedTask;
+
             RegisterModels.Clear();
             for (var i = StartAddress;
                 i < RegisterDataService.RegisterData.Length &&

@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using Catel;
 using Catel.IoC;
 using Catel.MVVM;
 using Catel.Services;
@@ -23,7 +22,7 @@ namespace ModbusWpf.Common.ViewModels
         // used in derived master and slave classes
         protected Socket Socket { get; set; }
 
-        private IDispatcherService _dispatcherService;
+        private readonly IDispatcherService _dispatcherService;
 
         #region Properties
 
@@ -32,30 +31,24 @@ namespace ModbusWpf.Common.ViewModels
         private ushort _startAddress;
         protected ushort StartAddress
         {
-            get
-            {
-                return _startAddress;
-            }
+            get => _startAddress;
             set
             {
-                // TODO: CurrentTab.StartAddress = value;
-                // TODO: var tab = tabControl1.SelectedTab;
-                // TODO: tab.Text = value.ToString();
                 _startAddress = value;
+                if (SelectedDataTabItem is not null)
+                    SelectedDataTabItem.StartAddress = value;
             }
         }
 
         private ushort _dataLength;
         protected ushort DataLength
         {
-            get
-            {
-                return _dataLength;
-            }
+            get => _dataLength;
             set
             {
                 _dataLength = value;
-                // TODO: CurrentTab.DataLength = value;
+                if (SelectedDataTabItem is not null)
+                    SelectedDataTabItem.StartAddress = value;
             }
         }
 
@@ -66,14 +59,12 @@ namespace ModbusWpf.Common.ViewModels
             set
             {
                 _showDataLength = value;
-                // TODO: foreach (DataTab tab in tabPage1.Controls)
-                // TODO: {
-                // TODO:     tab.ShowDataLength = value;
-                // TODO: }
-                // TODO: foreach (DataTab tab in tabPage2.Controls)
-                // TODO: {
-                // TODO:     tab.ShowDataLength = value;
-                // TODO: }
+
+                foreach (var dataTabItem in DataTabItems)
+                {
+                    if (dataTabItem is not null)
+                        dataTabItem.ShowDataLength = value;
+                }
             }
         }
 
@@ -96,35 +87,17 @@ namespace ModbusWpf.Common.ViewModels
         public StopBits StopBits { get; set; }
 
         private DisplayFormat _displayFormat = DisplayFormat.Integer;
+        private DataTabControlViewModel _selectedDataTabItem;
+
         public DisplayFormat DisplayFormat
         {
             get => _displayFormat;
-            set => _displayFormat = value;
-            // TODO: get { return _displayFormat; }
-            // TODO: set
-            // TODO: {
-            // TODO:     switch (value)
-            // TODO:     {
-            // TODO:         case DisplayFormat.LED:
-            // TODO:             radioButtonLED.Checked = true;
-            // TODO:             break;
-            // TODO:         case DisplayFormat.Binary:
-            // TODO:             radioButtonBinary.Checked = true;
-            // TODO:             break;
-            // TODO:         case DisplayFormat.Hex:
-            // TODO:             radioButtonHex.Checked = true;
-            // TODO:             break;
-            // TODO:         case DisplayFormat.Integer:
-            // TODO:             radioButtonInteger.Checked = true;
-            // TODO:             break;
-            // TODO:         case DisplayFormat.FloatReverse:
-            // TODO:             radioButtonReverseFloat.Checked = true;
-            // TODO:             break;
-            // TODO:     }
-            // TODO:     _displayFormat = value;
-            // TODO:     CurrentTab.DisplayFormat = DisplayFormat;
-            // TODO:     RefreshData();
-            // TODO: }
+            set
+            {
+                _displayFormat = value;
+                if (SelectedDataTabItem is not null)
+                    SelectedDataTabItem.DisplayFormat = value;
+            }
         }
 
         public CommunicationMode CommunicationMode { get; set; } = CommunicationMode.TCP;
@@ -157,9 +130,35 @@ namespace ModbusWpf.Common.ViewModels
             150
         };
 
+        public ObservableCollection<DataTabControlViewModel> DataTabItems { get; }
         public ObservableCollection<string> CommLogEntries { get; }
 
         public int SelectedCommLogIndex { get; set; }
+
+        public DataTabControlViewModel SelectedDataTabItem
+        {
+            get => _selectedDataTabItem;
+            set
+            {
+                _selectedDataTabItem = value;
+
+                if (_selectedDataTabItem.IsDummyTab)
+                {
+                    _selectedDataTabItem.IsDummyTab = false;
+                    _selectedDataTabItem.DataLength = DataLength;
+                    _selectedDataTabItem.StartAddress = StartAddress;
+                    _selectedDataTabItem.ShowDataLength = ShowDataLength;
+                    _selectedDataTabItem.DisplayFormat = DisplayFormat;
+                    _selectedDataTabItem.ApplyAddressSelectionCommand.Execute();
+
+                    DataTabItems.Add(new DataTabControlViewModel(){IsDummyTab = true});
+
+                    RaisePropertyChanged(nameof(SelectedDataTabItem));
+
+                    AppendLog($"New data tab starting at {StartAddress}");
+                }
+            }
+        }
 
         #endregion // Properties
 
@@ -180,10 +179,7 @@ namespace ModbusWpf.Common.ViewModels
                 }
             }
 
-            if (dispatcherService is null)
-            {
-                dispatcherService = ServiceLocator.Default.ResolveType<IDispatcherService>();
-            }
+            dispatcherService ??= ServiceLocator.Default.ResolveType<IDispatcherService>();
 
             _dispatcherService = dispatcherService;
 
@@ -192,8 +188,24 @@ namespace ModbusWpf.Common.ViewModels
 
             SlaveListenCommand = new TaskCommand(OnSlaveListenCommandExecuteAsync);
             SlaveDisconnectCommand = new TaskCommand(OnSlaveDisconnectCommandExecuteAsync);
+            CloseDataTabItemCommand = new TaskCommand<DataTabControlViewModel>(OnCloseDataTabItemCommandExecuteAsync);
 
-            CommLogEntries = new ObservableCollection<string>();
+            CommLogEntries = new ();
+            DataTabItems = new();
+#if DEBUG
+            //if (CatelEnvironment.IsInDesignMode)
+            {
+                AppendLog("first design mode log entry");
+                AppendLog("second design mode log entry");
+
+                DataTabItems.Add(new DataTabControlViewModel(registerDataService) {StartAddress = 1000, DisplayFormat = DisplayFormat.Integer, DataLength = 32});
+                //DataTabItems.Add(new DataTabControlViewModel(registerDataService) {StartAddress = 2000, DisplayFormat = DisplayFormat.FloatReverse, DataLength = 32});
+                //DataTabItems.Add(new DataTabControlViewModel(registerDataService) {StartAddress = 4000, DisplayFormat = DisplayFormat.Hex, DataLength = 16});
+                //DataTabItems.Add(new DataTabControlViewModel(registerDataService) {StartAddress = 5000, DisplayFormat = DisplayFormat.LED, DataLength = 2});
+
+                DataTabItems.Add(new DataTabControlViewModel(){IsDummyTab = true});
+            }
+#endif
 
             LoadUserData();
         }
@@ -205,6 +217,16 @@ namespace ModbusWpf.Common.ViewModels
             SaveUserData();
 
             return base.OnClosingAsync();
+        }
+
+        protected override async Task InitializeAsync()
+        {
+            foreach (var dataVm in DataTabItems)
+            {
+                await dataVm.InitializeViewModelAsync().ConfigureAwait(false);
+            }
+
+            await base.InitializeAsync().ConfigureAwait(false);
         }
 
         #region SettingsHandling
@@ -282,13 +304,53 @@ namespace ModbusWpf.Common.ViewModels
 
            await Task.CompletedTask;
         }
+
+
+        public TaskCommand<DataTabControlViewModel> CloseDataTabItemCommand { get; }
+
+        private async Task OnCloseDataTabItemCommandExecuteAsync(DataTabControlViewModel tabItem)
+        {
+            var closingIndex = DataTabItems.IndexOf(tabItem);
+            // don't close the special "..." tab, which is the last
+            if (closingIndex == DataTabItems.Count - 1)
+            //if (tabItem.Header == "...")
+                return;
+
+            AppendLog($"Closing data tab item {tabItem?.StartAddress} ({tabItem?.DisplayFormat})");
+
+            var selectedIndex = DataTabItems.IndexOf(SelectedDataTabItem);
+
+            // if the currently selected tab was close,
+            // select the previous one, if there is any
+            // else select the next one ("..." is always there)
+            // if that is the last one, a new tab page is created
+            if (selectedIndex == closingIndex)
+            {
+                if (selectedIndex > 0)
+                {
+                    SelectedDataTabItem = DataTabItems[selectedIndex - 1];
+                    RaisePropertyChanged(nameof(SelectedDataTabItem));
+                }
+                else
+                {
+                    SelectedDataTabItem = DataTabItems[selectedIndex + 1];
+                    RaisePropertyChanged(nameof(SelectedDataTabItem));
+                }
+            }
+
+            var oldTab = DataTabItems[closingIndex];
+
+            await oldTab.CloseViewModelAsync(null).ConfigureAwait(false);
+            DataTabItems.RemoveAt(closingIndex);
+
+        }
         #endregion // Commands
 
         #region Logging
 
         public delegate void AppendLogDelegate(string log);
 
-        protected void DriverIncommingData(byte[] data, int len)
+        protected void DriverIncomingData(byte[] data, int len)
         {
             if (LogPaused)
                 return;

@@ -1,4 +1,4 @@
-﻿<catel:Window x:Class="ModbusWpf.Common.Views.BaseForm"
+﻿<catel:Window
         xmlns:catel="http://schemas.catelproject.com"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -9,39 +9,40 @@
         xmlns:common="clr-namespace:Modbus.Common;assembly=Modbus.Common"
         xmlns:cc="clr-namespace:ModbusWpf.CustomControl;assembly=ModbusWpf.CustomControl"
         xmlns:ports="clr-namespace:System.IO.Ports;assembly=System"
+        xmlns:local="clr-namespace:ModbusWpf.Common.Views" x:Class="ModbusWpf.Common.Views.BaseForm"
         mc:Ignorable="d"
         Title="BaseForm" Height="940" Width="885"
-        d:DataContext="{d:DesignInstance Type=viewModels:BaseFormViewModel, IsDesignTimeCreatable=True}"
+        d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type viewModels:BaseFormViewModel}}"
         >
     <catel:Window.Resources>
         <ResourceDictionary>
             <converters:EnumBooleanConverter x:Key="EnumBooleanConverter" />
             <converters:IpAddressStringConverter x:Key="IpAddressStringConverter" />
-            <Style TargetType="TextBox">
+            <Style TargetType="{x:Type TextBox}">
                 <Setter Property="Margin" Value="6"/>
                 <Setter Property="VerticalContentAlignment" Value="Center"/>
                 <Setter Property="Height" Value="24" />
             </Style>
-            <Style TargetType="cc:IPTextBox">
+            <Style TargetType="{x:Type cc:IPTextBox}">
                 <Setter Property="Margin" Value="6" />
                 <Setter Property="Height" Value="24" />
             </Style>
-            <Style TargetType="Button">
+            <Style TargetType="{x:Type Button}">
                 <Setter Property="Margin" Value="6" />
                 <Setter Property="Padding" Value="6" />
             </Style>
-            <Style TargetType="RadioButton">
+            <Style TargetType="{x:Type RadioButton}">
                 <Setter Property="Margin" Value="6" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
             </Style>
-            <Style TargetType="ComboBox">
+            <Style TargetType="{x:Type ComboBox}">
                 <Setter Property="Margin" Value="6" />
                 <Setter Property="VerticalContentAlignment" Value="Center"/>
             </Style>
-            <Style TargetType="Label">
+            <Style TargetType="{x:Type Label}">
                 <Setter Property="VerticalContentAlignment" Value="Center"/>
             </Style>
-            <Style TargetType="GroupBox">
+            <Style TargetType="{x:Type GroupBox}">
                 <Setter Property="BorderBrush" Value="DarkGray" />
                 <Setter Property="Padding" Value="6" />
             </Style>
@@ -74,11 +75,11 @@
                 <GroupBox Header="Mode" Grid.Column="0" Margin="0,0,6,0">
                     <StackPanel Orientation="Vertical" >
                         <RadioButton GroupName="Mode" Content="TCP" 
-                                     IsChecked="{Binding CommunicationMode, UpdateSourceTrigger=PropertyChanged, ConverterParameter={x:Static common:CommunicationMode.TCP}, Converter={StaticResource EnumBooleanConverter}}"/>
+                                     IsChecked="{Binding CommunicationMode, ConverterParameter={x:Static common:CommunicationMode.TCP}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                         <RadioButton GroupName="Mode" Content="UDP" 
-                                     IsChecked="{Binding CommunicationMode, UpdateSourceTrigger=PropertyChanged, ConverterParameter={x:Static common:CommunicationMode.UDP}, Converter={StaticResource EnumBooleanConverter}}"/>
+                                     IsChecked="{Binding CommunicationMode, ConverterParameter={x:Static common:CommunicationMode.UDP}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                         <RadioButton GroupName="Mode" Content="RTU" 
-                                     IsChecked="{Binding CommunicationMode, UpdateSourceTrigger=PropertyChanged, ConverterParameter={x:Static common:CommunicationMode.RTU}, Converter={StaticResource EnumBooleanConverter}}"/>
+                                     IsChecked="{Binding CommunicationMode, ConverterParameter={x:Static common:CommunicationMode.RTU}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
                 </GroupBox>
                 <GroupBox Header="TCP" Grid.Column="1" IsEnabled="{Binding EnableTcpOptions}" Margin="0,0,6,0">
@@ -104,13 +105,13 @@
                             <RowDefinition />
                             <RowDefinition />
                         </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="12"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="12"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
                         <Label Grid.Row="0" Grid.Column="0" Content="Port Name:" />
                         <ComboBox Grid.Row="0" Grid.Column="1" 
                                   ItemsSource="{Binding ComPortItemsSource}"
@@ -122,32 +123,26 @@
                         <ComboBox Grid.Row="2" Grid.Column="1" 
                                   SelectedValue="{Binding Parity, UpdateSourceTrigger=LostFocus}"
                                   SelectedValuePath="Content">
-                            <ComboBox.Items>
-                                <ComboBoxItem Content="{x:Static ports:Parity.None}" />
-                                <ComboBoxItem Content="{x:Static ports:Parity.Odd}" />
-                                <ComboBoxItem Content="{x:Static ports:Parity.Even}" />
-                                <ComboBoxItem Content="{x:Static ports:Parity.Mark}" />
-                                <ComboBoxItem Content="{x:Static ports:Parity.Space}" />
-                            </ComboBox.Items>
+                            <ComboBoxItem Content="{x:Static ports:Parity.None}" />
+                            <ComboBoxItem Content="{x:Static ports:Parity.Odd}" />
+                            <ComboBoxItem Content="{x:Static ports:Parity.Even}" />
+                            <ComboBoxItem Content="{x:Static ports:Parity.Mark}" />
+                            <ComboBoxItem Content="{x:Static ports:Parity.Space}" />
                         </ComboBox>
                         <Label Grid.Row="0" Grid.Column="3" Content="Data Bits:" />
                         <ComboBox Grid.Row="0" Grid.Column="4" SelectedValuePath="Tag"
                                   SelectedValue="{Binding DataBits, UpdateSourceTrigger=LostFocus}">
-                            <ComboBox.Items>
-                                <ComboBoxItem Content="8 Bits" Tag="8" />
-                                <ComboBoxItem Content="7 Bits" Tag="7" />
-                            </ComboBox.Items>
+                            <ComboBoxItem Content="8 Bits" Tag="8" />
+                            <ComboBoxItem Content="7 Bits" Tag="7" />
                         </ComboBox>
                         <Label Grid.Row="1" Grid.Column="3" Content="Stop Bits:" />
                         <ComboBox Grid.Row="1" Grid.Column="4"
                                   SelectedValue="{Binding StopBits, UpdateSourceTrigger=LostFocus}"
                                   SelectedValuePath="Content">
-                            <ComboBox.Items>
-                                <ComboBoxItem Content="{x:Static ports:StopBits.None}" />
-                                <ComboBoxItem Content="{x:Static ports:StopBits.One}" />
-                                <ComboBoxItem Content="{x:Static ports:StopBits.Two}" />
-                                <ComboBoxItem Content="{x:Static ports:StopBits.OnePointFive}" />
-                            </ComboBox.Items>
+                            <ComboBoxItem Content="{x:Static ports:StopBits.None}" />
+                            <ComboBoxItem Content="{x:Static ports:StopBits.One}" />
+                            <ComboBoxItem Content="{x:Static ports:StopBits.Two}" />
+                            <ComboBoxItem Content="{x:Static ports:StopBits.OnePointFive}" />
                         </ComboBox>
                     </Grid>
                 </GroupBox>
@@ -168,26 +163,25 @@
             <WrapPanel Orientation="Horizontal" Margin="12">
                 <WrapPanel Orientation="Vertical">
                     <RadioButton GroupName="DisplayFormat" Content="LED" Margin="6"
-                                 IsChecked="{Binding DisplayFormat, UpdateSourceTrigger=PropertyChanged, ConverterParameter={x:Static common:DisplayFormat.LED}, Converter={StaticResource EnumBooleanConverter}}"/>
+                                 IsChecked="{Binding DisplayFormat, ConverterParameter={x:Static common:DisplayFormat.LED}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                     <RadioButton GroupName="DisplayFormat" Content="Binary" Margin="6" 
-                                 IsChecked="{Binding DisplayFormat, UpdateSourceTrigger=PropertyChanged, ConverterParameter={x:Static common:DisplayFormat.Binary}, Converter={StaticResource EnumBooleanConverter}}"/>
+                                 IsChecked="{Binding DisplayFormat, ConverterParameter={x:Static common:DisplayFormat.Binary}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                     <RadioButton GroupName="DisplayFormat" Content="Hex" Margin="6" 
-                                 IsChecked="{Binding DisplayFormat, UpdateSourceTrigger=PropertyChanged, ConverterParameter={x:Static common:DisplayFormat.Hex}, Converter={StaticResource EnumBooleanConverter}}"/>
+                                 IsChecked="{Binding DisplayFormat, ConverterParameter={x:Static common:DisplayFormat.Hex}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                 </WrapPanel>
                 <WrapPanel Orientation="Vertical">
                     <RadioButton GroupName="DisplayFormat" Content="Integer" Margin="6" 
-                                 IsChecked="{Binding DisplayFormat, UpdateSourceTrigger=PropertyChanged, ConverterParameter={x:Static common:DisplayFormat.Integer}, Converter={StaticResource EnumBooleanConverter}}"/>
+                                 IsChecked="{Binding DisplayFormat, ConverterParameter={x:Static common:DisplayFormat.Integer}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                     <RadioButton GroupName="DisplayFormat" Content="FloatReverse" Margin="6" 
-                                 IsChecked="{Binding DisplayFormat, UpdateSourceTrigger=PropertyChanged, ConverterParameter={x:Static common:DisplayFormat.FloatReverse}, Converter={StaticResource EnumBooleanConverter}}"/>
+                                 IsChecked="{Binding DisplayFormat, ConverterParameter={x:Static common:DisplayFormat.FloatReverse}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                 </WrapPanel>
             </WrapPanel>
         </GroupBox>
-        <GroupBox Header="Slave Settings" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2">
+        <GroupBox Header="Slave Settings" Grid.Row="1" Grid.Column="3" Margin="0,0,6,0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -197,13 +191,41 @@
                 <TextBox Grid.Row="0" Grid.Column="1" MinWidth="30" Text="{Binding SlaveId}"/>
                 <Label Content="Slave Delay (ms):" Grid.Row="1" Grid.Column="0"  Visibility="{Binding SlaveOptionsVisibility}"/>
                 <TextBox Grid.Row="1" Grid.Column="1" MinWidth="30" Text="{Binding SlaveDelay}"  Visibility="{Binding SlaveOptionsVisibility}"/>
-                <StackPanel Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Orientation="Vertical" HorizontalAlignment="Right">
-                    <Button Content="Import ..." />
-                    <Button Content="Export ..." />
-                </StackPanel>
             </Grid>
         </GroupBox>
-        <TabControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5"></TabControl>
+        <GroupBox Header="File I/O" Grid.Row="1" Grid.Column="4">
+            <StackPanel Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Orientation="Vertical" HorizontalAlignment="Right">
+                <Button Content="CSV Import Tab Data ..." />
+                <Button Content="CSV Export Tab Data ..." />
+            </StackPanel>
+
+        </GroupBox>
+        <TabControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5" ItemsSource="{Binding DataTabItems}"
+                    SelectedItem="{Binding SelectedDataTabItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <TabControl.ItemTemplate>
+                <!-- this is the header template-->
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Padding="0" Height="10" Width="10" 
+                                VerticalAlignment="Top" Margin="0,0,3,0" Background="Red" 
+                                Command="{Binding DataContext.CloseDataTabItemCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BaseForm}}}" 
+                                CommandParameter="{Binding }">
+                            <Path Height="6" Width="6" Stretch="Uniform" Tag="M0,0L32,0 32,32 0,32z" 
+                                  Data="M 0.47265625 -0.45117188 L -0.45117188 0.47265625 L 2.0839844 3.0078125 L -0.43554688 5.5371094 L 0.48046875 6.4511719 L 3.0019531 3.9257812 L 5.5292969 6.4511719 L 6.4511719 5.5292969 L 3.9257812 3.0019531 L 6.4296875 0.49414062 L 5.5078125 -0.42773438 L 3.0058594 2.0839844 L 0.47265625 -0.45117188 z"
+                                  Fill="White" />
+                        </Button>
+                        <TextBlock Text="{Binding StartAddress, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                        <TextBlock Text="{Binding DisplayFormat}" FontSize="8" Margin="3,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <!-- this is the body of the TabItem template-->
+                <DataTemplate>
+                    <local:DataTabControl DataContext="{Binding DataContext}" />
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
         <GroupBox Header="Communication Log" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="5">
             <Grid>
                 <Grid.RowDefinitions>
@@ -230,6 +252,7 @@
                          SelectedIndex="{Binding SelectedCommLogIndex}"
                     Background ="Black"
                     Foreground="LimeGreen" />
-            </Grid></GroupBox>
+            </Grid>
+        </GroupBox>
     </Grid>
 </catel:Window>
