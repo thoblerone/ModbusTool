@@ -76,6 +76,9 @@
     <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="ViewModels\BaseFormViewModel.cs" />
     <Compile Include="ViewModels\DataTabControlViewModel.cs" />
+    <Compile Include="Views\BaseControl.xaml.cs">
+      <DependentUpon>BaseControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\BaseForm.xaml.cs">
       <DependentUpon>BaseForm.xaml</DependentUpon>
     </Compile>
@@ -83,6 +86,10 @@
       <DependentUpon>DataTabControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Page Include="Views\BaseControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\BaseForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
