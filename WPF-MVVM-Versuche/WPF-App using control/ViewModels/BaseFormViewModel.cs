@@ -2,12 +2,14 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO.Ports;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using Catel;
 using Catel.IoC;
 using Catel.MVVM;
 using Catel.Services;
@@ -28,29 +30,9 @@ namespace ModbusWpf.Common.ViewModels
 
         public bool LogPaused { get; set; } = false;
 
-        private ushort _startAddress;
-        protected ushort StartAddress
-        {
-            get => _startAddress;
-            set
-            {
-                _startAddress = value;
-                if (SelectedDataTabItem is not null)
-                    SelectedDataTabItem.StartAddress = value;
-            }
-        }
+        public ushort StartAddress { get; set; }
 
-        private ushort _dataLength;
-        protected ushort DataLength
-        {
-            get => _dataLength;
-            set
-            {
-                _dataLength = value;
-                if (SelectedDataTabItem is not null)
-                    SelectedDataTabItem.StartAddress = value;
-            }
-        }
+        public ushort DataLength { get; set; }
 
         private bool _showDataLength;
         public bool ShowDataLength
@@ -86,19 +68,9 @@ namespace ModbusWpf.Common.ViewModels
 
         public StopBits StopBits { get; set; }
 
-        private DisplayFormat _displayFormat = DisplayFormat.Integer;
         private DataTabControlViewModel _selectedDataTabItem;
 
-        public DisplayFormat DisplayFormat
-        {
-            get => _displayFormat;
-            set
-            {
-                _displayFormat = value;
-                if (SelectedDataTabItem is not null)
-                    SelectedDataTabItem.DisplayFormat = value;
-            }
-        }
+        public DisplayFormat DisplayFormat { get; set; } = DisplayFormat.Integer;
 
         public CommunicationMode CommunicationMode { get; set; } = CommunicationMode.TCP;
 
@@ -142,20 +114,19 @@ namespace ModbusWpf.Common.ViewModels
             {
                 _selectedDataTabItem = value;
 
-                if (_selectedDataTabItem.IsDummyTab)
+                if (_selectedDataTabItem.DisplayFormat is null)
                 {
-                    _selectedDataTabItem.IsDummyTab = false;
                     _selectedDataTabItem.DataLength = DataLength;
                     _selectedDataTabItem.StartAddress = StartAddress;
                     _selectedDataTabItem.ShowDataLength = ShowDataLength;
                     _selectedDataTabItem.DisplayFormat = DisplayFormat;
                     _selectedDataTabItem.ApplyAddressSelectionCommand.Execute();
 
-                    DataTabItems.Add(new DataTabControlViewModel(){IsDummyTab = true});
+                    DataTabItems.Add(new DataTabControlViewModel(){DisplayFormat = null});
 
                     RaisePropertyChanged(nameof(SelectedDataTabItem));
 
-                    AppendLog($"New data tab starting at {StartAddress}");
+                    AppendLog($"New {DisplayFormat} data tab starting at {StartAddress}");
                 }
             }
         }
@@ -192,21 +163,28 @@ namespace ModbusWpf.Common.ViewModels
 
             CommLogEntries = new ();
             DataTabItems = new();
+
+            DataTabItems.Add(new DataTabControlViewModel(registerDataService)
+            {
+                StartAddress = Settings.Default.StartAddress,
+                DataLength = Settings.Default.DataLength,
+                DisplayFormat = Settings.Default.DisplayFormat
+            });
+
 #if DEBUG
-            //if (CatelEnvironment.IsInDesignMode)
+            if (CatelEnvironment.IsInDesignMode)
             {
                 AppendLog("first design mode log entry");
                 AppendLog("second design mode log entry");
 
-                DataTabItems.Add(new DataTabControlViewModel(registerDataService) {StartAddress = 1000, DisplayFormat = DisplayFormat.Integer, DataLength = 32});
-                //DataTabItems.Add(new DataTabControlViewModel(registerDataService) {StartAddress = 2000, DisplayFormat = DisplayFormat.FloatReverse, DataLength = 32});
-                //DataTabItems.Add(new DataTabControlViewModel(registerDataService) {StartAddress = 4000, DisplayFormat = DisplayFormat.Hex, DataLength = 16});
-                //DataTabItems.Add(new DataTabControlViewModel(registerDataService) {StartAddress = 5000, DisplayFormat = DisplayFormat.LED, DataLength = 2});
-
-                DataTabItems.Add(new DataTabControlViewModel(){IsDummyTab = true});
+                DataTabItems.Add(new DataTabControlViewModel(registerDataService) {StartAddress = 1000, DisplayFormat = DisplayFormat.FloatReverse, DataLength = 32});
+                DataTabItems.Add(new DataTabControlViewModel(registerDataService) {StartAddress = 1500, DisplayFormat = DisplayFormat.Hex, DataLength = 16});
+                DataTabItems.Add(new DataTabControlViewModel(registerDataService) {StartAddress = 2000, DisplayFormat = DisplayFormat.LED, DataLength = 2});
             }
 #endif
 
+            DataTabItems.Add(new DataTabControlViewModel() { DisplayFormat = null });
+            
             LoadUserData();
         }
 
@@ -226,6 +204,8 @@ namespace ModbusWpf.Common.ViewModels
                 await dataVm.InitializeViewModelAsync().ConfigureAwait(false);
             }
 
+            SelectedDataTabItem = DataTabItems.FirstOrDefault();
+
             await base.InitializeAsync().ConfigureAwait(false);
         }
 
@@ -235,17 +215,16 @@ namespace ModbusWpf.Common.ViewModels
         {
             if (Enum.TryParse(Settings.Default.CommunicationMode, out CommunicationMode mode))
                 CommunicationMode = mode;
-            if (Enum.TryParse(Settings.Default.DisplayFormat, out DisplayFormat format))
-                DisplayFormat = format;
             
             if (IPAddress.TryParse(Settings.Default.IPAddress, out var ipAddress))
                 IpAddress = ipAddress;
-            
+
             TcpPort = Settings.Default.TCPPort;
             PortName = Settings.Default.PortName;
             Baud = Settings.Default.Baud;
             Parity = Settings.Default.Parity;
             StartAddress = Settings.Default.StartAddress;
+            DisplayFormat = Settings.Default.DisplayFormat;
             DataLength = Settings.Default.DataLength;
             SlaveId = Settings.Default.SlaveId;
             SlaveDelay = Settings.Default.SlaveDelay;
@@ -257,7 +236,7 @@ namespace ModbusWpf.Common.ViewModels
         {
             Settings.Default.CommunicationMode = CommunicationMode.ToString();
             Settings.Default.IPAddress = IpAddress.ToString();
-            Settings.Default.DisplayFormat = DisplayFormat.ToString();
+            Settings.Default.DisplayFormat = DisplayFormat;
             Settings.Default.TCPPort = TcpPort;
             Settings.Default.PortName = PortName;
             Settings.Default.Baud = Baud;

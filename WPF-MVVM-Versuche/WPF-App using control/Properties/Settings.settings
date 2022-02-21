@@ -21,10 +21,10 @@
       <Value Profile="(Default)">None</Value>
     </Setting>
     <Setting Name="StartAddress" Type="System.UInt16" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">1000</Value>
     </Setting>
     <Setting Name="DataLength" Type="System.UInt16" Scope="User">
-      <Value Profile="(Default)">64</Value>
+      <Value Profile="(Default)">16</Value>
     </Setting>
     <Setting Name="SlaveId" Type="System.Byte" Scope="User">
       <Value Profile="(Default)">1</Value>
@@ -38,7 +38,7 @@
     <Setting Name="StopBits" Type="System.IO.Ports.StopBits" Scope="User">
       <Value Profile="(Default)">One</Value>
     </Setting>
-    <Setting Name="DisplayFormat" Type="System.String" Scope="User">
+    <Setting Name="DisplayFormat" Type="Modbus.Common.DisplayFormat" Scope="User">
       <Value Profile="(Default)">Integer</Value>
     </Setting>
   </Settings>

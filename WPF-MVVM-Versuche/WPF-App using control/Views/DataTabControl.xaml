@@ -101,51 +101,36 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <WrapPanel Grid.Column="0" DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center">
-                    <StackPanel Orientation="Horizontal" Margin="0,0,12,0">
-                        <Label Content="First Register:" />
-                        <TextBox VerticalContentAlignment="Center" 
-                                             Text="{Binding StartAddress, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"
-                                             Margin="6,0,0,0" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,0,12,0">
-                        <Label Content="Register Count:" 
-                           Visibility="{Binding ShowDataLength, Converter={StaticResource BooleanToCollapsingVisibilityConverter}}"/>
-                        <TextBox
-                        Text="{Binding DataLength, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" 
-                        Margin="6,0,0,0" 
-                        VerticalContentAlignment="Center"
-                        Visibility="{Binding ShowDataLength, Converter={StaticResource BooleanToCollapsingVisibilityConverter}}" 
-                                 />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Data Format:" Visibility="{Binding ShowDataLength, Converter={StaticResource BooleanToCollapsingVisibilityConverter}}"/>
-                        <ComboBox ItemsSource="{Binding DisplayFormatItemSource}" 
-                              Margin="6,0,0,0" 
-                              SelectedItem="{Binding DisplayFormat, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
-                              SelectedIndex="{Binding DisplayFormatIndex, Mode=TwoWay}"/>
-                    </StackPanel>
+                <WrapPanel Grid.Column="0" DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
+
+                    <Label Content="First Register:" />
+                    <TextBox VerticalContentAlignment="Center" MinWidth="30"
+                                             Text="{Binding StartAddress, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"/>
+
+                    <Label Content="Register Count:" Visibility="{Binding ShowDataLength, Converter={StaticResource BooleanToCollapsingVisibilityConverter}}"/>
+                    <TextBox Visibility="{Binding ShowDataLength, Converter={StaticResource BooleanToCollapsingVisibilityConverter}}"
+                                 Text="{Binding DataLength, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"  MinWidth="30"
+                                 VerticalContentAlignment="Center" />
+
+                    <Label Content="Data Format:" />
+                    <ComboBox ItemsSource="{Binding DisplayFormatItemSource}" 
+                              SelectedItem="{Binding DisplayFormat, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+                    <Button Content="Apply" Command="{Binding ApplyAddressSelectionCommand}" />
+                    <Button Content="Clear" Command="{Binding ClearDataCommand}" />
                 </WrapPanel>
-                <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <Button Content="Apply" Padding="12,3,12,3"
-                                Command="{Binding ApplyAddressSelectionCommand}"/>
-                    <Button Content="Clear" Margin="24,0,0,0" Padding="12,3,12,3"
-                                Command="{Binding ClearDataCommand}" />
-                </StackPanel>
             </Grid>
             <GroupBox Header="Registers" Grid.Row="1">
                 <DockPanel>
-                    <!--<ScrollViewer  VerticalScrollBarVisibility="Disabled">-->
-                        <ItemsControl 
+                    <ItemsControl 
                         ItemsSource="{Binding RegisterModels}"
                         ItemTemplateSelector="{StaticResource RegisterDisplayTemplateSelector}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                        <WrapPanel Orientation="Vertical" MaxWidth="800" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                    <!--</ScrollViewer>-->
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Vertical" MaxWidth="800" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
                 </DockPanel>
             </GroupBox>
         </Grid>

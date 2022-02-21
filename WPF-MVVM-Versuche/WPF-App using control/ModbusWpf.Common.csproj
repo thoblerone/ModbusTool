@@ -68,9 +68,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\DataTabVmToHeaderConverter.cs" />
     <Compile Include="Converters\EnumBooleanConverter.cs" />
     <Compile Include="Converters\IpAddressStringConverter.cs" />
-    <Compile Include="Helpers\EnumHelpers.cs" />
     <Compile Include="Helpers\RegisterDisplayTemplateSelector.cs" />
     <Compile Include="Helpers\IRegisterDataService.cs" />
     <Compile Include="Models\RegisterModel.cs" />

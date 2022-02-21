@@ -19,8 +19,13 @@ namespace ModbusWpf.Common.ViewModels
         public DataTabControlViewModel(IRegisterDataService registerDataService)
         {
             ApplyAddressSelectionCommand = new TaskCommand(() => ApplyAddressSelectionExecuteAsync());
+
+            DisplayFormat = new DisplayFormat();
+            DisplayFormat = Modbus.Common.DisplayFormat.Integer;
+
             ClearDataCommand = new TaskCommand(() => ClearDataExecuteAsync());
-            DisplayFormatItemSource = EnumHelpers.EnumTypeDescriptionToItemSourceArray(typeof(DisplayFormat));
+            DisplayFormatItemSource = Enum.GetValues(typeof(DisplayFormat));
+
 
             if (registerDataService is null)
             {
@@ -54,7 +59,7 @@ namespace ModbusWpf.Common.ViewModels
 
         public bool ShowDataLength { get; set; } = true;
 
-        public DisplayFormat DisplayFormat { get; set; } = DisplayFormat.Integer;
+        public DisplayFormat? DisplayFormat { get; set; }
 
         public object DisplayFormatItemSource { get; }
 
@@ -67,7 +72,6 @@ namespace ModbusWpf.Common.ViewModels
         public TaskCommand ApplyAddressSelectionCommand { get; }
 
         public TaskCommand ClearDataCommand { get; }
-        public bool IsDummyTab = false;
 
         #endregion
 
@@ -79,7 +83,7 @@ namespace ModbusWpf.Common.ViewModels
 
         private async Task ClearDataExecuteAsync()
         {
-            for (var i = StartAddress; i + StartAddress < RegisterDataService.RegisterData.Length && i < DataLength; i++)
+            for (var i = StartAddress; i + StartAddress < RegisterDataService.RegisterData.Length && i < DataLength+ StartAddress; i++)
             {
                 RegisterDataService.RegisterData[i].RegisterValue = 0;
             }
@@ -88,7 +92,7 @@ namespace ModbusWpf.Common.ViewModels
 
         private Task ApplyAddressSelectionExecuteAsync()
         {
-            if (IsDummyTab)
+            if (!DisplayFormat.HasValue) // true for the dummy tab
                 return Task.CompletedTask;
 
             RegisterModels.Clear();
@@ -97,11 +101,11 @@ namespace ModbusWpf.Common.ViewModels
                 i < DataLength + StartAddress;
                 i++)
             {
-                var nCoils = DisplayFormat == DisplayFormat.LED ? 16 : 1;
+                var nCoils = (Modbus.Common.DisplayFormat.LED == DisplayFormat) ? 16 : 1;
 
                 var model = new RegisterDisplayModel(RegisterDataService, i)
                 {
-                    RepresentationKind = DisplayFormat,
+                    RepresentationKind = DisplayFormat.Value,
                     CoilNumber = 0
                 };
                 RegisterModels.Add(model);
@@ -111,14 +115,14 @@ namespace ModbusWpf.Common.ViewModels
                 {
                     model = new RegisterDisplayModel(RegisterDataService, i)
                     {
-                        RepresentationKind = DisplayFormat,
+                        RepresentationKind = DisplayFormat.Value,
                         CoilNumber = coil
                     };
                     RegisterModels.Add(model);
                 }
                 // the floating point representation consumes
                 // two registers for each value, so skip every second
-                if (DisplayFormat == DisplayFormat.FloatReverse)
+                if (DisplayFormat.Value == Modbus.Common.DisplayFormat.FloatReverse)
                     i++;
             }
 

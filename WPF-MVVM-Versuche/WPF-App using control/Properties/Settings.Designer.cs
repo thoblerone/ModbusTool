@@ -97,7 +97,7 @@ namespace ModbusWpf.Common.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
         public ushort StartAddress {
             get {
                 return ((ushort)(this["StartAddress"]));
@@ -109,7 +109,7 @@ namespace ModbusWpf.Common.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("64")]
+        [global::System.Configuration.DefaultSettingValueAttribute("16")]
         public ushort DataLength {
             get {
                 return ((ushort)(this["DataLength"]));
@@ -170,9 +170,9 @@ namespace ModbusWpf.Common.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Integer")]
-        public string DisplayFormat {
+        public global::Modbus.Common.DisplayFormat DisplayFormat {
             get {
-                return ((string)(this["DisplayFormat"]));
+                return ((global::Modbus.Common.DisplayFormat)(this["DisplayFormat"]));
             }
             set {
                 this["DisplayFormat"] = value;

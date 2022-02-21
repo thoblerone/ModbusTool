@@ -16,8 +16,6 @@ namespace ModbusWpf.Common.Converters
     /// </example>
     public class EnumBooleanConverter : IValueConverter
     {
-        #region Overrides of ValueConverterBase<object,object>
-
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             return value?.Equals(parameter);
@@ -28,7 +26,5 @@ namespace ModbusWpf.Common.Converters
         {
             return value?.Equals(true) == true ? parameter : Binding.DoNothing;
         }
-
-        #endregion
     }
 }

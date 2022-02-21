@@ -18,34 +18,8 @@
         <ResourceDictionary>
             <converters:EnumBooleanConverter x:Key="EnumBooleanConverter" />
             <converters:IpAddressStringConverter x:Key="IpAddressStringConverter" />
-            <Style TargetType="{x:Type TextBox}">
-                <Setter Property="Margin" Value="6"/>
-                <Setter Property="VerticalContentAlignment" Value="Center"/>
-                <Setter Property="Height" Value="24" />
-            </Style>
-            <Style TargetType="{x:Type cc:IPTextBox}">
-                <Setter Property="Margin" Value="6" />
-                <Setter Property="Height" Value="24" />
-            </Style>
-            <Style TargetType="{x:Type Button}">
-                <Setter Property="Margin" Value="6" />
-                <Setter Property="Padding" Value="6" />
-            </Style>
-            <Style TargetType="{x:Type RadioButton}">
-                <Setter Property="Margin" Value="6" />
-                <Setter Property="VerticalContentAlignment" Value="Center" />
-            </Style>
-            <Style TargetType="{x:Type ComboBox}">
-                <Setter Property="Margin" Value="6" />
-                <Setter Property="VerticalContentAlignment" Value="Center"/>
-            </Style>
-            <Style TargetType="{x:Type Label}">
-                <Setter Property="VerticalContentAlignment" Value="Center"/>
-            </Style>
-            <Style TargetType="{x:Type GroupBox}">
-                <Setter Property="BorderBrush" Value="DarkGray" />
-                <Setter Property="Padding" Value="6" />
-            </Style>
+            <converters:StartAddressDisplayFormatToHeaderConverter x:Key="StartAddressDisplayFormatToHeaderConverter" />
+
         </ResourceDictionary>
     </catel:Window.Resources>
     <catel:Window.Background>
@@ -61,11 +35,12 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />
+            <ColumnDefinition/>
             <ColumnDefinition />
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <GroupBox Header="Communication" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Margin="0,0,6,0">
+        <GroupBox Header="Communication" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" Margin="0,0,6,0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -148,7 +123,7 @@
                 </GroupBox>
             </Grid>
         </GroupBox>
-        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="0" Grid.Column="4">
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="0" Grid.Column="5">
             <Button Content="Listen" Visibility="{Binding SlaveOptionsVisibility}" Command="{Binding SlaveListenCommand}"
                     Margin="48,0,6,3" Padding="0"  Height="24" />
             <Button Content="Disconnect" Margin="48,2,6,6" Padding="0" Height="24"
@@ -159,25 +134,37 @@
                 </Button>
             </GroupBox>
         </StackPanel>
-        <GroupBox Header="New Tab Display Format"  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
-            <WrapPanel Orientation="Horizontal" Margin="12">
-                <WrapPanel Orientation="Vertical">
-                    <RadioButton GroupName="DisplayFormat" Content="LED" Margin="6"
+        <GroupBox Header="New Tab Display Format"  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
+            <Grid Margin="12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <RadioButton Grid.Row="0" Grid.Column="0" GroupName="DisplayFormat" Content="LED" Margin="6"
                                  IsChecked="{Binding DisplayFormat, ConverterParameter={x:Static common:DisplayFormat.LED}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
-                    <RadioButton GroupName="DisplayFormat" Content="Binary" Margin="6" 
+                <RadioButton Grid.Row="1" Grid.Column="0" GroupName="DisplayFormat" Content="Binary" Margin="6" 
                                  IsChecked="{Binding DisplayFormat, ConverterParameter={x:Static common:DisplayFormat.Binary}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
-                    <RadioButton GroupName="DisplayFormat" Content="Hex" Margin="6" 
+                <RadioButton Grid.Row="2" Grid.Column="0" GroupName="DisplayFormat" Content="Hex" Margin="6" 
                                  IsChecked="{Binding DisplayFormat, ConverterParameter={x:Static common:DisplayFormat.Hex}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
-                </WrapPanel>
-                <WrapPanel Orientation="Vertical">
-                    <RadioButton GroupName="DisplayFormat" Content="Integer" Margin="6" 
+                <RadioButton Grid.Row="0" Grid.Column="1" GroupName="DisplayFormat" Content="Integer" Margin="6" 
                                  IsChecked="{Binding DisplayFormat, ConverterParameter={x:Static common:DisplayFormat.Integer}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
-                    <RadioButton GroupName="DisplayFormat" Content="FloatReverse" Margin="6" 
+                <RadioButton  Grid.Column="1" Grid.Row="1"  GroupName="DisplayFormat" Content="FloatReverse" Margin="6" 
                                  IsChecked="{Binding DisplayFormat, ConverterParameter={x:Static common:DisplayFormat.FloatReverse}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
-                </WrapPanel>
-            </WrapPanel>
-        </GroupBox>
-        <GroupBox Header="Slave Settings" Grid.Row="1" Grid.Column="3" Margin="0,0,6,0">
+                <Label Grid.Row="0" Grid.Column="2" Content="Start Address:" />
+                <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding StartAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="50" />
+                <Label Grid.Row="1" Grid.Column="2"  Content="Data Length:" />
+                <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding DataLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="50" />
+
+            </Grid>
+            </GroupBox>
+            <GroupBox Header="Slave Settings" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="0,0,6,0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -193,15 +180,16 @@
                 <TextBox Grid.Row="1" Grid.Column="1" MinWidth="30" Text="{Binding SlaveDelay}"  Visibility="{Binding SlaveOptionsVisibility}"/>
             </Grid>
         </GroupBox>
-        <GroupBox Header="File I/O" Grid.Row="1" Grid.Column="4">
-            <StackPanel Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Orientation="Vertical" HorizontalAlignment="Right">
-                <Button Content="CSV Import Tab Data ..." />
-                <Button Content="CSV Export Tab Data ..." />
+        <GroupBox Header="CSV File I/O" Grid.Row="1" Grid.Column="5">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Right">
+                <Button Content="Import Tab Data ..." />
+                <Button Content="Export Tab Data ..." />
             </StackPanel>
 
         </GroupBox>
-        <TabControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5" ItemsSource="{Binding DataTabItems}"
-                    SelectedItem="{Binding SelectedDataTabItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        <TabControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="6" ItemsSource="{Binding DataTabItems}"
+                    SelectedItem="{Binding SelectedDataTabItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    IsSynchronizedWithCurrentItem="True">
             <TabControl.ItemTemplate>
                 <!-- this is the header template-->
                 <DataTemplate>
@@ -214,7 +202,14 @@
                                   Data="M 0.47265625 -0.45117188 L -0.45117188 0.47265625 L 2.0839844 3.0078125 L -0.43554688 5.5371094 L 0.48046875 6.4511719 L 3.0019531 3.9257812 L 5.5292969 6.4511719 L 6.4511719 5.5292969 L 3.9257812 3.0019531 L 6.4296875 0.49414062 L 5.5078125 -0.42773438 L 3.0058594 2.0839844 L 0.47265625 -0.45117188 z"
                                   Fill="White" />
                         </Button>
-                        <TextBlock Text="{Binding StartAddress, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding Converter="{StaticResource StartAddressDisplayFormatToHeaderConverter}" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding Path="DisplayFormat" UpdateSourceTrigger="PropertyChanged"/>
+                                    <Binding Path="StartAddress" UpdateSourceTrigger="PropertyChanged"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
                         <TextBlock Text="{Binding DisplayFormat}" FontSize="8" Margin="3,0,0,0" VerticalAlignment="Center"/>
                     </StackPanel>
                 </DataTemplate>
@@ -222,11 +217,11 @@
             <TabControl.ContentTemplate>
                 <!-- this is the body of the TabItem template-->
                 <DataTemplate>
-                    <local:DataTabControl DataContext="{Binding DataContext}" />
+                    <local:DataTabControl />
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>
-        <GroupBox Header="Communication Log" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="5">
+        <GroupBox Header="Communication Log" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="6">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
