@@ -137,7 +137,7 @@
       <Name>Modbus.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\CustomControls\ModbusWpfCustomControls.csproj">
-      <Project>{54d557ce-0d9e-42e7-a50d-6101b6a2bdb4}</Project>
+      <Project>{54D557CE-0D9E-42E7-A50D-6101B6A2BDB4}</Project>
       <Name>ModbusWpfCustomControls</Name>
     </ProjectReference>
   </ItemGroup>

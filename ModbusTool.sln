@@ -17,9 +17,9 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ModbusTool", "Setup\ModbusT
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ModbusWpf", "ModbusWpf", "{699ED452-3141-4FE6-912E-262B0218849A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModbusWpf.Common", "WPF-MVVM-Versuche\WPF-App using control\ModbusWpf.Common.csproj", "{DD6700FA-A81A-44B5-AF7B-1FB1AF29D3A2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModbusWpf.Common", "ModbusWpf\ModbusWpf.Common\ModbusWpf.Common.csproj", "{DD6700FA-A81A-44B5-AF7B-1FB1AF29D3A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModbusWpfCustomControls", "WPF-MVVM-Versuche\CustomControls\ModbusWpfCustomControls.csproj", "{54D557CE-0D9E-42E7-A50D-6101B6A2BDB4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModbusWpfCustomControls", "ModbusWpf\CustomControls\ModbusWpfCustomControls.csproj", "{54D557CE-0D9E-42E7-A50D-6101B6A2BDB4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

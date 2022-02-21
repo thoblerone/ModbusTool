@@ -193,7 +193,7 @@
                 <Label Content="Slave Delay (ms):" Grid.Row="1" Grid.Column="0"  Visibility="{Binding SlaveOptionsVisibility}"/>
                 <TextBox Grid.Row="1" Grid.Column="1" MinWidth="30" Text="{Binding SlaveDelay}"  Visibility="{Binding SlaveOptionsVisibility}"/>
                 <Button Content="Note (Tooltip)" Grid.Row="2" Grid.ColumnSpan="2" >
-                    <Button.ToolTip xml:space="preserve"><![CDATA[Client/Server Terminology:
+                    <Button.ToolTip><![CDATA[Client/Server Terminology:
 The Modbus Organization replaced 'Master-Slave' with 'Client-Server' in July 2020.
 [https://www.modbus.org/docs/Client-ServerPR-07-2020-final.docx.pdf] 
 This new Modbus terminology replaces Master with Client, and Slave with Server, 
