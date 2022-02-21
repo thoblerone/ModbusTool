@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,8 +16,10 @@ using Catel;
 using Catel.IoC;
 using Catel.MVVM;
 using Catel.Services;
+using Microsoft.Win32;
 using Modbus.Common;
 using ModbusWpf.Common.Helpers;
+using ModbusWpf.Common.Models;
 using ModbusWpf.Common.Properties;
 
 namespace ModbusWpf.Common.ViewModels
@@ -80,6 +85,7 @@ namespace ModbusWpf.Common.ViewModels
         public Visibility IpAddressVisibility { get; protected set; } = Visibility.Visible;
 
         public Visibility SlaveOptionsVisibility { get; protected set; } = Visibility.Visible;
+        public Visibility MasterOptionsVisibility { get; protected set; } = Visibility.Visible;
 
         public string[] ComPortItemsSource => SerialPort.GetPortNames();
 
@@ -158,8 +164,12 @@ namespace ModbusWpf.Common.ViewModels
             LogClearCommand = new TaskCommand(OnLogClearCommandExecuteAsync);
 
             SlaveListenCommand = new TaskCommand(OnSlaveListenCommandExecuteAsync);
-            SlaveDisconnectCommand = new TaskCommand(OnSlaveDisconnectCommandExecuteAsync);
+            MasterListenCommand = new TaskCommand(OnMasterListenCommandExecuteAsync);
+            DisconnectCommand = new TaskCommand(OnDisconnectCommandExecuteAsync);
             CloseDataTabItemCommand = new TaskCommand<DataTabControlViewModel>(OnCloseDataTabItemCommandExecuteAsync);
+
+            ExportCurrentTabDataCommand = new TaskCommand(OnExportCurrentTabDataCommandExecuteAsync);
+            ImportCurrentTabDataCommand = new TaskCommand(OnImportCurrentTabDataCommandExecuteAsync);
 
             CommLogEntries = new ();
             DataTabItems = new();
@@ -253,8 +263,179 @@ namespace ModbusWpf.Common.ViewModels
 
         #region Commands
 
-        public TaskCommand SlaveDisconnectCommand { get; }
-        private async Task OnSlaveDisconnectCommandExecuteAsync()
+
+        public TaskCommand ImportCurrentTabDataCommand { get; }
+
+        private async Task OnImportCurrentTabDataCommandExecuteAsync()
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                AddExtension = true,
+                DefaultExt = ".csv",
+                Multiselect = false
+            };
+
+            var registerDataService = ServiceLocator.Default.TryResolveType<IRegisterDataService>();
+
+            if (registerDataService is null)
+                return;
+
+            if (openFileDialog.ShowDialog() != true)
+                return;
+
+
+            var registerImportModel = new RegisterDisplayModel(registerDataService, 0);
+
+            using (var s = new FileStream(openFileDialog.FileName, FileMode.Open, FileAccess.Read))
+            {
+                using (var r = new StreamReader(s))
+                {
+                    var fileContent = r.ReadToEnd();
+                    var registerNumberValuePairs =
+                        fileContent.Split(new []{CultureInfo.CurrentUICulture.TextInfo.ListSeparator}, StringSplitOptions.None);
+
+                    var first = true;
+                    foreach (var registerValuePair in registerNumberValuePairs)
+                    {
+                        DisplayFormat fmt;
+
+                        var v = registerValuePair.Split(':');
+                        var address = int.Parse(v[0]);
+                        var strValue = v[1];
+
+                        registerImportModel.RegisterNumber = address;
+
+                        if (strValue.StartsWith("0x", StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            fmt = DisplayFormat.Hex;
+                            registerImportModel.HexString = strValue;
+                        }
+                        else if (v[1].Contains(CultureInfo.CurrentUICulture.NumberFormat.CurrencyDecimalSeparator)) // found decimal point -> must be 2 register float
+                        // bug: there's no way do distinguish between FloatReverse and the not yet implemented Float"Normal" representation
+                        {
+                            fmt = DisplayFormat.FloatReverse;
+                            registerImportModel.FloatReverseString = strValue;
+                        }
+                        else if (v[1].Length > 6) //must be binary or LED, bug: the data format does not allow to distinguish
+                        {
+                            fmt = DisplayFormat.Binary;
+                            registerImportModel.BinaryString = strValue;
+                        }
+                        else
+                        {
+                            fmt = DisplayFormat.Integer;
+                            registerImportModel.TargetRegisterValue = Convert.ToUInt16(v[1], 10);
+                        }
+
+                        if (first)
+                        {
+                            SelectedDataTabItem.DisplayFormat = fmt;
+                            SelectedDataTabItem.StartAddress = registerImportModel.RegisterNumber;
+                            first = false;
+                        }
+                    }
+
+                    r.Close();
+                    SelectedDataTabItem.DataLength = Convert.ToUInt16(registerNumberValuePairs.Length);
+
+                    if (SelectedDataTabItem.DisplayFormat == DisplayFormat.FloatReverse)
+                        SelectedDataTabItem.DataLength *= 2;
+
+                    SelectedDataTabItem.ApplyAddressSelectionCommand.Execute();
+                }
+
+                s.Close();
+            }
+
+            await Task.CompletedTask;
+        }
+
+        public TaskCommand ExportCurrentTabDataCommand { get; }
+
+        private async Task OnExportCurrentTabDataCommandExecuteAsync()
+        {
+            if (SelectedDataTabItem?.RegisterModels.FirstOrDefault() is null)
+                return;
+
+            // var length = SelectedDataTabItem.DataLength;
+            // var startAddress = SelectedDataTabItem.StartAddress;
+            var startAddress = SelectedDataTabItem.RegisterModels.First().RegisterNumber;
+
+            string suffix = DisplayFormat switch
+            {
+                DisplayFormat.Integer => "_Decimal_",
+                DisplayFormat.Hex => "_HEX_",
+                DisplayFormat.Binary => "_Binary_",
+                DisplayFormat.LED => "_LED_",
+                DisplayFormat.FloatReverse => "_FloatReverse_",
+                _ => throw new ArgumentOutOfRangeException()
+            };
+            var filename = "ModbusExport_" + startAddress + suffix + DateTime.Now.ToString("yyyyMMddHHmm") + ".csv";
+
+            var saveFileDialog = new SaveFileDialog
+            {
+                AddExtension = true,
+                DefaultExt = ".csv",
+                FileName = filename,
+                OverwritePrompt = true
+            };
+
+            if (saveFileDialog.ShowDialog() != true)
+            {
+                return;
+            }
+
+            using (var s = saveFileDialog.OpenFile())
+            {
+                using (var w = new StreamWriter(s))
+                {
+                    var regLast = SelectedDataTabItem.RegisterModels.Last();
+
+                    foreach (var register in SelectedDataTabItem.RegisterModels)
+                    {
+                        w.Write(register.RegisterNumber);
+                        await w.WriteAsync(':').ConfigureAwait(false);
+                        var data = register.TargetRegisterValue;//_registerData[StartAddress + x];
+                        switch (SelectedDataTabItem.DisplayFormat)
+                        {
+                            case DisplayFormat.Integer:
+                                w.Write(register.TargetRegisterValue.ToString());
+                                break;
+                            case DisplayFormat.Hex:
+                                await w.WriteAsync($"0x{register.HexString}").ConfigureAwait(false);
+                                break;
+                            case DisplayFormat.Binary:
+                            case DisplayFormat.LED:
+                                await w.WriteAsync(register.BinaryString).ConfigureAwait(false);
+                                break;
+                            case DisplayFormat.FloatReverse:
+                                await w.WriteAsync(register.FloatReverseString).ConfigureAwait(false);
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+
+                        if (register.RegisterNumber < regLast.RegisterNumber)
+                            await w.WriteAsync(CultureInfo.CurrentUICulture.TextInfo.ListSeparator).ConfigureAwait(false);
+                    }
+
+                    await w.FlushAsync().ConfigureAwait(false);
+                    w.Close();
+                }
+
+                s.Close();
+            }
+
+            await Task.CompletedTask;
+        }
+
+        public TaskCommand MasterListenCommand { get; }
+        private async Task OnMasterListenCommandExecuteAsync()
+        {
+            throw new NotImplementedException("Implement in sub class");
+        }
+        public TaskCommand DisconnectCommand { get; }
+        private async Task OnDisconnectCommandExecuteAsync()
         {
             throw new NotImplementedException("Implement in sub class");
         }

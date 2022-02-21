@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Catel.Data;
 using Modbus.Common;
 using ModbusWpf.Common.Helpers;
@@ -182,7 +183,7 @@ namespace ModbusWpf.Common.Models
                 if (RegisterNumber >= RegisterDataService.RegisterData.Length - 1)
                     throw new IndexOutOfRangeException();
 
-                if (!float.TryParse(value, out var fVal))
+                if (!float.TryParse(value, NumberStyles.Any, CultureInfo.CurrentUICulture, out var fVal))
                     fVal = 0;
 
                 var bytes = BitConverter.GetBytes(fVal);
@@ -209,7 +210,7 @@ namespace ModbusWpf.Common.Models
                 bytes[0] = (byte) (dataUshort2 % 256);
                 bytes[1] = (byte) ((dataUshort2 >> 8) % 256);
 
-                return System.BitConverter.ToSingle(bytes, 0).ToString("f3");
+                return System.BitConverter.ToSingle(bytes, 0).ToString("f3",  CultureInfo.CurrentUICulture);
             }
             set
             {

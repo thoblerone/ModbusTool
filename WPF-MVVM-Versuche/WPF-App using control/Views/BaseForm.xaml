@@ -123,17 +123,30 @@
                 </GroupBox>
             </Grid>
         </GroupBox>
-        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="0" Grid.Column="5">
-            <Button Content="Listen" Visibility="{Binding SlaveOptionsVisibility}" Command="{Binding SlaveListenCommand}"
-                    Margin="48,0,6,3" Padding="0"  Height="24" />
-            <Button Content="Disconnect" Margin="48,2,6,6" Padding="0" Height="24"
-                    Visibility="{Binding SlaveOptionsVisibility}" Command="{Binding SlaveDisconnectCommand}" />
-            <GroupBox Header="If you find this useful ..." >
-                <Button Command="{Binding DonateCommand}">
-                    <Image Source="btn_donateCC_LG.gif" />
-                </Button>
-            </GroupBox>
-        </StackPanel>
+        <Grid Grid.Row="0" Grid.Column="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0" Content="Listen" Visibility="{Binding SlaveOptionsVisibility}" 
+                    Command="{Binding SlaveListenCommand}"
+                    Margin="48,12,6,3" Padding="0"  Height="24" />
+            <Button Grid.Row="0" Content="Listen" Visibility="{Binding MasterOptionsVisibility}" 
+                    Command="{Binding MasterListenCommand}"
+                    Margin="48,12,6,3" Padding="0"  Height="24" />
+            <Button Grid.Row="1" Content="Disconnect" Margin="48,2,6,6" Padding="0" Height="24"
+                    Visibility="{Binding SlaveOptionsVisibility}" 
+                    Command="{Binding DisconnectCommand}" />
+
+            <StackPanel Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <GroupBox Header="If you find this useful ..." >
+                    <Button Command="{Binding DonateCommand}">
+                        <Image Source="btn_donateCC_LG.gif" />
+                    </Button>
+                </GroupBox>
+            </StackPanel>
+        </Grid>
         <GroupBox Header="New Tab Display Format"  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
             <Grid Margin="12">
                 <Grid.ColumnDefinitions>
@@ -182,10 +195,23 @@
         </GroupBox>
         <GroupBox Header="CSV File I/O" Grid.Row="1" Grid.Column="5">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Right">
-                <Button Content="Import Tab Data ..." />
-                <Button Content="Export Tab Data ..." />
+                <Button Content="Import Tab Data ..." Command="{Binding ImportCurrentTabDataCommand}"/>
+                <Button Content="Export Tab Data ..." Command="{Binding ExportCurrentTabDataCommand}"/>
+                <Button Content="Note (Tooltip)" Tag="" >
+                    <Button.ToolTip xml:space="preserve"><![CDATA[
+                        Client/Server
+                        The Modbus Organization replaced 'Master-Slave' with 'Client-Server' in July 2020.
+                        [https://www.modbus.org/docs/Client-ServerPR-07-2020-final.docx.pdf] 
+                        This new Modbus terminology replaces Master with Client, and Slave with Server, 
+                        thus a Modbus network has a single client (ex-master) with multiple servers (ex-slaves). 
+                        This has caused some confusion as a usual office PC computer network would have a single 
+                        server with multiple clients (i.e. PC users), and is the reverse of, for example, Python, 
+                        where Master was replaced with Server. In the case of Modbus, the client (main controller) 
+                        is the only device on the network that can initiate a transfer requesting the data, and 
+                        the servers (e.g. sensors) are the ones serving the data in response.]]>
+                    </Button.ToolTip>
+                </Button>
             </StackPanel>
-
         </GroupBox>
         <TabControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="6" ItemsSource="{Binding DataTabItems}"
                     SelectedItem="{Binding SelectedDataTabItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
