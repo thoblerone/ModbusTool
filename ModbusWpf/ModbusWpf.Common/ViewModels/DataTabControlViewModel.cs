@@ -87,7 +87,6 @@ namespace ModbusWpf.Common.ViewModels
             {
                 RegisterDataService.RegisterData[i].RegisterValue = 0;
             }
-
         }
 
         private Task ApplyAddressSelectionExecuteAsync()

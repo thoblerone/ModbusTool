@@ -12,7 +12,7 @@
         xmlns:local="clr-namespace:ModbusWpf.Common.Views" x:Class="ModbusWpf.Common.Views.BaseForm"
         mc:Ignorable="d"
         Title="BaseForm" Height="940" Width="885"
-        d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type viewModels:BaseFormViewModel}}"
+        d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type viewModels:BaseViewModel}}"
         >
     <catel:Window.Resources>
         <ResourceDictionary>
@@ -215,7 +215,8 @@ the servers (e.g. sensors) are the ones serving the data in response.]]>
         </GroupBox>
         <TabControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="6" ItemsSource="{Binding DataTabItems}"
                     SelectedItem="{Binding SelectedDataTabItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    IsSynchronizedWithCurrentItem="True">
+                    IsSynchronizedWithCurrentItem="True"
+                    Margin="0,6,0,0">
             <TabControl.ItemTemplate>
                 <!-- this is the header template-->
                 <DataTemplate>

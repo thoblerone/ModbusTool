@@ -24,7 +24,7 @@ using ModbusWpf.Common.Properties;
 
 namespace ModbusWpf.Common.ViewModels
 {
-    class BaseFormViewModel : ViewModelBase
+    public class BaseViewModel : ViewModelBase
     {
         // used in derived master and slave classes
         protected Socket Socket { get; set; }
@@ -140,11 +140,11 @@ namespace ModbusWpf.Common.ViewModels
         #endregion // Properties
 
         #region Constructors 
-        public BaseFormViewModel() : this(null, null)
+        public BaseViewModel() : this(null, null)
         {
         }
 
-        public BaseFormViewModel(IDispatcherService dispatcherService, IRegisterDataService registerDataService)
+        public BaseViewModel(IDispatcherService dispatcherService, IRegisterDataService registerDataService)
         {
             if (registerDataService is null)
             {

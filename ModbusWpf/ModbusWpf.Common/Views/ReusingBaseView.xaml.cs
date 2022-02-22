@@ -10,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace ModbusWpf.Common.Views
 {
     /// <summary>
-    /// Interaktionslogik für MyNewBaseFormControl.xaml
+    /// Interaktionslogik für ReusingBaseView.xaml
     /// </summary>
-    public partial class BaseControl
+    public partial class ReusingBaseView 
     {
-        public BaseControl()
+        public ReusingBaseView()
         {
             InitializeComponent();
         }

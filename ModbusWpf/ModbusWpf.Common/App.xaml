@@ -34,5 +34,5 @@
             <Setter Property="Padding" Value="6" />
         </Style>
 
-</Application.Resources>
+    </Application.Resources>
 </Application>
