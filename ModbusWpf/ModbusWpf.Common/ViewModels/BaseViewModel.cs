@@ -27,9 +27,11 @@ namespace ModbusWpf.Common.ViewModels
     public class BaseViewModel : ViewModelBase
     {
         // used in derived master and slave classes
-        protected Socket Socket { get; set; }
+        protected Socket _socket;
+        protected SerialPort _uart;
 
-        private readonly IDispatcherService _dispatcherService;
+
+        protected readonly IDispatcherService _dispatcherService;
 
         #region Properties
 
@@ -79,8 +81,19 @@ namespace ModbusWpf.Common.ViewModels
 
         public CommunicationMode CommunicationMode { get; set; } = CommunicationMode.TCP;
 
-        public bool EnableTcpOptions => CommunicationMode is CommunicationMode.TCP or CommunicationMode.UDP;
-        public bool EnableRtuOptions => CommunicationMode == CommunicationMode.RTU;
+        public bool EnableTcpOptions
+        {
+            get { return 
+                CommunicationMode is CommunicationMode.TCP or CommunicationMode.UDP &&
+                HasConnected == false; }
+        }
+
+        public bool EnableRtuOptions
+        {
+            get { return 
+                CommunicationMode == CommunicationMode.RTU &&
+                HasConnected == false; }
+        }
 
         public Visibility IpAddressVisibility { get; protected set; } = Visibility.Visible;
 
@@ -137,6 +150,8 @@ namespace ModbusWpf.Common.ViewModels
             }
         }
 
+        public bool HasConnected { get; set; }
+
         #endregion // Properties
 
         #region Constructors 
@@ -163,9 +178,9 @@ namespace ModbusWpf.Common.ViewModels
             DonateCommand = new TaskCommand(OnDonateCommandExecuteAsync);
             LogClearCommand = new TaskCommand(OnLogClearCommandExecuteAsync);
 
-            SlaveListenCommand = new TaskCommand(OnSlaveListenCommandExecuteAsync);
-            MasterListenCommand = new TaskCommand(OnMasterListenCommandExecuteAsync);
-            DisconnectCommand = new TaskCommand(OnDisconnectCommandExecuteAsync);
+            SlaveListenCommand = new TaskCommand(OnSlaveListenCommandExecuteAsync, () => !HasConnected);
+            MasterListenCommand = new TaskCommand(OnMasterListenCommandExecuteAsync, () => !HasConnected);
+            DisconnectCommand = new TaskCommand(OnDisconnectCommandExecuteAsync, () => HasConnected);
             CloseDataTabItemCommand = new TaskCommand<DataTabControlViewModel>(OnCloseDataTabItemCommandExecuteAsync);
 
             ExportCurrentTabDataCommand = new TaskCommand(OnExportCurrentTabDataCommandExecuteAsync);
@@ -430,12 +445,12 @@ namespace ModbusWpf.Common.ViewModels
         }
 
         public TaskCommand MasterListenCommand { get; }
-        private async Task OnMasterListenCommandExecuteAsync()
+        protected virtual async Task OnMasterListenCommandExecuteAsync()
         {
             throw new NotImplementedException("Implement in sub class");
         }
         public TaskCommand DisconnectCommand { get; }
-        private async Task OnDisconnectCommandExecuteAsync()
+        protected virtual async Task OnDisconnectCommandExecuteAsync()
         {
             throw new NotImplementedException("Implement in sub class");
         }
@@ -538,28 +553,21 @@ namespace ModbusWpf.Common.ViewModels
             if (LogPaused)
                 return;
 
-            if (!Dispatcher.CurrentDispatcher.CheckAccess())
+            _dispatcherService.Invoke(() =>
             {
-                // if required, recursive call on dispatcher thread
-                _dispatcherService.Invoke(new AppendLogDelegate(AppendLog), log);
-                return;
-            }
+                var now = DateTime.Now;
+                var logEntry = $">{now.ToLongTimeString()}: {log}";
+                CommLogEntries.Add(logEntry);
+                SelectedCommLogIndex = CommLogEntries.Count - 1;
+                SelectedCommLogIndex = -1;
 
-            var now = DateTime.Now;
-            var logEntry = $">{now.ToLongTimeString()}: {log}";
-            CommLogEntries.Add(logEntry);
-            SelectedCommLogIndex = CommLogEntries.Count - 1;
-            SelectedCommLogIndex = - 1;
-
-            // don't let the log file get huge to conserve memory
-            if (CommLogEntries.Count > 15000)
-            {
-                _dispatcherService.InvokeAsync(() =>
+                // don't let the log file get huge to conserve memory
+                if (CommLogEntries.Count > 15000)
                 {
-                    while(CommLogEntries.Count > 10000)
+                    while (CommLogEntries.Count > 10000)
                         CommLogEntries.RemoveAt(0);
-                });
-            }
+                }
+            });
         }
 
         #endregion

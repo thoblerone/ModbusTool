@@ -24,5 +24,13 @@ namespace ModbusWpf.Common.Views
         {
             InitializeComponent();
         }
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is not ListBox theBox)
+                return;
+
+            theBox.ScrollIntoView(theBox.SelectedItem);
+        }
     }
 }

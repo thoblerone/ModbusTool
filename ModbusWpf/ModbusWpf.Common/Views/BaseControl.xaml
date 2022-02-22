@@ -79,7 +79,9 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <GroupBox Header="Mode" Grid.Column="0" Margin="0,0,6,0">
+                <GroupBox Header="Mode" Grid.Column="0" Margin="0,0,6,0"
+                          IsEnabled="{Binding HasConnected, Converter={catel:BooleanToOppositeBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"
+                          >
                     <StackPanel Orientation="Vertical" >
                         <RadioButton GroupName="Mode" Content="TCP" 
                                      IsChecked="{Binding CommunicationMode, ConverterParameter={x:Static common:CommunicationMode.TCP}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
@@ -89,7 +91,8 @@
                                      IsChecked="{Binding CommunicationMode, ConverterParameter={x:Static common:CommunicationMode.RTU}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox Header="TCP" Grid.Column="1" IsEnabled="{Binding EnableTcpOptions}" Margin="0,0,6,0">
+                <GroupBox Header="TCP" Grid.Column="1" Margin="0,0,6,0"
+                          IsEnabled="{Binding EnableTcpOptions, UpdateSourceTrigger=PropertyChanged}" >
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition />
@@ -105,7 +108,8 @@
                         <cc:IPTextBox Grid.Column="1" Grid.Row="1" Address="{Binding IpAddress, Converter={StaticResource IpAddressStringConverter}}" Margin="6" Visibility="{Binding IpAddressVisibility}" />
                     </Grid>
                 </GroupBox>
-                <GroupBox Header="RTU" Grid.Column="2" IsEnabled="{Binding EnableRtuOptions}">
+                <GroupBox Header="RTU" Grid.Column="2" 
+                          IsEnabled="{Binding EnableRtuOptions, UpdateSourceTrigger=PropertyChanged}">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition />
@@ -161,14 +165,13 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
-            <Button Grid.Row="0" Content="Listen" Visibility="{Binding SlaveOptionsVisibility}" 
+            <Button Grid.Row="0" Content="Listen" Visibility="{Binding SlaveOptionsVisibility}"
                     Command="{Binding SlaveListenCommand}"
                     Margin="48,12,6,3" Padding="0"  Height="24" />
-            <Button Grid.Row="0" Content="Listen" Visibility="{Binding MasterOptionsVisibility}" 
+            <Button Grid.Row="0" Content="Connect" Visibility="{Binding MasterOptionsVisibility}" 
                     Command="{Binding MasterListenCommand}"
                     Margin="48,12,6,3" Padding="0"  Height="24" />
             <Button Grid.Row="1" Content="Disconnect" Margin="48,2,6,6" Padding="0" Height="24"
-                    Visibility="{Binding SlaveOptionsVisibility}" 
                     Command="{Binding DisconnectCommand}" />
 
             <StackPanel Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Bottom">
@@ -209,7 +212,9 @@
 
             </Grid>
         </GroupBox>
-        <GroupBox Header="Slave Settings" Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="0,0,6,0">
+        <GroupBox Header="Slave Settings" Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="2" 
+                  HorizontalAlignment="Right" Margin="0,0,6,0"
+                  IsEnabled="{Binding HasConnected, Converter={catel:BooleanToOppositeBooleanConverter}, UpdateSourceTrigger=PropertyChanged}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -240,7 +245,7 @@ the servers (e.g. sensors) are the ones serving the data in response.]]>
                 </Button>
             </Grid>
         </GroupBox>
-        <GroupBox Header="CSV File I/O" Grid.Row="2" Grid.Column="5">
+        <GroupBox Header="CSV File I/O" Grid.Row="2" Grid.Column="5" IsEnabled="{Binding HasConnected, Converter={catel:BooleanToOppositeBooleanConverter}, UpdateSourceTrigger=PropertyChanged}">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Right">
                 <Button Content="Import Tab Data ..." Command="{Binding ImportCurrentTabDataCommand}"/>
                 <Button Content="Export Tab Data ..." Command="{Binding ExportCurrentTabDataCommand}"/>
@@ -306,7 +311,15 @@ the servers (e.g. sensors) are the ones serving the data in response.]]>
                          ItemsSource="{Binding CommLogEntries}"
                          SelectedIndex="{Binding SelectedCommLogIndex}"
                     Background ="Black"
-                    Foreground="LimeGreen" />
+                    Foreground="LimeGreen" SelectionChanged="ListBox_SelectionChanged">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Padding" Value="0" />
+                            <Setter Property="Margin" Value="-1" />
+                            <Setter Property="BorderThickness" Value="0" />
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
             </Grid>
         </GroupBox>
     </Grid>
