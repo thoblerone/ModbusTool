@@ -150,7 +150,6 @@
   <ItemGroup>
     <PackageReference Include="Catel.Fody">
       <Version>4.7.0</Version>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Catel.MVVM">
