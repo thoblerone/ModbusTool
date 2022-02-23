@@ -264,6 +264,40 @@
                 <Button Content="Export Tab Data ..." Command="{Binding ExportCurrentTabDataCommand}"/>
             </StackPanel>
         </GroupBox>
+        <GroupBox Header="Functions" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Visibility="{Binding MasterOptionsVisibility}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Row="0" Grid.Column="0" Command="{Binding ExecuteClientFunctionCommand}" CommandParameter="ReadCoils" Content="Read coils" />
+                <Button Grid.Row="0" Grid.Column="1" Command="{Binding ExecuteClientFunctionCommand}" CommandParameter="ReadDiscrete" Content="Read&#xa;discrete" />
+                <Button Grid.Row="0" Grid.Column="2" Command="{Binding ExecuteClientFunctionCommand}" CommandParameter="ReadHoldingRegister" Content="Read holding&#xa;register" />
+                <Button Grid.Row="0" Grid.Column="3" Command="{Binding ExecuteClientFunctionCommand}" CommandParameter="ReadInputRegister" Content="Read input&#xa;register" />
+                <Button Grid.Row="0" Grid.Column="4" Command="{Binding ExecuteClientFunctionCommand}" CommandParameter="WriteSingleCoil" Content="Write&#xa;single coil" />
+                <Button Grid.Row="0" Grid.Column="5" Command="{Binding ExecuteClientFunctionCommand}" CommandParameter="WriteSingleRegister" Content="Write single&#xa;register" />
+                <Button Grid.Row="0" Grid.Column="6" Command="{Binding ExecuteClientFunctionCommand}" CommandParameter="WriteMultipleCoils" Content="Write&#xa;multiple coils" />
+                <Button Grid.Row="0" Grid.Column="7" Command="{Binding ExecuteClientFunctionCommand}" CommandParameter="WriteMultipeRegister" Content="Write multiple&#xa;register" />
+                <StackPanel Grid.Row="1" Grid.ColumnSpan="8" Grid.Column="0" Orientation="Horizontal" >
+                    <CheckBox Margin="6,0,0,0" IsChecked="{Binding ClientPollingActive}" Content="Poll" VerticalContentAlignment="Center"/>
+                    <TextBox Text="{Binding ClientPollTime, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="50" VerticalAlignment="Center" />
+                    <TextBlock Text="ms" Width="50" VerticalAlignment="Center"/>
+                </StackPanel>
+
+            </Grid>
+
+        </GroupBox>
         <TabControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding DataTabItems}"
                     SelectedItem="{Binding SelectedDataTabItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     IsSynchronizedWithCurrentItem="True"

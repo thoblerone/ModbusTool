@@ -190,6 +190,7 @@ namespace ModbusWpf.Common.ViewModels
 
             ExportCurrentTabDataCommand = new TaskCommand(OnExportCurrentTabDataCommandExecuteAsync);
             ImportCurrentTabDataCommand = new TaskCommand(OnImportCurrentTabDataCommandExecuteAsync);
+            ExecuteClientFunctionCommand = new TaskCommand<string>(OnExecuteClientFunctionCommandExecuteAsync);
 
             CommLogEntries = new ();
             DataTabItems = new();
@@ -489,6 +490,13 @@ namespace ModbusWpf.Common.ViewModels
 
 
         public TaskCommand<DataTabControlViewModel> CloseDataTabItemCommand { get; }
+
+        public TaskCommand<string> ExecuteClientFunctionCommand { get; }
+
+        public virtual async Task OnExecuteClientFunctionCommandExecuteAsync(string commandDescription)
+        {
+            throw new NotImplementedException("Implement in sub class");
+        }
 
         private async Task OnCloseDataTabItemCommandExecuteAsync(DataTabControlViewModel tabItem)
         {
