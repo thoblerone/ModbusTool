@@ -11,7 +11,7 @@
         xmlns:ports="clr-namespace:System.IO.Ports;assembly=System"
         xmlns:local="clr-namespace:ModbusWpf.Common.Views" x:Class="ModbusWpf.Common.Views.BaseForm"
         mc:Ignorable="d"
-        Title="BaseForm" Height="940" Width="885"
+        Title="{Binding Title}" Height="940" Width="885"
         d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type viewModels:BaseViewModel}}"
         >
     <catel:Window.Resources>

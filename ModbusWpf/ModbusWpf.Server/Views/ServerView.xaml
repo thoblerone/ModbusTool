@@ -8,16 +8,10 @@
         xmlns:commonViews="clr-namespace:ModbusWpf.Common.Views;assembly=ModbusWpf.Common"
         xmlns:viewModels="clr-namespace:ModbusWpf.Server.ViewModels"
         mc:Ignorable="d"
-        Title="ServerView" 
+        Title="{Binding Title}" 
         d:DesignHeight="940" d:DesignWidth="885"
         d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type viewModels:ServerViewModel}}"
         Height="940" Width="885">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition />
-        </Grid.RowDefinitions>
-        <Label Content="{Binding}" Grid.Row="0"  />
-        <commonViews:BaseControl Grid.Row="1" />
-    </Grid>
+
+        <commonViews:BaseControl />
 </catel:Window>

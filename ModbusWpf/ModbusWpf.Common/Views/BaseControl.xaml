@@ -11,7 +11,6 @@
              xmlns:ports="clr-namespace:System.IO.Ports;assembly=System"
              xmlns:viewModels="clr-namespace:ModbusWpf.Common.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="940" d:DesignWidth="885"
              d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type viewModels:BaseViewModel}}"
              
              >
@@ -54,25 +53,20 @@
     <catel:UserControl.Background>
         <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
     </catel:UserControl.Background>
-    
+
     <Grid Margin="6">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="2*"/>
-            <RowDefinition Height="1*"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition/>
-            <ColumnDefinition />
-            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Label Content="{Binding }" Grid.Row="0" Grid.ColumnSpan="4" />
-        <GroupBox Header="Communication" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" Margin="0,0,6,0">
+        <GroupBox Header="Communication" Grid.Row="0" Grid.Column="0" Margin="0,0,6,0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -95,8 +89,8 @@
                           IsEnabled="{Binding EnableTcpOptions, UpdateSourceTrigger=PropertyChanged}" >
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -159,7 +153,7 @@
                 </GroupBox>
             </Grid>
         </GroupBox>
-        <Grid Grid.Row="1" Grid.Column="5">
+        <Grid Grid.Row="0" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto" />
@@ -182,76 +176,95 @@
                 </GroupBox>
             </StackPanel>
         </Grid>
-        <GroupBox Header="New Tab Display Format"  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
-            <Grid Margin="12">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <RadioButton Grid.Row="0" Grid.Column="0" GroupName="DisplayFormat" Content="LED" Margin="6"
+        <DockPanel Grid.Row="1" Grid.Column="0">
+            <GroupBox Header="New Tab Display Format"  DockPanel.Dock="Left">
+                <Grid Margin="6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <RadioButton Grid.Row="0" Grid.Column="0" GroupName="DisplayFormat" Content="LED" Margin="6"
                                  IsChecked="{Binding DisplayFormat, ConverterParameter={x:Static common:DisplayFormat.LED}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
-                <RadioButton Grid.Row="1" Grid.Column="0" GroupName="DisplayFormat" Content="Binary" Margin="6" 
+                    <RadioButton Grid.Row="1" Grid.Column="0" GroupName="DisplayFormat" Content="Binary" Margin="6" 
                                  IsChecked="{Binding DisplayFormat, ConverterParameter={x:Static common:DisplayFormat.Binary}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
-                <RadioButton Grid.Row="2" Grid.Column="0" GroupName="DisplayFormat" Content="Hex" Margin="6" 
+                    <RadioButton Grid.Row="2" Grid.Column="0" GroupName="DisplayFormat" Content="Hex" Margin="6" 
                                  IsChecked="{Binding DisplayFormat, ConverterParameter={x:Static common:DisplayFormat.Hex}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
-                <RadioButton Grid.Row="0" Grid.Column="1" GroupName="DisplayFormat" Content="Integer" Margin="6" 
+                    <RadioButton Grid.Row="0" Grid.Column="1" GroupName="DisplayFormat" Content="Integer" Margin="6" 
                                  IsChecked="{Binding DisplayFormat, ConverterParameter={x:Static common:DisplayFormat.Integer}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
-                <RadioButton  Grid.Column="1" Grid.Row="1"  GroupName="DisplayFormat" Content="FloatReverse" Margin="6" 
+                    <RadioButton  Grid.Column="1" Grid.Row="1"  GroupName="DisplayFormat" Content="FloatReverse" Margin="6" 
                                  IsChecked="{Binding DisplayFormat, ConverterParameter={x:Static common:DisplayFormat.FloatReverse}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
-                <Label Grid.Row="0" Grid.Column="2" Content="Start Address:" />
-                <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding StartAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="50" />
-                <Label Grid.Row="1" Grid.Column="2"  Content="Data Length:" />
-                <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding DataLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="50" />
+                    <Label Grid.Row="0" Grid.Column="2" Content="Start Address:" />
+                    <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding StartAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="50" />
+                    <Label Grid.Row="1" Grid.Column="2"  Content="Data Length:" />
+                    <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding DataLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="50" />
 
-            </Grid>
-        </GroupBox>
-        <GroupBox Header="Slave Settings" Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="2" 
+                </Grid>
+            </GroupBox>
+            <Button Padding="3,0, 10,0" 
+                    BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0" 
+                    IsEnabled="False" ToolTipService.ShowOnDisabled="True" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="60000">
+                <Path Data="{Binding IconPath}" HorizontalAlignment="Right" Stretch="Uniform" Width="100" Height="100">
+                    <Path.Fill>
+                        <LinearGradientBrush>
+                            <GradientStop Color="{Binding IconColor}" Offset="0" />
+                            <GradientStop Color="{DynamicResource {x:Static SystemColors.ControlDarkDarkColorKey}}" Offset="1" />
+                            <LinearGradientBrush.Transform>
+                                <MatrixTransform Matrix="0.75,0,0,0.75,0,0" />
+                            </LinearGradientBrush.Transform>
+                        </LinearGradientBrush>
+                    </Path.Fill>
+                </Path>
+                <Button.ToolTip>
+                    <ToolTip MaxWidth="450">
+                        <TextBlock TextWrapping="Wrap"><Bold>Client/Server Terminology:</Bold><LineBreak />
+                            The Modbus Organization replaced 'Master-Slave' with 'Client-Server' in July 2020.<LineBreak />
+                            https://www.modbus.org/docs/Client-ServerPR-07-2020-final.docx.pdf <LineBreak />
+                            The new Modbus terminology replaces Master with Client, and Slave with Server, 
+                            thus a Modbus network has a single client (ex-master) with multiple servers (ex-slaves). 
+                            This has caused some confusion as a usual office PC computer network would have a single 
+                            server with multiple clients (i.e. PC users), and is the reverse of, for example, Python, 
+                            where Master was replaced with Server. <LineBreak/>
+                            <Bold>In the case of Modbus, the client (main controller) 
+                            is the only device on the network that can initiate a transfer requesting the data, and 
+                            the servers (e.g. sensors) are the ones serving the data in response.</Bold></TextBlock>
+                    </ToolTip>
+                </Button.ToolTip>
+
+            </Button>
+            <GroupBox DockPanel.Dock="Right" Header="Slave Settings" Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="1" 
                   HorizontalAlignment="Right" Margin="0,0,6,0"
                   IsEnabled="{Binding HasConnected, Converter={catel:BooleanToOppositeBooleanConverter}, UpdateSourceTrigger=PropertyChanged}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Label Content="Slave ID:" Grid.Row="0" Grid.Column="0" />
-                <TextBox Grid.Row="0" Grid.Column="1" MinWidth="30" Text="{Binding SlaveId}"/>
-                <Label Content="Slave Delay (ms):" Grid.Row="1" Grid.Column="0"  Visibility="{Binding SlaveOptionsVisibility}"/>
-                <TextBox Grid.Row="1" Grid.Column="1" MinWidth="30" Text="{Binding SlaveDelay}"  Visibility="{Binding SlaveOptionsVisibility}"/>
-                <Button Content="Note (Tooltip)" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" >
-                    <Button.ToolTip>
-                        <![CDATA[Client/Server Terminology:
-The Modbus Organization replaced 'Master-Slave' with 'Client-Server' in July 2020.
-[https://www.modbus.org/docs/Client-ServerPR-07-2020-final.docx.pdf] 
-This new Modbus terminology replaces Master with Client, and Slave with Server, 
-thus a Modbus network has a single client (ex-master) with multiple servers (ex-slaves). 
-This has caused some confusion as a usual office PC computer network would have a single 
-server with multiple clients (i.e. PC users), and is the reverse of, for example, Python, 
-where Master was replaced with Server. In the case of Modbus, the client (main controller) 
-is the only device on the network that can initiate a transfer requesting the data, and 
-the servers (e.g. sensors) are the ones serving the data in response.]]>
-                    </Button.ToolTip>
-                </Button>
-            </Grid>
-        </GroupBox>
-        <GroupBox Header="CSV File I/O" Grid.Row="2" Grid.Column="5" IsEnabled="{Binding HasConnected, Converter={catel:BooleanToOppositeBooleanConverter}, UpdateSourceTrigger=PropertyChanged}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Label Content="Slave ID:" Grid.Row="0" Grid.Column="0" />
+                    <TextBox Grid.Row="0" Grid.Column="1" MinWidth="30" Text="{Binding SlaveId}"/>
+                    <Label Content="Slave Delay (ms):" Grid.Row="1" Grid.Column="0"  Visibility="{Binding SlaveOptionsVisibility}"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" MinWidth="30" Text="{Binding SlaveDelay}"  Visibility="{Binding SlaveOptionsVisibility}"/>
+                </Grid>
+            </GroupBox>
+        </DockPanel>
+        <GroupBox Header="CSV File I/O" Grid.Row="1" Grid.Column="1" IsEnabled="{Binding HasConnected, Converter={catel:BooleanToOppositeBooleanConverter}, UpdateSourceTrigger=PropertyChanged}">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Right">
                 <Button Content="Import Tab Data ..." Command="{Binding ImportCurrentTabDataCommand}"/>
                 <Button Content="Export Tab Data ..." Command="{Binding ExportCurrentTabDataCommand}"/>
             </StackPanel>
         </GroupBox>
-        <TabControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="6" ItemsSource="{Binding DataTabItems}"
+        <TabControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding DataTabItems}"
                     SelectedItem="{Binding SelectedDataTabItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     IsSynchronizedWithCurrentItem="True"
                     Margin="0,6,0,0">
@@ -286,12 +299,15 @@ the servers (e.g. sensors) are the ones serving the data in response.]]>
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>
-        <GroupBox Header="Communication Log" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="6">
+        <GroupBox Header="Communication Log" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
                 <StackPanel  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" >
                     <ToggleButton IsChecked="{Binding LogPaused}" Padding="6" Margin="6">
                         <ToggleButton.Style>
