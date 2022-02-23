@@ -1,11 +1,26 @@
 ﻿using System.Threading.Tasks;
 using Catel.Data;
+using Catel.MVVM.Converters;
+using Microsoft.Xaml.Behaviors.Core;
 
 namespace ModbusWpf.Common.Helpers
 {
+
+    public interface ISomeInterface
+    {
+        //...
+
+        // Indexer declaration:
+        string this[int index]
+        {
+            get;
+            set;
+        }
+    }
     public interface IRegisterDataService
     {
         RegisterDataValue[] RegisterData { get; set; }
+        ushort this[int index] { get; set; }
     }
 
 
@@ -54,5 +69,11 @@ namespace ModbusWpf.Common.Helpers
         }
 
         public RegisterDataValue[] RegisterData { get; set; }
+
+        public ushort this[int index]
+        {
+            get => RegisterData[index].RegisterValue;
+            set => RegisterData[index].RegisterValue = value;
+        }
     }
 }

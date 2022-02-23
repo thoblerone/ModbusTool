@@ -291,7 +291,7 @@
                 <Button Grid.Row="0" Grid.Column="7" Command="{Binding ExecuteClientFunctionCommand}" CommandParameter="WriteMultipeRegister" Content="Write multiple&#xa;register" />
                 <StackPanel Grid.Row="1" Grid.ColumnSpan="8" Grid.Column="0" Orientation="Horizontal" >
                     <CheckBox Margin="6,0,0,0" IsChecked="{Binding ClientPollingActive}" Content="Poll" VerticalContentAlignment="Center"/>
-                    <TextBox Text="{Binding ClientPollTime, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="50" VerticalAlignment="Center" />
+                    <TextBox Text="{Binding ClientPollInterval, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="50" VerticalAlignment="Center" />
                     <TextBlock Text="ms" Width="50" VerticalAlignment="Center"/>
                 </StackPanel>
 

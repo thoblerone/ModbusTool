@@ -136,7 +136,7 @@ namespace ModbusWpf.Common.Models
         {
             get
             {
-                ushort dataByte = RegisterDataService.RegisterData[RegisterNumber].RegisterValue;
+                ushort dataByte = RegisterDataService[RegisterNumber];
 
                 return (dataByte & (1 << CoilNumber)) != 0;
             }
@@ -144,19 +144,19 @@ namespace ModbusWpf.Common.Models
             {
                 if (value)
                 {
-                    RegisterDataService.RegisterData[RegisterNumber].RegisterValue |= (ushort) (1 << CoilNumber);
+                    RegisterDataService[RegisterNumber] |= (ushort) (1 << CoilNumber);
                 }
                 else
                 {
-                    RegisterDataService.RegisterData[RegisterNumber].RegisterValue &= (ushort) ~(1 << CoilNumber);
+                    RegisterDataService[RegisterNumber] &= (ushort) ~(1 << CoilNumber);
                 }
             }
         }
 
         public ushort TargetRegisterValue
         {
-            get => RegisterDataService.RegisterData[RegisterNumber].RegisterValue;
-            set => RegisterDataService.RegisterData[RegisterNumber].RegisterValue = value;
+            get => RegisterDataService[RegisterNumber];
+            set => RegisterDataService[RegisterNumber] = value;
         }
 
         public string FloatString
@@ -166,8 +166,8 @@ namespace ModbusWpf.Common.Models
                 if (RegisterNumber >= RegisterDataService.RegisterData.Length-1)
                     return float.NaN.ToString();
 
-                ushort dataUshort1 = RegisterDataService.RegisterData[RegisterNumber].RegisterValue;
-                ushort dataUshort2 = RegisterDataService.RegisterData[RegisterNumber + 1].RegisterValue;
+                ushort dataUshort1 = RegisterDataService[RegisterNumber];
+                ushort dataUshort2 = RegisterDataService[RegisterNumber + 1];
 
                 var bytes = new byte[4];
 
@@ -188,8 +188,8 @@ namespace ModbusWpf.Common.Models
 
                 var bytes = BitConverter.GetBytes(fVal);
 
-                RegisterDataService.RegisterData[RegisterNumber].RegisterValue = (ushort)((bytes[1] << 8) + bytes[0]);
-                RegisterDataService.RegisterData[RegisterNumber + 1].RegisterValue = (ushort)((bytes[3] << 8) + bytes[2]);
+                RegisterDataService[RegisterNumber] = (ushort)((bytes[1] << 8) + bytes[0]);
+                RegisterDataService[RegisterNumber + 1] = (ushort)((bytes[3] << 8) + bytes[2]);
             }
         }
 
@@ -200,8 +200,8 @@ namespace ModbusWpf.Common.Models
                 if (RegisterNumber >= RegisterDataService.RegisterData.Length - 1)
                     return float.NaN.ToString();
 
-                ushort dataUshort1 = RegisterDataService.RegisterData[RegisterNumber].RegisterValue;
-                ushort dataUshort2 = RegisterDataService.RegisterData[RegisterNumber + 1].RegisterValue;
+                ushort dataUshort1 = RegisterDataService[RegisterNumber];
+                ushort dataUshort2 = RegisterDataService[RegisterNumber + 1];
 
                 var bytes = new byte[4];
 
@@ -222,20 +222,20 @@ namespace ModbusWpf.Common.Models
 
                 var bytes = BitConverter.GetBytes(fVal);
 
-                RegisterDataService.RegisterData[RegisterNumber].RegisterValue = (ushort) ((bytes[3] << 8) + bytes[2]);
-                RegisterDataService.RegisterData[RegisterNumber + 1].RegisterValue = (ushort) ((bytes[1] << 8) + bytes[0]);
+                RegisterDataService[RegisterNumber] = (ushort) ((bytes[3] << 8) + bytes[2]);
+                RegisterDataService[RegisterNumber + 1] = (ushort) ((bytes[1] << 8) + bytes[0]);
             }
         }
 
         public string BinaryString
         {
-            get => Convert.ToString(RegisterDataService.RegisterData[RegisterNumber].RegisterValue, 2).PadLeft(16, '0');
-            set => RegisterDataService.RegisterData[RegisterNumber].RegisterValue = Convert.ToUInt16(value, 2);
+            get => Convert.ToString(RegisterDataService[RegisterNumber], 2).PadLeft(16, '0');
+            set => RegisterDataService[RegisterNumber] = Convert.ToUInt16(value, 2);
         }
         public string HexString
         {
-            get => RegisterDataService.RegisterData[RegisterNumber].RegisterValue.ToString("x4");
-            set => RegisterDataService.RegisterData[RegisterNumber].RegisterValue = Convert.ToUInt16(value, 16);
+            get => RegisterDataService[RegisterNumber].ToString("x4");
+            set => RegisterDataService[RegisterNumber] = Convert.ToUInt16(value, 16);
         }
     }
 }

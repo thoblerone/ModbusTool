@@ -224,7 +224,7 @@ namespace ModbusWpf.Server.ViewModels
         private void DoRead(ModbusCommand command)
         {
             for (int i = 0; i < command.Count; i++)
-                command.Data[i] = _registerDataService.RegisterData[command.Offset + i].RegisterValue;
+                command.Data[i] = _registerDataService[command.Offset + i];
 
             AppendLog($"Sent data: Function code:{command.FunctionCode}.");
 
@@ -247,7 +247,7 @@ namespace ModbusWpf.Server.ViewModels
             //command.Data.CopyTo(_registerData, dataAddress);
             for (int i = 0; i < command.Data.Length; i++)
             {
-                _registerDataService.RegisterData[i + dataAddress].RegisterValue = command.Data[i];
+                _registerDataService[i + dataAddress] = command.Data[i];
             }
 
             AppendLog($"Received data: Function code:{command.FunctionCode}.");
