@@ -44,7 +44,7 @@ namespace ModbusWpf.Common.ViewModels
             {
                 for (ushort i = 0; i < 25; i++)
                 {
-                    registerDataService.RegisterData[i].RegisterValue = i;
+                    registerDataService[i] = i;
                 }
             }
         }
@@ -85,7 +85,7 @@ namespace ModbusWpf.Common.ViewModels
         {
             for (var i = StartAddress; i + StartAddress < RegisterDataService.RegisterData.Length && i < DataLength+ StartAddress; i++)
             {
-                RegisterDataService.RegisterData[i].RegisterValue = 0;
+                RegisterDataService[i] = 0;
             }
 
             await Task.CompletedTask;

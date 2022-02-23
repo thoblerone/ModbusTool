@@ -10,6 +10,7 @@
              xmlns:cc="clr-namespace:ModbusWpf.CustomControl;assembly=ModbusWpf.CustomControl"
              xmlns:ports="clr-namespace:System.IO.Ports;assembly=System"
              xmlns:viewModels="clr-namespace:ModbusWpf.Common.ViewModels"
+             xmlns:helpers="clr-namespace:ModbusWpf.Common.Helpers"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type viewModels:BaseViewModel}}"
              
@@ -281,14 +282,14 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Button Grid.Row="0" Grid.Column="0" Command="{Binding ExecuteClientFunctionCommand}" CommandParameter="ReadCoils" Content="Read coils" />
+                <Button Grid.Row="0" Grid.Column="0" Command="{Binding ExecuteClientFunctionCommand}" CommandParameter="{x:Static helpers:ClientFunctions.ReadCoils}" Content="Read coils" />
                 <Button Grid.Row="0" Grid.Column="1" Command="{Binding ExecuteClientFunctionCommand}" CommandParameter="ReadDiscrete" Content="Read&#xa;discrete" />
                 <Button Grid.Row="0" Grid.Column="2" Command="{Binding ExecuteClientFunctionCommand}" CommandParameter="ReadHoldingRegister" Content="Read holding&#xa;register" />
                 <Button Grid.Row="0" Grid.Column="3" Command="{Binding ExecuteClientFunctionCommand}" CommandParameter="ReadInputRegister" Content="Read input&#xa;register" />
                 <Button Grid.Row="0" Grid.Column="4" Command="{Binding ExecuteClientFunctionCommand}" CommandParameter="WriteSingleCoil" Content="Write&#xa;single coil" />
                 <Button Grid.Row="0" Grid.Column="5" Command="{Binding ExecuteClientFunctionCommand}" CommandParameter="WriteSingleRegister" Content="Write single&#xa;register" />
                 <Button Grid.Row="0" Grid.Column="6" Command="{Binding ExecuteClientFunctionCommand}" CommandParameter="WriteMultipleCoils" Content="Write&#xa;multiple coils" />
-                <Button Grid.Row="0" Grid.Column="7" Command="{Binding ExecuteClientFunctionCommand}" CommandParameter="WriteMultipeRegister" Content="Write multiple&#xa;register" />
+                <Button Grid.Row="0" Grid.Column="7" Command="{Binding ExecuteClientFunctionCommand}" CommandParameter="WriteMultipleRegister" Content="Write multiple&#xa;register" />
                 <StackPanel Grid.Row="1" Grid.ColumnSpan="8" Grid.Column="0" Orientation="Horizontal" >
                     <CheckBox Margin="6,0,0,0" IsChecked="{Binding ClientPollingActive}" Content="Poll" VerticalContentAlignment="Center"/>
                     <TextBox Text="{Binding ClientPollInterval, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="50" VerticalAlignment="Center" />

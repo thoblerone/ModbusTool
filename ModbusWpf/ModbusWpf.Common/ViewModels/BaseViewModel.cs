@@ -190,7 +190,7 @@ namespace ModbusWpf.Common.ViewModels
 
             ExportCurrentTabDataCommand = new TaskCommand(OnExportCurrentTabDataCommandExecuteAsync);
             ImportCurrentTabDataCommand = new TaskCommand(OnImportCurrentTabDataCommandExecuteAsync);
-            ExecuteClientFunctionCommand = new TaskCommand<string>(OnExecuteClientFunctionCommandExecuteAsync);
+            ExecuteClientFunctionCommand = new TaskCommand<ClientFunctions>(OnExecuteClientFunctionCommandExecuteAsync);
 
             CommLogEntries = new ();
             DataTabItems = new();
@@ -452,6 +452,7 @@ namespace ModbusWpf.Common.ViewModels
             await Task.CompletedTask;
         }
 
+#pragma warning disable 1998
         public TaskCommand MasterListenCommand { get; }
         protected virtual async Task OnMasterListenCommandExecuteAsync()
         {
@@ -468,6 +469,7 @@ namespace ModbusWpf.Common.ViewModels
         {
             throw new NotImplementedException("Implement in sub class");
         }
+#pragma warning restore 1998
 
         public TaskCommand DonateCommand { get; }
         private async Task OnDonateCommandExecuteAsync()
@@ -491,12 +493,14 @@ namespace ModbusWpf.Common.ViewModels
 
         public TaskCommand<DataTabControlViewModel> CloseDataTabItemCommand { get; }
 
-        public TaskCommand<string> ExecuteClientFunctionCommand { get; }
+        public TaskCommand<ClientFunctions> ExecuteClientFunctionCommand { get; }
 
-        public virtual async Task OnExecuteClientFunctionCommandExecuteAsync(string commandDescription)
+        #pragma warning disable 1998
+        public virtual async Task OnExecuteClientFunctionCommandExecuteAsync(ClientFunctions functionCode)
         {
             throw new NotImplementedException("Implement in sub class");
         }
+        #pragma warning restore 1998
 
         private async Task OnCloseDataTabItemCommandExecuteAsync(DataTabControlViewModel tabItem)
         {
@@ -540,7 +544,7 @@ namespace ModbusWpf.Common.ViewModels
 
         public delegate void AppendLogDelegate(string log);
 
-        protected void DriverIncomingData(byte[] data, int len)
+        protected void LogIncomingData(byte[] data, int len)
         {
             if (LogPaused)
                 return;
@@ -553,7 +557,7 @@ namespace ModbusWpf.Common.ViewModels
             AppendLog($"RX: {hex}");
         }
 
-        protected void DriverOutgoingData(byte[] data)
+        protected void LogOutgoingData(byte[] data)
         {
             if (LogPaused)
                 return;

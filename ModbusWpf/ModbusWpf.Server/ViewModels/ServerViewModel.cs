@@ -67,8 +67,8 @@ namespace ModbusWpf.Server.ViewModels
                         _uart = new SerialPort(PortName, Baud, Parity, DataBits, StopBits);
                         _uart.Open();
                         var rtuServer = new ModbusServer(new ModbusRtuCodec()) { Address = SlaveId };
-                        rtuServer.OutgoingData += DriverOutgoingData;
-                        rtuServer.IncommingData += DriverIncomingData;
+                        rtuServer.OutgoingData += LogOutgoingData;
+                        rtuServer.IncommingData += LogIncomingData;
 
                         _listener = _uart.GetListener(rtuServer);
                         _listener.ServeCommand += listener_ServeCommand;
@@ -82,8 +82,8 @@ namespace ModbusWpf.Server.ViewModels
                         _socket.Bind(new IPEndPoint(IPAddress.Any, TcpPort));
                         //create a server driver
                         var udpServer = new ModbusServer(new ModbusTcpCodec()) { Address = SlaveId };
-                        udpServer.OutgoingData += DriverOutgoingData;
-                        udpServer.IncommingData += DriverIncomingData;
+                        udpServer.OutgoingData += LogOutgoingData;
+                        udpServer.IncommingData += LogIncomingData;
                         //listen for an incoming request
                         _listener = _socket.GetUdpListener(udpServer);
                         _listener.ServeCommand += listener_ServeCommand;
@@ -168,8 +168,8 @@ namespace ModbusWpf.Server.ViewModels
         protected void TcpThreadWorker()
         {
             var server = new ModbusServer(new ModbusTcpCodec()) { Address = SlaveId };
-            server.IncommingData += DriverIncomingData;
-            server.OutgoingData += DriverOutgoingData;
+            server.IncommingData += LogIncomingData;
+            server.OutgoingData += LogOutgoingData;
             try
             {
                 while (_tcpServerThread.ThreadState == ThreadState.Running)
@@ -235,12 +235,12 @@ namespace ModbusWpf.Server.ViewModels
             var dataAddress = command.Offset;
             if (dataAddress < StartAddress || dataAddress > StartAddress + DataLength)
             {
-                AppendLog($"Received address is not within viewable range, Received address:{dataAddress}.");
+                AppendLog($"Received address is not within viewable range, Received address: {dataAddress}.");
                 return;
             }
             if (command.Count + dataAddress > _registerDataService.RegisterData.Length)
             {
-                AppendLog($"Received address is not within viewable range, Received address:{dataAddress}.");
+                AppendLog($"Received address is not within viewable range, Received address: {dataAddress}.");
                 return;
             }
 
@@ -250,7 +250,7 @@ namespace ModbusWpf.Server.ViewModels
                 _registerDataService[i + dataAddress] = command.Data[i];
             }
 
-            AppendLog($"Received data: Function code:{command.FunctionCode}.");
+            AppendLog($"Received data: Function code: {command.FunctionCode}.");
         }
         #endregion // Server Functionality
 
