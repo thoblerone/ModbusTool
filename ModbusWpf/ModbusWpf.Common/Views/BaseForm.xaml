@@ -161,19 +161,19 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <RadioButton Grid.Row="0" Grid.Column="0" GroupName="DisplayFormat" Content="LED" Margin="6"
-                                 IsChecked="{Binding DisplayFormat, ConverterParameter={x:Static common:DisplayFormat.LED}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                                 IsChecked="{Binding NewTabDisplayFormat, ConverterParameter={x:Static common:DisplayFormat.LED}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                 <RadioButton Grid.Row="1" Grid.Column="0" GroupName="DisplayFormat" Content="Binary" Margin="6" 
-                                 IsChecked="{Binding DisplayFormat, ConverterParameter={x:Static common:DisplayFormat.Binary}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                                 IsChecked="{Binding NewTabDisplayFormat, ConverterParameter={x:Static common:DisplayFormat.Binary}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                 <RadioButton Grid.Row="2" Grid.Column="0" GroupName="DisplayFormat" Content="Hex" Margin="6" 
-                                 IsChecked="{Binding DisplayFormat, ConverterParameter={x:Static common:DisplayFormat.Hex}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                                 IsChecked="{Binding NewTabDisplayFormat, ConverterParameter={x:Static common:DisplayFormat.Hex}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                 <RadioButton Grid.Row="0" Grid.Column="1" GroupName="DisplayFormat" Content="Integer" Margin="6" 
-                                 IsChecked="{Binding DisplayFormat, ConverterParameter={x:Static common:DisplayFormat.Integer}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                                 IsChecked="{Binding NewTabDisplayFormat, ConverterParameter={x:Static common:DisplayFormat.Integer}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                 <RadioButton  Grid.Column="1" Grid.Row="1"  GroupName="DisplayFormat" Content="FloatReverse" Margin="6" 
-                                 IsChecked="{Binding DisplayFormat, ConverterParameter={x:Static common:DisplayFormat.FloatReverse}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                                 IsChecked="{Binding NewTabDisplayFormat, ConverterParameter={x:Static common:DisplayFormat.FloatReverse}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                 <Label Grid.Row="0" Grid.Column="2" Content="Start Address:" />
-                <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding StartAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="50" />
+                <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding MainFormStartAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="50" />
                 <Label Grid.Row="1" Grid.Column="2"  Content="Data Length:" />
-                <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding DataLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="50" />
+                <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding MainFormDataLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="50" />
 
             </Grid>
             </GroupBox>

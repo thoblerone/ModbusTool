@@ -226,31 +226,24 @@ namespace ModbusWpf.Server.ViewModels
             for (int i = 0; i < command.Count; i++)
                 command.Data[i] = _registerDataService[command.Offset + i];
 
-            AppendLog($"Sent data: Function code:{command.FunctionCode}.");
+            AppendLog($"Sent data: Function code:{command.FunctionCode}, length = {command.Count}.");
 
         }
 
         private void DoWrite(ModbusCommand command)
         {
             var dataAddress = command.Offset;
-            if (dataAddress < StartAddress || dataAddress > StartAddress + DataLength)
-            {
-                AppendLog($"Received address is not within viewable range, Received address: {dataAddress}.");
-                return;
-            }
             if (command.Count + dataAddress > _registerDataService.RegisterData.Length)
             {
-                AppendLog($"Received address is not within viewable range, Received address: {dataAddress}.");
+                AppendLog($"Received data exceeds maintained range, Received address: {dataAddress}, length={command.Count}.");
                 return;
             }
-
-            //command.Data.CopyTo(_registerData, dataAddress);
             for (int i = 0; i < command.Data.Length; i++)
             {
                 _registerDataService[i + dataAddress] = command.Data[i];
             }
 
-            AppendLog($"Received data: Function code: {command.FunctionCode}.");
+            AppendLog($"Received data: Function code: {command.FunctionCode}, length = {command.Data.Length}.");
         }
         #endregion // Server Functionality
 

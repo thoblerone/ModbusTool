@@ -131,21 +131,34 @@ namespace ModbusWpf.Common.ViewModels
             get => _selectedDataTabItem;
             set
             {
+                if (_selectedDataTabItem == value)
+                {
+                    return;
+                }
+
                 _selectedDataTabItem = value;
 
                 if (_selectedDataTabItem.DisplayFormat is null)
                 {
-                    _selectedDataTabItem.DataLength = DataLength;
-                    _selectedDataTabItem.StartAddress = StartAddress;
-                    _selectedDataTabItem.ShowDataLength = ShowDataLength;
-                    _selectedDataTabItem.DisplayFormat = DisplayFormat;
-                    _selectedDataTabItem.ApplyAddressSelectionCommand.Execute();
+                    // This case indicates that the "..." dummy tab was selected.
+                    // Create a new data tab, insert it before the dummy tab
+                    // and make it the current tab
+                    var newTab = new DataTabControlViewModel()
+                    {
+                        DataLength = MainFormDataLength,
+                        StartAddress = MainFormStartAddress,
+                        ShowDataLength = ShowDataLength,
+                        DisplayFormat = NewTabDisplayFormat
+                    };
+                    newTab.ApplyAddressSelectionCommand.Execute();
 
-                    DataTabItems.Add(new DataTabControlViewModel(){DisplayFormat = null});
+                    DataTabItems.Insert(DataTabItems.Count-1, newTab);
+                    
+                     _selectedDataTabItem = newTab;
 
                     RaisePropertyChanged(nameof(SelectedDataTabItem));
 
-                    AppendLog($"New {DisplayFormat} data tab starting at {StartAddress}");
+                    AppendLog($"New {NewTabDisplayFormat} data tab starting at {MainFormStartAddress}");
                 }
                 else
                 {
