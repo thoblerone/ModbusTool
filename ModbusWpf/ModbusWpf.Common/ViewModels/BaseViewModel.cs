@@ -37,9 +37,9 @@ namespace ModbusWpf.Common.ViewModels
 
         public bool LogPaused { get; set; } = false;
 
-        public ushort StartAddress { get; set; }
+        internal ushort MainFormStartAddress { get; set; }
 
-        public ushort DataLength { get; set; }
+        internal ushort MainFormDataLength { get; set; }
 
         private bool _showDataLength;
         public bool ShowDataLength
@@ -77,7 +77,7 @@ namespace ModbusWpf.Common.ViewModels
 
         private DataTabControlViewModel _selectedDataTabItem;
 
-        public DisplayFormat DisplayFormat { get; set; } = DisplayFormat.Integer;
+        internal DisplayFormat NewTabDisplayFormat { get; set; } = DisplayFormat.Integer;
 
         public CommunicationMode CommunicationMode { get; set; } = CommunicationMode.TCP;
 
@@ -146,6 +146,10 @@ namespace ModbusWpf.Common.ViewModels
                     RaisePropertyChanged(nameof(SelectedDataTabItem));
 
                     AppendLog($"New {DisplayFormat} data tab starting at {StartAddress}");
+                }
+                else
+                {
+                    NewTabDisplayFormat = _selectedDataTabItem.DisplayFormat.Value;
                 }
             }
         }
@@ -256,9 +260,9 @@ namespace ModbusWpf.Common.ViewModels
             PortName = Settings.Default.PortName;
             Baud = Settings.Default.Baud;
             Parity = Settings.Default.Parity;
-            StartAddress = Settings.Default.StartAddress;
-            DisplayFormat = Settings.Default.DisplayFormat;
-            DataLength = Settings.Default.DataLength;
+            MainFormStartAddress = Settings.Default.StartAddress;
+            NewTabDisplayFormat = Settings.Default.DisplayFormat;
+            MainFormDataLength = Settings.Default.DataLength;
             ServerId = Settings.Default.ServerId;
             ServerDelay = Settings.Default.ServerDelay;
             DataBits = Settings.Default.DataBits;
@@ -269,13 +273,13 @@ namespace ModbusWpf.Common.ViewModels
         {
             Settings.Default.CommunicationMode = CommunicationMode.ToString();
             Settings.Default.IPAddress = IpAddress.ToString();
-            Settings.Default.DisplayFormat = DisplayFormat;
+            Settings.Default.DisplayFormat = NewTabDisplayFormat;
             Settings.Default.TCPPort = TcpPort;
             Settings.Default.PortName = PortName;
             Settings.Default.Baud = Baud;
             Settings.Default.Parity = Parity;
-            Settings.Default.StartAddress = StartAddress;
-            Settings.Default.DataLength = DataLength;
+            Settings.Default.StartAddress = MainFormStartAddress;
+            Settings.Default.DataLength = MainFormDataLength;
             Settings.Default.ServerId = ServerId;
             Settings.Default.ServerDelay = ServerDelay;
             Settings.Default.DataBits = DataBits;
@@ -384,7 +388,7 @@ namespace ModbusWpf.Common.ViewModels
             // var startAddress = SelectedDataTabItem.StartAddress;
             var startAddress = SelectedDataTabItem.RegisterModels.First().RegisterNumber;
 
-            string suffix = DisplayFormat switch
+            string suffix = SelectedDataTabItem.DisplayFormat switch
             {
                 DisplayFormat.Integer => "_Decimal_",
                 DisplayFormat.Hex => "_HEX_",
@@ -393,6 +397,7 @@ namespace ModbusWpf.Common.ViewModels
                 DisplayFormat.FloatReverse => "_FloatReverse_",
                 _ => throw new ArgumentOutOfRangeException()
             };
+
             var filename = "ModbusExport_" + startAddress + suffix + DateTime.Now.ToString("yyyyMMddHHmm") + ".csv";
 
             var saveFileDialog = new SaveFileDialog

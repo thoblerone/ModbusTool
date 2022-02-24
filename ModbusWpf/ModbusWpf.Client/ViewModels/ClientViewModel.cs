@@ -63,10 +63,10 @@ namespace ModbusWpf.Client.ViewModels
                     break;
                 case ClientFunctions.WriteSingleCoil:
                 {
-                    var backupDataLength = DataLength;
-                    DataLength = 1;
+                    var backupDataLength = SelectedDataTabItem.DataLength;
+                    SelectedDataTabItem.DataLength = 1;
                     await ExecuteWriteCommandAsync(ModbusCommand.FuncWriteCoil).ConfigureAwait(false);
-                    DataLength = backupDataLength;
+                    SelectedDataTabItem.DataLength = backupDataLength;
                     break;
                 }
                 case ClientFunctions.WriteSingleRegister:
@@ -101,14 +101,14 @@ namespace ModbusWpf.Client.ViewModels
 
                 var command = new ModbusCommand(function)
                 {
-                    Offset = StartAddress,
-                    Count = DataLength,
+                    Offset = SelectedDataTabItem.StartAddress,
+                    Count = SelectedDataTabItem.DataLength,
                     TransId = _transactionId++,
-                    Data = new ushort[DataLength]
+                    Data = new ushort[SelectedDataTabItem.DataLength]
                 };
-                for (var i = 0; i < DataLength; i++)
+                for (var i = 0; i < SelectedDataTabItem.DataLength; i++)
                 {
-                    var index = StartAddress + i;
+                    var index = SelectedDataTabItem.StartAddress + i;
                     if (index > registerDataService.RegisterData.Length)
                     {
                         break;
@@ -138,19 +138,19 @@ namespace ModbusWpf.Client.ViewModels
             {
                 var command = new ModbusCommand(function)
                 {
-                    Offset = StartAddress, 
-                    Count = DataLength, 
+                    Offset = SelectedDataTabItem.StartAddress, 
+                    Count = SelectedDataTabItem.DataLength, 
                     TransId = _transactionId++,
-                    Data = new ushort[DataLength]
+                    Data = new ushort[SelectedDataTabItem.DataLength]
                 };
 
                 var result = _driver.ExecuteGeneric(_portClient, command);
 
                 if (result.Status == CommResponse.Ack)
                 {
-                    for (var i = 0; i < DataLength; i++)
+                    for (var i = 0; i < SelectedDataTabItem.DataLength; i++)
                     {
-                        var idxRegister = StartAddress + i;
+                        var idxRegister = SelectedDataTabItem.StartAddress + i;
                         if (idxRegister > registerDataService.RegisterData.Length)
                         {
                             break;

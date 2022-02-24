@@ -104,8 +104,8 @@
                 <WrapPanel Grid.Column="0" DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
 
                     <Label Content="First Register:" />
-                    <TextBox VerticalContentAlignment="Center" MinWidth="30"
-                                             Text="{Binding StartAddress, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"/>
+                    <cc:ReturnKeyTextBox VerticalContentAlignment="Center" MinWidth="30"
+                                             Text="{Binding StartAddress, UpdateSourceTrigger=Explicit, Mode=TwoWay}"/>
 
                     <Label Content="Register Count:" Visibility="{Binding ShowDataLength, Converter={StaticResource BooleanToCollapsingVisibilityConverter}}"/>
                     <TextBox Visibility="{Binding ShowDataLength, Converter={StaticResource BooleanToCollapsingVisibilityConverter}}"

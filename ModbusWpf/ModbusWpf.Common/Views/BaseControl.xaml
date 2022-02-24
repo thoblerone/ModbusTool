@@ -31,6 +31,10 @@
             </Style>
             <Style TargetType="{x:Type Button}">
                 <Setter Property="Margin" Value="6" />
+                <Setter Property="Padding" Value="6,0" />
+            </Style>
+            <Style TargetType="{x:Type Button}" x:Key="MultiLineButtonStyle">
+                <Setter Property="Margin" Value="6" />
                 <Setter Property="Padding" Value="6" />
             </Style>
             <Style TargetType="{x:Type RadioButton}">
@@ -178,37 +182,26 @@
             </StackPanel>
         </Grid>
         <DockPanel Grid.Row="1" Grid.Column="0">
-            <GroupBox Header="New Tab Display Format"  DockPanel.Dock="Left">
-                <Grid Margin="6">
+            <GroupBox DockPanel.Dock="Right" Header="Server Settings" Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="1" 
+                  HorizontalAlignment="Right" Margin="0,0,6,0"
+                  IsEnabled="{Binding HasConnected, Converter={catel:BooleanToOppositeBooleanConverter}, UpdateSourceTrigger=PropertyChanged}">
+                <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <RadioButton Grid.Row="0" Grid.Column="0" GroupName="DisplayFormat" Content="LED" Margin="6"
-                                 IsChecked="{Binding DisplayFormat, ConverterParameter={x:Static common:DisplayFormat.LED}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
-                    <RadioButton Grid.Row="1" Grid.Column="0" GroupName="DisplayFormat" Content="Binary" Margin="6" 
-                                 IsChecked="{Binding DisplayFormat, ConverterParameter={x:Static common:DisplayFormat.Binary}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
-                    <RadioButton Grid.Row="2" Grid.Column="0" GroupName="DisplayFormat" Content="Hex" Margin="6" 
-                                 IsChecked="{Binding DisplayFormat, ConverterParameter={x:Static common:DisplayFormat.Hex}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
-                    <RadioButton Grid.Row="0" Grid.Column="1" GroupName="DisplayFormat" Content="Integer" Margin="6" 
-                                 IsChecked="{Binding DisplayFormat, ConverterParameter={x:Static common:DisplayFormat.Integer}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
-                    <RadioButton  Grid.Column="1" Grid.Row="1"  GroupName="DisplayFormat" Content="FloatReverse" Margin="6" 
-                                 IsChecked="{Binding DisplayFormat, ConverterParameter={x:Static common:DisplayFormat.FloatReverse}, Converter={StaticResource EnumBooleanConverter}, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Label Grid.Row="0" Grid.Column="2" Content="Start Address:" />
-                    <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding StartAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="50" />
-                    <Label Grid.Row="1" Grid.Column="2"  Content="Data Length:" />
-                    <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding DataLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="50" />
-
+                    <Label Content="Server ID:" Grid.Row="0" Grid.Column="0" />
+                    <TextBox Grid.Row="0" Grid.Column="1" MinWidth="30" Text="{Binding ServerId}"/>
+                    <Label Content="Server Delay (ms):" Grid.Row="1" Grid.Column="0"  Visibility="{Binding ServerOptionsVisibility}"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" MinWidth="30" Text="{Binding ServerDelay}"  Visibility="{Binding ServerOptionsVisibility}"/>
                 </Grid>
             </GroupBox>
-            <Button Padding="3,0, 10,0" 
+            <Button Padding="3,0, 10,0"  HorizontalContentAlignment="Right"
                     BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0" 
                     IsEnabled="False" ToolTipService.ShowOnDisabled="True" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="60000">
                 <Path Data="{Binding IconPath}" HorizontalAlignment="Right" Stretch="Uniform" Width="100" Height="100">
@@ -239,25 +232,6 @@
                 </Button.ToolTip>
 
             </Button>
-            <GroupBox DockPanel.Dock="Right" Header="Server Settings" Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="1" 
-                  HorizontalAlignment="Right" Margin="0,0,6,0"
-                  IsEnabled="{Binding HasConnected, Converter={catel:BooleanToOppositeBooleanConverter}, UpdateSourceTrigger=PropertyChanged}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Label Content="Server ID:" Grid.Row="0" Grid.Column="0" />
-                    <TextBox Grid.Row="0" Grid.Column="1" MinWidth="30" Text="{Binding ServerId}"/>
-                    <Label Content="Server Delay (ms):" Grid.Row="1" Grid.Column="0"  Visibility="{Binding ServerOptionsVisibility}"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" MinWidth="30" Text="{Binding ServerDelay}"  Visibility="{Binding ServerOptionsVisibility}"/>
-                </Grid>
-            </GroupBox>
         </DockPanel>
         <GroupBox Header="CSV File I/O" Grid.Row="1" Grid.Column="1" IsEnabled="{Binding HasConnected, Converter={catel:BooleanToOppositeBooleanConverter}, UpdateSourceTrigger=PropertyChanged}">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Right">

@@ -11,6 +11,8 @@ namespace ModbusWpf.Common.ViewModels
 {
     public class DataTabControlViewModel : ViewModelBase
     {
+        private int _startAddress = 0;
+
         #region Constructors
 
         public DataTabControlViewModel() : this(null)
@@ -55,7 +57,19 @@ namespace ModbusWpf.Common.ViewModels
 
         #region Properties
         public ushort DataLength { get; set; } = 32;
-        public int StartAddress { get; set; } = 0;
+
+        public int StartAddress
+        {
+            get => _startAddress;
+            set
+            {
+                // the UI should bind using UpdateSourceTrigger=Explicit
+                // to avoid too frequent UI rebuilds
+                _startAddress = value;
+                
+                ApplyAddressSelectionCommand.Execute();
+            }
+        }
 
         public bool ShowDataLength { get; set; } = true;
 
