@@ -41,22 +41,6 @@ namespace ModbusWpf.Common.ViewModels
 
         internal ushort MainFormDataLength { get; set; }
 
-        private bool _showDataLength;
-        public bool ShowDataLength
-        {
-            get => _showDataLength;
-            set
-            {
-                _showDataLength = value;
-
-                foreach (var dataTabItem in DataTabItems)
-                {
-                    if (dataTabItem is not null)
-                        dataTabItem.ShowDataLength = value;
-                }
-            }
-        }
-
         public IPAddress IpAddress { get; set; } = IPAddress.None;
 
         public int TcpPort { get; set; }
@@ -140,8 +124,8 @@ namespace ModbusWpf.Common.ViewModels
                     {
                         DataLength = MainFormDataLength,
                         StartAddress = MainFormStartAddress,
-                        ShowDataLength = ShowDataLength,
-                        DisplayFormat = NewTabDisplayFormat
+                        DisplayFormat = NewTabDisplayFormat,
+                        
                     };
                     newTab.ApplyAddressSelectionCommand.Execute();
 
@@ -150,8 +134,6 @@ namespace ModbusWpf.Common.ViewModels
                      _selectedDataTabItem = newTab;
 
                     RaisePropertyChanged(nameof(SelectedDataTabItem));
-
-                    AppendLog($"New {NewTabDisplayFormat} data tab starting at {MainFormStartAddress}");
                 }
                 else
                 {

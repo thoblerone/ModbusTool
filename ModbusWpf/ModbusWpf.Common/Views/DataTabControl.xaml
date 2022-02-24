@@ -107,10 +107,9 @@
                     <cc:ReturnKeyTextBox VerticalContentAlignment="Center" MinWidth="30"
                                              Text="{Binding StartAddress, UpdateSourceTrigger=Explicit, Mode=TwoWay}"/>
 
-                    <Label Content="Register Count:" Visibility="{Binding ShowDataLength, Converter={StaticResource BooleanToCollapsingVisibilityConverter}}"/>
-                    <TextBox Visibility="{Binding ShowDataLength, Converter={StaticResource BooleanToCollapsingVisibilityConverter}}"
-                                 Text="{Binding DataLength, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"  MinWidth="30"
-                                 VerticalContentAlignment="Center" />
+                    <Label Content="Register Count:" />
+                    <cc:ReturnKeyTextBox Text="{Binding DataLength, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"  MinWidth="30" 
+                                         VerticalContentAlignment="Center"/>
 
                     <Label Content="Data Format:" />
                     <ComboBox ItemsSource="{Binding DisplayFormatItemSource}" 

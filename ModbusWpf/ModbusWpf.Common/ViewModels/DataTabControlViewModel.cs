@@ -71,8 +71,6 @@ namespace ModbusWpf.Common.ViewModels
             }
         }
 
-        public bool ShowDataLength { get; set; } = true;
-
         public DisplayFormat? DisplayFormat { get; set; }
 
         public object DisplayFormatItemSource { get; }
