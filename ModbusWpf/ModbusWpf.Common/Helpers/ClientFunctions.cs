@@ -8,6 +8,7 @@ namespace ModbusWpf.Common.Helpers
 {
     public enum ClientFunctions
     {
+        NoFunction,
         ReadCoils,
         ReadDiscrete,
         ReadHoldingRegister,

@@ -201,7 +201,7 @@
                     <TextBox Grid.Row="1" Grid.Column="1" MinWidth="30" Text="{Binding ServerDelay}"  Visibility="{Binding ServerOptionsVisibility}"/>
                 </Grid>
             </GroupBox>
-            <Button Padding="3,0, 10,0"  HorizontalContentAlignment="Right"
+            <Button Padding="3,0, 10,0"  HorizontalContentAlignment="Right" 
                     BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0" 
                     IsEnabled="False" ToolTipService.ShowOnDisabled="True" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="60000">
                 <Path Data="{Binding IconPath}" HorizontalAlignment="Right" Stretch="Uniform" Width="100" Height="100">
@@ -235,8 +235,8 @@
         </DockPanel>
         <GroupBox Header="CSV File I/O" Grid.Row="1" Grid.Column="1" IsEnabled="{Binding HasConnected, Converter={catel:BooleanToOppositeBooleanConverter}, UpdateSourceTrigger=PropertyChanged}">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Right">
-                <Button Content="Import Tab Data ..." Command="{Binding ImportCurrentTabDataCommand}"/>
-                <Button Content="Export Tab Data ..." Command="{Binding ExportCurrentTabDataCommand}"/>
+                <Button Content="Import Tab Data ..." Command="{Binding ImportCurrentTabDataCommand}" Style="{StaticResource MultiLineButtonStyle}"/>
+                <Button Content="Export Tab Data ..." Command="{Binding ExportCurrentTabDataCommand}" Style="{StaticResource MultiLineButtonStyle}"/>
             </StackPanel>
         </GroupBox>
         <GroupBox Header="Functions" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Visibility="{Binding ClientOptionsVisibility}">

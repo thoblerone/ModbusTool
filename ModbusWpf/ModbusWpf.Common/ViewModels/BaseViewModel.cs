@@ -75,25 +75,17 @@ namespace ModbusWpf.Common.ViewModels
 
         public StopBits StopBits { get; set; }
 
-        private DataTabControlViewModel _selectedDataTabItem;
-
         internal DisplayFormat NewTabDisplayFormat { get; set; } = DisplayFormat.Integer;
 
         public CommunicationMode CommunicationMode { get; set; } = CommunicationMode.TCP;
 
-        public bool EnableTcpOptions
-        {
-            get { return 
-                CommunicationMode is CommunicationMode.TCP or CommunicationMode.UDP &&
-                HasConnected == false; }
-        }
+        public bool EnableTcpOptions =>
+            CommunicationMode is CommunicationMode.TCP or CommunicationMode.UDP &&
+            HasConnected == false;
 
-        public bool EnableRtuOptions
-        {
-            get { return 
-                CommunicationMode == CommunicationMode.RTU &&
-                HasConnected == false; }
-        }
+        public bool EnableRtuOptions =>
+            CommunicationMode == CommunicationMode.RTU &&
+            HasConnected == false;
 
         public Visibility IpAddressVisibility { get; protected set; } = Visibility.Visible;
 
@@ -126,6 +118,7 @@ namespace ModbusWpf.Common.ViewModels
 
         public int SelectedCommLogIndex { get; set; }
 
+        private DataTabControlViewModel _selectedDataTabItem;
         public DataTabControlViewModel SelectedDataTabItem
         {
             get => _selectedDataTabItem;
@@ -168,7 +161,9 @@ namespace ModbusWpf.Common.ViewModels
         }
 
         public bool HasConnected { get; set; }
-        public bool ClientPollingActive { get; set; }
+
+        public virtual bool ClientPollingActive { get; set; }
+
         public int ClientPollInterval { get; set; }
 
         public virtual string IconPath => "m 37.21,15.38 v 0.17 H 70.74 V 42.09 H 36.95 l 0.01,0.26 v 9.61 c 0,0.08 0,0.16 -0.01,0.24 -0.09,2.07 -0.77,3.54 -2.06,4.39 -1.29,0.86 -2.99,0.94 -5.08,0.23 C 29.58,56.74 29.38,56.63 29.2,56.49 19.1,48.57 12.14,40.65 2.04,32.72 L 1.9,32.6 C 0.22,31.08 -0.24,29.49 0.11,27.9 0.42,26.5 1.4,25.3 2.71,24.27 L 27.47,2.3 c 1.21,-0.95 2.48,-1.69 3.67,-2.05 1.07,-0.32 2.11,-0.35 3.07,0 1.05,0.38 1.88,1.15 2.42,2.39 0.38,0.89 0.59,2.03 0.59,3.46 v 9.05 c 0,0.09 0,0.16 -0.01,0.23 z M 85.67,82.73 V 82.56 H 52.14 V 56.03 h 33.79 l -0.01,-0.26 v -9.61 c 0,-0.08 0,-0.17 0.01,-0.24 0.09,-2.07 0.77,-3.54 2.06,-4.39 1.29,-0.86 2.99,-0.94 5.08,-0.23 0.23,0.08 0.43,0.19 0.61,0.33 10.1,7.92 17.06,15.85 27.15,23.78 l 0.14,0.12 c 1.68,1.52 2.14,3.11 1.79,4.7 -0.31,1.4 -1.29,2.6 -2.6,3.63 L 95.41,95.82 c -1.21,0.95 -2.48,1.69 -3.67,2.05 -1.07,0.32 -2.11,0.35 -3.07,0 -1.05,-0.38 -1.88,-1.15 -2.42,-2.39 -0.38,-0.89 -0.59,-2.03 -0.59,-3.46 v -9.06 c 0,-0.08 0,-0.15 0.01,-0.23 z";
@@ -210,14 +205,15 @@ namespace ModbusWpf.Common.ViewModels
             ExecuteClientFunctionCommand = new TaskCommand<ClientFunctions>(OnExecuteClientFunctionCommandExecuteAsync);
 
             CommLogEntries = new ();
-            DataTabItems = new();
-
-            DataTabItems.Add(new DataTabControlViewModel(registerDataService)
+            DataTabItems = new()
             {
-                StartAddress = Settings.Default.StartAddress,
-                DataLength = Settings.Default.DataLength,
-                DisplayFormat = Settings.Default.DisplayFormat
-            });
+                new DataTabControlViewModel(registerDataService)
+                {
+                    StartAddress = Settings.Default.StartAddress,
+                    DataLength = Settings.Default.DataLength,
+                    DisplayFormat = Settings.Default.DisplayFormat
+                }
+            };
 
 #if DEBUG
             if (CatelEnvironment.IsInDesignMode)

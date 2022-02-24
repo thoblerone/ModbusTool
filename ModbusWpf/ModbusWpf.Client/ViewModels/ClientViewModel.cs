@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 using Catel.IoC;
 using Catel.Services;
 using ModbusLib;
@@ -26,6 +27,8 @@ namespace ModbusWpf.Client.ViewModels
         public ClientViewModel(IDispatcherService dispatcherService, IRegisterDataService registerDataService)
             : base(dispatcherService, registerDataService)
         {
+            _pollingTimer = new DispatcherTimer();
+            _pollingTimer.Tick += PollingTimer_Tick;
         }
         #endregion // Constructors
 
@@ -49,17 +52,24 @@ namespace ModbusWpf.Client.ViewModels
         {
             switch (functionCode)
             {
+                case ClientFunctions.NoFunction:
+                    // nothing to do
+                    break;
                 case ClientFunctions.ReadCoils:
                     await ExecuteReadCommandAsync(ModbusCommand.FuncReadCoils);
+                    _lastReadCommand = functionCode;
                     break;
                 case ClientFunctions.ReadDiscrete:
                     await ExecuteReadCommandAsync(ModbusCommand.FuncReadInputDiscretes);
+                    _lastReadCommand = functionCode;
                     break;
                 case ClientFunctions.ReadHoldingRegister:
                     await ExecuteReadCommandAsync(ModbusCommand.FuncReadMultipleRegisters);
+                    _lastReadCommand = functionCode;
                     break;
                 case ClientFunctions.ReadInputRegister:
                     await ExecuteReadCommandAsync(ModbusCommand.FuncReadInputRegisters);
+                    _lastReadCommand = functionCode;
                     break;
                 case ClientFunctions.WriteSingleCoil:
                 {
@@ -90,8 +100,6 @@ namespace ModbusWpf.Client.ViewModels
         private int _transactionId;
         private ModbusClient _driver;
         private ICommClient _portClient;
-        private byte _lastReadCommand = 0;
-
 
         private Task ExecuteWriteCommandAsync(byte function)
         {
@@ -131,7 +139,6 @@ namespace ModbusWpf.Client.ViewModels
 
         private Task ExecuteReadCommandAsync(byte function)
         {
-            _lastReadCommand = function;
             var registerDataService = ServiceLocator.Default.ResolveType<IRegisterDataService>();
 
             try
@@ -243,6 +250,38 @@ namespace ModbusWpf.Client.ViewModels
 
             HasConnected = true;
         }
+
+        private readonly DispatcherTimer _pollingTimer;
+        private ClientFunctions _lastReadCommand = ClientFunctions.NoFunction;
+        private bool _clientPollingActive;
+        public override bool ClientPollingActive
+        {
+            get => _clientPollingActive;
+            set
+            {
+                _clientPollingActive = value;
+
+                if (_clientPollingActive)
+                {
+                    _lastReadCommand = ClientFunctions.NoFunction;
+                    _pollingTimer.Interval = TimeSpan.FromMilliseconds(ClientPollInterval);
+                    _pollingTimer.Start();
+                }
+                else
+                {
+                    _pollingTimer.Stop();
+                }
+            }
+        }
+
+        private void PollingTimer_Tick(object sender, EventArgs e)
+        {
+            if (_lastReadCommand == ClientFunctions.NoFunction)
+                return;
+            
+            OnExecuteClientFunctionCommandExecuteAsync(_lastReadCommand).Wait();
+        }
+
         #endregion
 
 
