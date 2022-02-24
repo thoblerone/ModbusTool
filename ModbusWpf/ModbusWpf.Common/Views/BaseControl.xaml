@@ -263,12 +263,12 @@
 
             </GroupBox>
         </DockPanel>
-        <GroupBox Header="CSV File I/O" Grid.Row="1" Grid.Column="1" IsEnabled="{Binding HasConnected, Converter={catel:BooleanToOppositeBooleanConverter}, UpdateSourceTrigger=PropertyChanged}">
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Right">
-                <Button Content="Import Tab Data ..." Command="{Binding ImportCurrentTabDataCommand}" Style="{StaticResource MultiLineButtonStyle}"/>
-                <Button Content="Export Tab Data ..." Command="{Binding ExportCurrentTabDataCommand}" Style="{StaticResource MultiLineButtonStyle}"/>
-            </StackPanel>
-        </GroupBox>
+        <GroupBox Header="CSV File I/O" IsEnabled="{Binding HasConnected, Converter={catel:BooleanToOppositeBooleanConverter}, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Stretch" Width="197">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Right">
+                    <Button Content="Import Tab Data ..." Command="{Binding ImportCurrentTabDataCommand}" Style="{StaticResource MultiLineButtonStyle}"/>
+                    <Button Content="Export Tab Data ..." Command="{Binding ExportCurrentTabDataCommand}" Style="{StaticResource MultiLineButtonStyle}"/>
+                </StackPanel>
+            </GroupBox>
         <TabControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding DataTabItems}"
                     SelectedItem="{Binding SelectedDataTabItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     IsSynchronizedWithCurrentItem="True"

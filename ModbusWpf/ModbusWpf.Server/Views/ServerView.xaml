@@ -11,7 +11,34 @@
         Title="{Binding Title}" 
         d:DesignHeight="940" d:DesignWidth="885"
         d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type viewModels:ServerViewModel}}"
-        Height="940" Width="885">
+        Height="940" MinWidth="860" Width="885" Icon="{DynamicResource VectorIcon}">
+
+    <catel:Window.Resources>
+        <ResourceDictionary>
+            <DrawingImage x:Key="VectorIcon">
+                <DrawingImage.Drawing>
+                    <DrawingGroup>
+                        <GeometryDrawing >
+                            <GeometryDrawing.Brush><SolidColorBrush Color="{Binding IconColor}" />
+                                <!--<LinearGradientBrush>
+                                    <GradientStop Color="{Binding IconColor}" Offset="0" />
+                                    <GradientStop Color="DarkGray" Offset="1" />
+                                    <LinearGradientBrush.Transform>
+                                        <MatrixTransform Matrix="0.75,0,0,0.75,0,0" />
+                                    </LinearGradientBrush.Transform>
+                                </LinearGradientBrush>-->
+                            </GeometryDrawing.Brush>
+                            <GeometryDrawing.Geometry>
+                                <GeometryGroup>
+                                    <PathGeometry Figures="{Binding IconPath}"/>
+                                </GeometryGroup>
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                </DrawingImage.Drawing>
+            </DrawingImage>
+        </ResourceDictionary>
+    </catel:Window.Resources>
 
         <commonViews:BaseControl />
 </catel:Window>
