@@ -82,9 +82,6 @@
     <Compile Include="Views\BaseControl.xaml.cs">
       <DependentUpon>BaseControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\BaseForm.xaml.cs">
-      <DependentUpon>BaseForm.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\DataTabControl.xaml.cs">
       <DependentUpon>DataTabControl.xaml</DependentUpon>
     </Compile>
@@ -92,10 +89,6 @@
       <DependentUpon>ReusingBaseView.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\BaseControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\BaseForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

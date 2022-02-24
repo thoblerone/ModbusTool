@@ -12,12 +12,5 @@
         Height="940" Width="885"
         d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type viewModels:ReusingBaseViewModel}}"
         >
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition />
-        </Grid.RowDefinitions>
-        <Label Content="{Binding}" Grid.Row="0"  />
-        <views:BaseControl Grid.Row="1" />
-    </Grid>
+    <views:BaseControl />
 </catel:Window>
