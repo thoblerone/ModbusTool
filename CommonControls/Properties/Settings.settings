@@ -26,10 +26,10 @@
     <Setting Name="DataLength" Type="System.UInt16" Scope="User">
       <Value Profile="(Default)">64</Value>
     </Setting>
-    <Setting Name="SlaveId" Type="System.Byte" Scope="User">
+    <Setting Name="ServerId" Type="System.Byte" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="SlaveDelay" Type="System.Int32" Scope="User">
+    <Setting Name="ServerDelay" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="DataBits" Type="System.Int32" Scope="User">

@@ -122,24 +122,24 @@ namespace ModbusWpf.Common.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public byte SlaveId {
+        public byte ServerId {
             get {
-                return ((byte)(this["SlaveId"]));
+                return ((byte)(this["ServerId"]));
             }
             set {
-                this["SlaveId"] = value;
+                this["ServerId"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int SlaveDelay {
+        public int ServerDelay {
             get {
-                return ((int)(this["SlaveDelay"]));
+                return ((int)(this["ServerDelay"]));
             }
             set {
-                this["SlaveDelay"] = value;
+                this["ServerDelay"] = value;
             }
         }
         

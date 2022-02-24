@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ModbusSlave")]
+[assembly: AssemblyTitle("ModbusServer")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ClassicDIY")]
-[assembly: AssemblyProduct("ModbusSlave")]
+[assembly: AssemblyProduct("ModbusServer")]
 [assembly: AssemblyCopyright("Copyright 2020 ClassicDIY (https://github.com/ClassicDIY/ModbusTool)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

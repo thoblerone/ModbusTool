@@ -26,7 +26,7 @@ namespace ModbusWpf.Common.ViewModels
 {
     public class BaseViewModel : ViewModelBase
     {
-        // used in derived master and slave classes
+        // used in derived client and server classes
         protected Socket _socket;
         protected SerialPort _uart;
 
@@ -61,9 +61,9 @@ namespace ModbusWpf.Common.ViewModels
 
         public int TcpPort { get; set; }
 
-        public byte SlaveId { get; set; }
+        public byte ServerId { get; set; }
 
-        public int SlaveDelay { get; set; }
+        public int ServerDelay { get; set; }
 
         public string PortName { get; set; }
 
@@ -97,8 +97,8 @@ namespace ModbusWpf.Common.ViewModels
 
         public Visibility IpAddressVisibility { get; protected set; } = Visibility.Visible;
 
-        public Visibility SlaveOptionsVisibility { get; protected set; } = Visibility.Visible;
-        public Visibility MasterOptionsVisibility { get; protected set; } = Visibility.Visible;
+        public Visibility ServerOptionsVisibility { get; protected set; } = Visibility.Visible;
+        public Visibility ClientOptionsVisibility { get; protected set; } = Visibility.Visible;
 
         public string[] ComPortItemsSource => SerialPort.GetPortNames();
 
@@ -183,8 +183,8 @@ namespace ModbusWpf.Common.ViewModels
             DonateCommand = new TaskCommand(OnDonateCommandExecuteAsync);
             LogClearCommand = new TaskCommand(OnLogClearCommandExecuteAsync);
 
-            SlaveListenCommand = new TaskCommand(OnSlaveListenCommandExecuteAsync, () => !HasConnected);
-            MasterListenCommand = new TaskCommand(OnMasterListenCommandExecuteAsync, () => !HasConnected);
+            ServerListenCommand = new TaskCommand(OnServerListenCommandExecuteAsync, () => !HasConnected);
+            ClientListenCommand = new TaskCommand(OnClientListenCommandExecuteAsync, () => !HasConnected);
             DisconnectCommand = new TaskCommand(OnDisconnectCommandExecuteAsync, () => HasConnected);
             CloseDataTabItemCommand = new TaskCommand<DataTabControlViewModel>(OnCloseDataTabItemCommandExecuteAsync);
 
@@ -259,8 +259,8 @@ namespace ModbusWpf.Common.ViewModels
             StartAddress = Settings.Default.StartAddress;
             DisplayFormat = Settings.Default.DisplayFormat;
             DataLength = Settings.Default.DataLength;
-            SlaveId = Settings.Default.SlaveId;
-            SlaveDelay = Settings.Default.SlaveDelay;
+            ServerId = Settings.Default.ServerId;
+            ServerDelay = Settings.Default.ServerDelay;
             DataBits = Settings.Default.DataBits;
             StopBits = Settings.Default.StopBits;
         }
@@ -276,8 +276,8 @@ namespace ModbusWpf.Common.ViewModels
             Settings.Default.Parity = Parity;
             Settings.Default.StartAddress = StartAddress;
             Settings.Default.DataLength = DataLength;
-            Settings.Default.SlaveId = SlaveId;
-            Settings.Default.SlaveDelay = SlaveDelay;
+            Settings.Default.ServerId = ServerId;
+            Settings.Default.ServerDelay = ServerDelay;
             Settings.Default.DataBits = DataBits;
             Settings.Default.StopBits = StopBits;
             Settings.Default.Save();
@@ -452,9 +452,10 @@ namespace ModbusWpf.Common.ViewModels
             await Task.CompletedTask;
         }
 
-#pragma warning disable 1998
-        public TaskCommand MasterListenCommand { get; }
-        protected virtual async Task OnMasterListenCommandExecuteAsync()
+        // function templates for the Client implementation
+        #pragma warning disable 1998
+        public TaskCommand ClientListenCommand { get; }
+        protected virtual async Task OnClientListenCommandExecuteAsync()
         {
             throw new NotImplementedException("Implement in sub class");
         }
@@ -464,12 +465,12 @@ namespace ModbusWpf.Common.ViewModels
             throw new NotImplementedException("Implement in sub class");
         }
 
-        public TaskCommand SlaveListenCommand { get; }
-        protected virtual async Task OnSlaveListenCommandExecuteAsync()
+        public TaskCommand ServerListenCommand { get; }
+        protected virtual async Task OnServerListenCommandExecuteAsync()
         {
             throw new NotImplementedException("Implement in sub class");
         }
-#pragma warning restore 1998
+        #pragma warning restore 1998
 
         public TaskCommand DonateCommand { get; }
         private async Task OnDonateCommandExecuteAsync()

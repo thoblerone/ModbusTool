@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace ModbusSlave
+namespace ModbusServer
 {
     static class Program
     {
@@ -21,7 +21,7 @@ namespace ModbusSlave
             Application.SetCompatibleTextRenderingDefault(false);
 
             Application.ThreadExit += Application_ApplicationExit;
-            Application.Run(new SlaveForm());
+            Application.Run(new ServerForm());
             Application.ApplicationExit += Application_ApplicationExit;
         }
 

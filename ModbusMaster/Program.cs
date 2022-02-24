@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace ModbusMaster
+namespace ModbusClient
 {
     static class Program
     {
@@ -15,7 +15,7 @@ namespace ModbusMaster
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MasterForm());
+            Application.Run(new ClientForm());
         }
     }
 }

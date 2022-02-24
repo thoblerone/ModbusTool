@@ -1,6 +1,6 @@
-﻿namespace ModbusSlave
+﻿namespace ModbusServer
 {
-    partial class SlaveForm
+    partial class ServerForm
     {
 
         /// <summary>
@@ -24,7 +24,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SlaveForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ServerForm));
             this.buttonDisconnect = new System.Windows.Forms.Button();
             this.btnConnect = new System.Windows.Forms.Button();
             this.groupBox4.SuspendLayout();
@@ -62,16 +62,16 @@
             this.btnConnect.Text = "Listen";
             this.btnConnect.Click += new System.EventHandler(this.BtnConnectClick);
             // 
-            // SlaveForm
+            // ServerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.ClientSize = new System.Drawing.Size(869, 887);
             this.Controls.Add(this.buttonDisconnect);
             this.Controls.Add(this.btnConnect);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "SlaveForm";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SlaveFormClosing);
-            this.Load += new System.EventHandler(this.SlaveFormLoading);
+            this.Name = "ServerForm";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ServerFormClosing);
+            this.Load += new System.EventHandler(this.ServerFormLoading);
             this.Controls.SetChildIndex(this.tabControl1, 0);
             this.Controls.SetChildIndex(this.grpExchange, 0);
             this.Controls.SetChildIndex(this.groupBox3, 0);

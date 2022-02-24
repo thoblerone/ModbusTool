@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ModbusSlave.Properties {
+namespace ModbusServer.Properties {
     using System;
     
     

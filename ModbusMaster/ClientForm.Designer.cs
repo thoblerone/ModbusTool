@@ -1,6 +1,6 @@
-﻿namespace ModbusMaster
+﻿namespace ModbusClient
 {
-    partial class MasterForm
+    partial class ClientForm
     {
 
         /// <summary>
@@ -25,7 +25,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MasterForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ClientForm));
             this.groupBoxFunctions = new System.Windows.Forms.GroupBox();
             this.txtPollDelay = new System.Windows.Forms.TextBox();
             this.cbPoll = new System.Windows.Forms.CheckBox();
@@ -67,9 +67,9 @@
             // 
             this.label1.Visible = false;
             // 
-            // textBoxSlaveDelay
+            // textBoxServerDelay
             // 
-            this.textBoxSlaveDelay.Visible = false;
+            this.textBoxServerDelay.Visible = false;
             // 
             // radioButtonReverseFloat
             // 
@@ -211,7 +211,7 @@
             this.pollTimer.Interval = 2000;
             this.pollTimer.Tick += new System.EventHandler(this.pollTimer_Tick);
             // 
-            // MasterForm
+            // ClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.ClientSize = new System.Drawing.Size(869, 917);
@@ -219,11 +219,11 @@
             this.Controls.Add(this.btnConnect);
             this.Controls.Add(this.groupBoxFunctions);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "MasterForm";
+            this.Name = "ClientForm";
             this.ShowDataLength = true;
-            this.Text = "Modbus Master";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MasterFormClosing);
-            this.Load += new System.EventHandler(this.MasterForm_Load);
+            this.Text = "Modbus Client";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ClientFormClosing);
+            this.Load += new System.EventHandler(this.ClientForm_Load);
             this.Controls.SetChildIndex(this.tabControl1, 0);
             this.Controls.SetChildIndex(this.grpExchange, 0);
             this.Controls.SetChildIndex(this.groupBox3, 0);

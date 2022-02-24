@@ -36,9 +36,9 @@
             this.listBoxCommLog = new System.Windows.Forms.ListBox();
             this.buttonClear = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.textBoxSlaveDelay = new System.Windows.Forms.TextBox();
+            this.textBoxServerDelay = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.textBoxSlaveID = new System.Windows.Forms.TextBox();
+            this.textBoxServerID = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.radioButtonLED = new System.Windows.Forms.RadioButton();
             this.radioButtonReverseFloat = new System.Windows.Forms.RadioButton();
@@ -136,16 +136,16 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(86, 14);
             this.label1.TabIndex = 30;
-            this.label1.Text = "Slave delay (ms)";
+            this.label1.Text = "Server delay (ms)";
             // 
-            // textBoxSlaveDelay
+            // textBoxServerDelay
             // 
-            this.textBoxSlaveDelay.Location = new System.Drawing.Point(120, 40);
-            this.textBoxSlaveDelay.Name = "textBoxSlaveDelay";
-            this.textBoxSlaveDelay.Size = new System.Drawing.Size(40, 20);
-            this.textBoxSlaveDelay.TabIndex = 29;
-            this.textBoxSlaveDelay.Text = "1";
-            this.textBoxSlaveDelay.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.textBoxServerDelay.Location = new System.Drawing.Point(120, 40);
+            this.textBoxServerDelay.Name = "textBoxServerDelay";
+            this.textBoxServerDelay.Size = new System.Drawing.Size(40, 20);
+            this.textBoxServerDelay.TabIndex = 29;
+            this.textBoxServerDelay.Text = "1";
+            this.textBoxServerDelay.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // label7
             // 
@@ -153,16 +153,16 @@
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(74, 14);
             this.label7.TabIndex = 28;
-            this.label7.Text = "Slave ID";
+            this.label7.Text = "Server ID";
             // 
-            // textBoxSlaveID
+            // textBoxServerID
             // 
-            this.textBoxSlaveID.Location = new System.Drawing.Point(120, 20);
-            this.textBoxSlaveID.Name = "textBoxSlaveID";
-            this.textBoxSlaveID.Size = new System.Drawing.Size(40, 20);
-            this.textBoxSlaveID.TabIndex = 27;
-            this.textBoxSlaveID.Text = "1";
-            this.textBoxSlaveID.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.textBoxServerID.Location = new System.Drawing.Point(120, 20);
+            this.textBoxServerID.Name = "textBoxServerID";
+            this.textBoxServerID.Size = new System.Drawing.Size(40, 20);
+            this.textBoxServerID.TabIndex = 27;
+            this.textBoxServerID.Text = "1";
+            this.textBoxServerID.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // groupBox3
             // 
@@ -501,11 +501,11 @@
             // grpExchange
             // 
             this.grpExchange.Controls.Add(this.buttonImport);
-            this.grpExchange.Controls.Add(this.textBoxSlaveID);
+            this.grpExchange.Controls.Add(this.textBoxServerID);
             this.grpExchange.Controls.Add(this.buttonExport);
             this.grpExchange.Controls.Add(this.label1);
             this.grpExchange.Controls.Add(this.label7);
-            this.grpExchange.Controls.Add(this.textBoxSlaveDelay);
+            this.grpExchange.Controls.Add(this.textBoxServerDelay);
             this.grpExchange.Location = new System.Drawing.Point(571, 144);
             this.grpExchange.Name = "grpExchange";
             this.grpExchange.Size = new System.Drawing.Size(289, 110);
@@ -595,7 +595,7 @@
             this.Controls.Add(this.groupBox3);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "BaseForm";
-            this.Text = "Modbus Slave";
+            this.Text = "Modbus Server";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.BaseFormClosing);
             this.Load += new System.EventHandler(this.BaseFormLoading);
             this.groupBox4.ResumeLayout(false);
@@ -621,7 +621,7 @@
         protected System.Windows.Forms.GroupBox groupBox4;
         protected System.Windows.Forms.ListBox listBoxCommLog;
         protected System.Windows.Forms.Label label7;
-        protected System.Windows.Forms.TextBox textBoxSlaveID;
+        protected System.Windows.Forms.TextBox textBoxServerID;
         protected System.Windows.Forms.GroupBox groupBox3;
         protected System.Windows.Forms.RadioButton radioButtonLED;
         protected System.Windows.Forms.RadioButton radioButtonInteger;
@@ -642,7 +642,7 @@
         protected System.Windows.Forms.Label label6;
         protected System.Windows.Forms.TextBox textBoxPort;
         protected System.Windows.Forms.Label label1;
-        protected System.Windows.Forms.TextBox textBoxSlaveDelay;
+        protected System.Windows.Forms.TextBox textBoxServerDelay;
         protected System.Windows.Forms.ComboBox comboBoxBaudRate;
         protected System.Windows.Forms.RadioButton radioButtonRTU;
         protected System.Windows.Forms.OpenFileDialog openFileDialog;

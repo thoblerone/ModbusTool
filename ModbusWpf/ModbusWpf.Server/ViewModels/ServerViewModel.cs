@@ -39,8 +39,8 @@ namespace ModbusWpf.Server.ViewModels
 
             Title = $"Modbus Server ({Assembly.GetExecutingAssembly().GetName().Version})";
             
-            MasterOptionsVisibility = Visibility.Collapsed;
-            SlaveOptionsVisibility = Visibility.Visible;
+            ClientOptionsVisibility = Visibility.Collapsed;
+            ServerOptionsVisibility = Visibility.Visible;
         }
         protected override async Task OnClosingAsync()
         {
@@ -57,7 +57,7 @@ namespace ModbusWpf.Server.ViewModels
         private Thread _tcpServerThread;
         private readonly IRegisterDataService _registerDataService;
 
-        protected override async Task OnSlaveListenCommandExecuteAsync()
+        protected override async Task OnServerListenCommandExecuteAsync()
         {
             try
             {
@@ -66,7 +66,7 @@ namespace ModbusWpf.Server.ViewModels
                     case CommunicationMode.RTU:
                         _uart = new SerialPort(PortName, Baud, Parity, DataBits, StopBits);
                         _uart.Open();
-                        var rtuServer = new ModbusServer(new ModbusRtuCodec()) { Address = SlaveId };
+                        var rtuServer = new ModbusServer(new ModbusRtuCodec()) { Address = ServerId };
                         rtuServer.OutgoingData += LogOutgoingData;
                         rtuServer.IncommingData += LogIncomingData;
 
@@ -81,7 +81,7 @@ namespace ModbusWpf.Server.ViewModels
                         _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
                         _socket.Bind(new IPEndPoint(IPAddress.Any, TcpPort));
                         //create a server driver
-                        var udpServer = new ModbusServer(new ModbusTcpCodec()) { Address = SlaveId };
+                        var udpServer = new ModbusServer(new ModbusTcpCodec()) { Address = ServerId };
                         udpServer.OutgoingData += LogOutgoingData;
                         udpServer.IncommingData += LogIncomingData;
                         //listen for an incoming request
@@ -167,7 +167,7 @@ namespace ModbusWpf.Server.ViewModels
         /// </summary>
         protected void TcpThreadWorker()
         {
-            var server = new ModbusServer(new ModbusTcpCodec()) { Address = SlaveId };
+            var server = new ModbusServer(new ModbusTcpCodec()) { Address = ServerId };
             server.IncommingData += LogIncomingData;
             server.OutgoingData += LogOutgoingData;
             try
@@ -194,7 +194,7 @@ namespace ModbusWpf.Server.ViewModels
         {
             var command = (ModbusCommand)e.Data.UserData;
 
-            Thread.Sleep(SlaveDelay);
+            Thread.Sleep(ServerDelay);
 
             //take the proper function command handler
             switch (command.FunctionCode)

@@ -8,8 +8,8 @@
     <ProjectGuid>{9A0EC5E1-B32F-4103-BAFA-DFAEC9C2B50C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ModbusMaster</RootNamespace>
-    <AssemblyName>ModbusMaster</AssemblyName>
+    <RootNamespace>ModbusClient</RootNamespace>
+    <AssemblyName>ModbusClient</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -52,7 +52,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>ModbusMaster.Program</StartupObject>
+    <StartupObject>ModbusClient.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -95,7 +95,7 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>ModbusMaster.ico</ApplicationIcon>
+    <ApplicationIcon>ModbusClient.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -110,16 +110,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MasterForm.cs">
+    <Compile Include="ClientForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MasterForm.Designer.cs">
-      <DependentUpon>MasterForm.cs</DependentUpon>
+    <Compile Include="ClientForm.Designer.cs">
+      <DependentUpon>ClientForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="MasterForm.resx">
-      <DependentUpon>MasterForm.cs</DependentUpon>
+    <EmbeddedResource Include="ClientForm.resx">
+      <DependentUpon>ClientForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -144,7 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Desktop.ico" />
-    <Content Include="ModbusMaster.ico" />
+    <Content Include="ModbusClient.ico" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonControls\Modbus.Common.csproj">

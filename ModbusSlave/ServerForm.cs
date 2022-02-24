@@ -9,9 +9,9 @@ using Modbus.Common;
 using ModbusLib;
 using ModbusLib.Protocols;
 
-namespace ModbusSlave
+namespace ModbusServer
 {
-    public partial class SlaveForm : BaseForm
+    public partial class ServerForm : BaseForm
     {
                     
         private Function _function = Function.HoldingRegister;
@@ -21,19 +21,19 @@ namespace ModbusSlave
 
         #region Form
         
-        public SlaveForm()
+        public ServerForm()
         {
             base.ShowDataLength = false;
             InitializeComponent();
             this.Text += String.Format(" ({0})", Assembly.GetExecutingAssembly().GetName().Version.ToString());
         }
 
-        private void SlaveFormClosing(object sender, FormClosingEventArgs e)
+        private void ServerFormClosing(object sender, FormClosingEventArgs e)
         {
             DoDisconnect();
         }
 
-        private void SlaveFormLoading(object sender, EventArgs e)
+        private void ServerFormLoading(object sender, EventArgs e)
         {
         }
 
@@ -51,7 +51,7 @@ namespace ModbusSlave
                     case CommunicationMode.RTU:
                         _uart = new SerialPort(PortName, Baud, Parity, DataBits, StopBits);
                         _uart.Open();
-                        var rtuServer = new ModbusServer(new ModbusRtuCodec()) { Address = SlaveId };
+                        var rtuServer = new ModbusLib.Protocols.ModbusServer(new ModbusRtuCodec()) { Address = ServerId };
                         rtuServer.OutgoingData += DriverOutgoingData;
                         rtuServer.IncommingData += DriverIncommingData;
                         _listener = _uart.GetListener(rtuServer);
@@ -64,7 +64,7 @@ namespace ModbusSlave
                         _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
                         _socket.Bind(new IPEndPoint(IPAddress.Any, TCPPort));
                         //create a server driver
-                        var udpServer = new ModbusServer(new ModbusTcpCodec()) { Address = SlaveId };
+                        var udpServer = new ModbusLib.Protocols.ModbusServer(new ModbusTcpCodec()) { Address = ServerId };
                         udpServer.OutgoingData += DriverOutgoingData;
                         udpServer.IncommingData += DriverIncommingData;
                         //listen for an incoming request
@@ -103,7 +103,7 @@ namespace ModbusSlave
         /// </summary>
         protected void Worker()
         {
-            var server = new ModbusServer(new ModbusTcpCodec()) { Address = SlaveId };
+            var server = new ModbusLib.Protocols.ModbusServer(new ModbusTcpCodec()) { Address = ServerId };
             server.IncommingData += DriverIncommingData;
             server.OutgoingData += DriverOutgoingData;
             try
@@ -177,7 +177,7 @@ namespace ModbusSlave
         {
             var command = (ModbusCommand)e.Data.UserData;
 
-            Thread.Sleep(SlaveDelay);
+            Thread.Sleep(ServerDelay);
 
             //take the proper function command handler
             switch (command.FunctionCode)

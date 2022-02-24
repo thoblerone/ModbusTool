@@ -80,8 +80,8 @@ namespace Modbus.Common
             Parity = Properties.Settings.Default.Parity;
             StartAddress = Properties.Settings.Default.StartAddress;
             DataLength = Properties.Settings.Default.DataLength;
-            SlaveId = Properties.Settings.Default.SlaveId;
-            SlaveDelay = Properties.Settings.Default.SlaveDelay;
+            ServerId = Properties.Settings.Default.ServerId;
+            ServerDelay = Properties.Settings.Default.ServerDelay;
             DataBits = Properties.Settings.Default.DataBits;
             StopBits = Properties.Settings.Default.StopBits;
         }
@@ -97,8 +97,8 @@ namespace Modbus.Common
             Properties.Settings.Default.Parity = Parity;
             Properties.Settings.Default.StartAddress = StartAddress;
             Properties.Settings.Default.DataLength = DataLength;
-            Properties.Settings.Default.SlaveId = SlaveId;
-            Properties.Settings.Default.SlaveDelay = SlaveDelay;
+            Properties.Settings.Default.ServerId = ServerId;
+            Properties.Settings.Default.ServerDelay = ServerDelay;
             Properties.Settings.Default.DataBits = DataBits;
             Properties.Settings.Default.StopBits = StopBits;
             Properties.Settings.Default.Save();
@@ -377,27 +377,27 @@ namespace Modbus.Common
             }
         }
 
-        protected byte SlaveId
+        protected byte ServerId
         {
             get
             {
-                return Byte.Parse(textBoxSlaveID.Text);
+                return Byte.Parse(textBoxServerID.Text);
             }
             set
             {
-                textBoxSlaveID.Text = Convert.ToString(value);
+                textBoxServerID.Text = Convert.ToString(value);
             }
         }
 
-        protected int SlaveDelay
+        protected int ServerDelay
         {
             get
             {
-                return int.Parse(textBoxSlaveDelay.Text);
+                return int.Parse(textBoxServerDelay.Text);
             }
             set
             {
-                textBoxSlaveDelay.Text = Convert.ToString(value);
+                textBoxServerDelay.Text = Convert.ToString(value);
             }
         }
 

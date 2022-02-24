@@ -8,12 +8,12 @@ using Modbus.Common;
 using ModbusLib;
 using ModbusLib.Protocols;
 
-namespace ModbusMaster
+namespace ModbusClient
 {
-    public partial class MasterForm : BaseForm
+    public partial class ClientForm : BaseForm
     {
         private int _transactionId;
-        private ModbusClient _driver;
+        private ModbusLib.Protocols.ModbusClient _driver;
         private ICommClient _portClient;
         private SerialPort _uart;
 
@@ -21,13 +21,13 @@ namespace ModbusMaster
 
         #region Form
 
-        public MasterForm()
+        public ClientForm()
         {
             InitializeComponent();
             this.Text += String.Format(" ({0})", Assembly.GetExecutingAssembly().GetName().Version.ToString());
         }
 
-        private void MasterFormClosing(object sender, FormClosingEventArgs e)
+        private void ClientFormClosing(object sender, FormClosingEventArgs e)
         {
             DoDisconnect();
         }
@@ -64,7 +64,7 @@ namespace ModbusMaster
                         _uart = new SerialPort(PortName, Baud, Parity, DataBits, StopBits);
                         _uart.Open();
                         _portClient = _uart.GetClient();
-                        _driver = new ModbusClient(new ModbusRtuCodec()) { Address = SlaveId };
+                        _driver = new ModbusLib.Protocols.ModbusClient(new ModbusRtuCodec()) { Address = ServerId };
                         _driver.OutgoingData += DriverOutgoingData;
                         _driver.IncommingData += DriverIncommingData;
                         AppendLog(String.Format("Connected using RTU to {0}", PortName));
@@ -74,7 +74,7 @@ namespace ModbusMaster
                         _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
                         _socket.Connect(new IPEndPoint(IPAddress, TCPPort));
                         _portClient = _socket.GetClient();
-                        _driver = new ModbusClient(new ModbusTcpCodec()) { Address = SlaveId };
+                        _driver = new ModbusLib.Protocols.ModbusClient(new ModbusTcpCodec()) { Address = ServerId };
                         _driver.OutgoingData += DriverOutgoingData;
                         _driver.IncommingData += DriverIncommingData;
                         AppendLog(String.Format("Connected using UDP to {0}", _socket.RemoteEndPoint));
@@ -87,7 +87,7 @@ namespace ModbusMaster
                         _socket.ReceiveTimeout = 2000;
                         _socket.Connect(new IPEndPoint(IPAddress, TCPPort));
                         _portClient = _socket.GetClient();
-                        _driver = new ModbusClient(new ModbusTcpCodec()) { Address = SlaveId };
+                        _driver = new ModbusLib.Protocols.ModbusClient(new ModbusTcpCodec()) { Address = ServerId };
                         _driver.OutgoingData += DriverOutgoingData;
                         _driver.IncommingData += DriverIncommingData;
                         AppendLog(String.Format("Connected using TCP to {0}", _socket.RemoteEndPoint));
@@ -276,7 +276,7 @@ namespace ModbusMaster
                 ExecuteReadCommand(_lastReadCommand);
         }
 
-        private void MasterForm_Load(object sender, EventArgs e)
+        private void ClientForm_Load(object sender, EventArgs e)
         {
 
         }
