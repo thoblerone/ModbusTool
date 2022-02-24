@@ -11,8 +11,6 @@ namespace ModbusWpf.Common.ViewModels
 {
     public class DataTabControlViewModel : ViewModelBase
     {
-        private int _startAddress = 0;
-
         #region Constructors
 
         public DataTabControlViewModel() : this(null)
@@ -41,14 +39,6 @@ namespace ModbusWpf.Common.ViewModels
             
             RegisterDataService = registerDataService;
             RegisterModels = new ObservableCollection<RegisterDisplayModel>();
-
-            //if (CatelEnvironment.IsInDesignMode)
-            {
-                for (ushort i = 0; i < 25; i++)
-                {
-                    registerDataService[i] = i;
-                }
-            }
         }
 
         public IRegisterDataService RegisterDataService { get; }
@@ -56,18 +46,41 @@ namespace ModbusWpf.Common.ViewModels
         #endregion
 
         #region Properties
-        public ushort DataLength { get; set; } = 32;
+
+        public ushort DataLength
+        {
+            get => _dataLength;
+            set
+            {
+                if (_dataLength == value)
+                    return;
+
+                // the UI should bind using UpdateSourceTrigger=LostFocus
+                // to avoid too frequent UI rebuilds
+                _dataLength = value;
+
+                ApplyAddressSelectionCommand.Execute();
+                RaisePropertyChanged(nameof(DataLength));
+            }
+        }
+
+        private int _startAddress = 0;
+        private ushort _dataLength = 32;
 
         public int StartAddress
         {
             get => _startAddress;
             set
             {
-                // the UI should bind using UpdateSourceTrigger=Explicit
+                if (_startAddress == value)
+                    return;
+
+                // the UI should bind using UpdateSourceTrigger=LostFocus
                 // to avoid too frequent UI rebuilds
                 _startAddress = value;
                 
                 ApplyAddressSelectionCommand.Execute();
+                RaisePropertyChanged(nameof(StartAddress));
             }
         }
 

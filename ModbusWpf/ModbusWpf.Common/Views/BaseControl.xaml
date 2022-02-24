@@ -68,7 +68,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="635" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <GroupBox Header="Communication" Grid.Row="0" Grid.Column="0" Margin="0,0,6,0">
@@ -166,17 +166,17 @@
             </Grid.RowDefinitions>
             <Button Grid.Row="0" Content="Listen" Visibility="{Binding ServerOptionsVisibility}"
                     Command="{Binding ServerListenCommand}"
-                    Margin="48,12,6,3" Padding="0"  Height="24" />
+                    Padding="0"  Height="24" Width="143" HorizontalAlignment="Right" />
             <Button Grid.Row="0" Content="Connect" Visibility="{Binding ClientOptionsVisibility}" 
                     Command="{Binding ClientListenCommand}"
-                    Margin="48,12,6,3" Padding="0"  Height="24" />
-            <Button Grid.Row="1" Content="Disconnect" Margin="48,2,6,6" Padding="0" Height="24"
-                    Command="{Binding DisconnectCommand}" />
+                    Padding="0"  Height="24" Width="143" HorizontalAlignment="Right" />
+            <Button Grid.Row="1" Content="Disconnect" Padding="0" Height="24"
+                    Command="{Binding DisconnectCommand}" HorizontalAlignment="Right" Width="143" />
 
             <StackPanel Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                 <GroupBox Header="If you find this useful ..." >
                     <Button Command="{Binding DonateCommand}">
-                        <Image Source="btn_donateCC_LG.gif" />
+                        <Image Source="btn_donateCC_LG.gif" Width="147" Height="47" />
                     </Button>
                 </GroupBox>
             </StackPanel>
@@ -199,25 +199,23 @@
                     <TextBox Grid.Row="0" Grid.Column="1" MinWidth="30" Text="{Binding ServerId}"/>
                     <Label Content="Server Delay (ms):" Grid.Row="1" Grid.Column="0"  Visibility="{Binding ServerOptionsVisibility}"/>
                     <TextBox Grid.Row="1" Grid.Column="1" MinWidth="30" Text="{Binding ServerDelay}"  Visibility="{Binding ServerOptionsVisibility}"/>
-                </Grid>
-            </GroupBox>
-            <Button Padding="3,0, 10,0"  HorizontalContentAlignment="Right" 
-                    BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0" 
-                    IsEnabled="False" ToolTipService.ShowOnDisabled="True" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="60000">
-                <Path Data="{Binding IconPath}" HorizontalAlignment="Right" Stretch="Uniform" Width="100" Height="100">
-                    <Path.Fill>
-                        <LinearGradientBrush>
-                            <GradientStop Color="{Binding IconColor}" Offset="0" />
-                            <GradientStop Color="{DynamicResource {x:Static SystemColors.ControlDarkDarkColorKey}}" Offset="1" />
-                            <LinearGradientBrush.Transform>
-                                <MatrixTransform Matrix="0.75,0,0,0.75,0,0" />
-                            </LinearGradientBrush.Transform>
-                        </LinearGradientBrush>
-                    </Path.Fill>
-                </Path>
-                <Button.ToolTip>
-                    <ToolTip MaxWidth="450">
-                        <TextBlock TextWrapping="Wrap"><Bold>Client/Server Terminology:</Bold><LineBreak />
+                    <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Padding="3,0, 10,0" BorderBrush="{x:Null}"
+                            Background="{x:Null}" BorderThickness="0" ToolTipService.ShowOnDisabled="True"
+                            ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="60000" HorizontalAlignment="Center">
+                        <Path Data="{Binding IconPath}" HorizontalAlignment="Right" Stretch="Uniform" Width="75" Height="75">
+                            <Path.Fill>
+                                <LinearGradientBrush>
+                                    <GradientStop Color="{Binding IconColor}" Offset="0" />
+                                    <GradientStop Color="{DynamicResource {x:Static SystemColors.ControlDarkDarkColorKey}}" Offset="1" />
+                                    <LinearGradientBrush.Transform>
+                                        <MatrixTransform Matrix="0.75,0,0,0.75,0,0" />
+                                    </LinearGradientBrush.Transform>
+                                </LinearGradientBrush>
+                            </Path.Fill>
+                        </Path>
+                        <Border.ToolTip>
+                            <ToolTip MaxWidth="450">
+                                <TextBlock TextWrapping="Wrap"><Bold>Client/Server Terminology:</Bold><LineBreak />
                             The Modbus Organization replaced 'Master-Slave' with 'Client-Server' in July 2020.<LineBreak />
                             https://www.modbus.org/docs/Client-ServerPR-07-2020-final.docx.pdf <LineBreak />
                             The new Modbus terminology replaces Master with Client, and Slave with Server, 
@@ -228,50 +226,48 @@
                             <Bold>In the case of Modbus, the client (main controller) 
                             is the only device on the network that can initiate a transfer requesting the data, and 
                             the servers (e.g. sensors) are the ones serving the data in response.</Bold></TextBlock>
-                    </ToolTip>
-                </Button.ToolTip>
+                            </ToolTip>
+                        </Border.ToolTip>
+                    </Border>
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="Functions" Grid.Row="1" Grid.Column="0" Visibility="{Binding ClientOptionsVisibility}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
 
-            </Button>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Row="0" Grid.Column="0" Command="{Binding ExecuteClientFunctionCommand}" Style="{StaticResource MultiLineButtonStyle}" CommandParameter="{x:Static helpers:ClientFunctions.ReadCoils}" Content="Read coils"/>
+                    <Button Grid.Row="0" Grid.Column="1" Command="{Binding ExecuteClientFunctionCommand}" Style="{StaticResource MultiLineButtonStyle}" CommandParameter="{x:Static helpers:ClientFunctions.ReadDiscrete}" Content="Read&#xa;discrete" />
+                    <Button Grid.Row="0" Grid.Column="2" Command="{Binding ExecuteClientFunctionCommand}" Style="{StaticResource MultiLineButtonStyle}" CommandParameter="{x:Static helpers:ClientFunctions.ReadHoldingRegister}" Content="Read holding&#xa;register" />
+                    <Button Grid.Row="0" Grid.Column="3" Command="{Binding ExecuteClientFunctionCommand}" Style="{StaticResource MultiLineButtonStyle}" CommandParameter="{x:Static helpers:ClientFunctions.ReadInputRegister}" Content="Read input&#xa;register" />
+                    <Button Grid.Row="1" Grid.Column="0" Command="{Binding ExecuteClientFunctionCommand}" Style="{StaticResource MultiLineButtonStyle}" CommandParameter="{x:Static helpers:ClientFunctions.WriteSingleCoil}" Content="Write&#xa;single coil" />
+                    <Button Grid.Row="1" Grid.Column="1" Command="{Binding ExecuteClientFunctionCommand}" Style="{StaticResource MultiLineButtonStyle}" CommandParameter="{x:Static helpers:ClientFunctions.WriteSingleRegister}" Content="Write single&#xa;register" />
+                    <Button Grid.Row="1" Grid.Column="2" Command="{Binding ExecuteClientFunctionCommand}" Style="{StaticResource MultiLineButtonStyle}" CommandParameter="{x:Static helpers:ClientFunctions.WriteMultipleCoils}" Content="Write&#xa;multiple coils" />
+                    <Button Grid.Row="1" Grid.Column="3" Command="{Binding ExecuteClientFunctionCommand}" Style="{StaticResource MultiLineButtonStyle}" CommandParameter="{x:Static helpers:ClientFunctions.WriteMultipleRegister}" Content="Write multiple&#xa;register" />
+                    <StackPanel Grid.Row="2" Grid.ColumnSpan="4" Grid.Column="0" Orientation="Horizontal" >
+                        <CheckBox Margin="6,0,0,0" IsChecked="{Binding ClientPollingActive}" Content="Poll" VerticalContentAlignment="Center"/>
+                        <TextBox Text="{Binding ClientPollInterval, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="50" VerticalAlignment="Center" />
+                        <TextBlock Text="ms" Width="50" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                </Grid>
+
+            </GroupBox>
         </DockPanel>
         <GroupBox Header="CSV File I/O" Grid.Row="1" Grid.Column="1" IsEnabled="{Binding HasConnected, Converter={catel:BooleanToOppositeBooleanConverter}, UpdateSourceTrigger=PropertyChanged}">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Right">
                 <Button Content="Import Tab Data ..." Command="{Binding ImportCurrentTabDataCommand}" Style="{StaticResource MultiLineButtonStyle}"/>
                 <Button Content="Export Tab Data ..." Command="{Binding ExportCurrentTabDataCommand}" Style="{StaticResource MultiLineButtonStyle}"/>
             </StackPanel>
-        </GroupBox>
-        <GroupBox Header="Functions" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Visibility="{Binding ClientOptionsVisibility}">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Button Grid.Row="0" Grid.Column="0" Command="{Binding ExecuteClientFunctionCommand}" Style="{StaticResource MultiLineButtonStyle}" CommandParameter="{x:Static helpers:ClientFunctions.ReadCoils}" Content="Read coils" />
-                <Button Grid.Row="0" Grid.Column="1" Command="{Binding ExecuteClientFunctionCommand}" Style="{StaticResource MultiLineButtonStyle}" CommandParameter="{x:Static helpers:ClientFunctions.ReadDiscrete}" Content="Read&#xa;discrete" />
-                <Button Grid.Row="0" Grid.Column="2" Command="{Binding ExecuteClientFunctionCommand}" Style="{StaticResource MultiLineButtonStyle}" CommandParameter="{x:Static helpers:ClientFunctions.ReadHoldingRegister}" Content="Read holding&#xa;register" />
-                <Button Grid.Row="0" Grid.Column="3" Command="{Binding ExecuteClientFunctionCommand}" Style="{StaticResource MultiLineButtonStyle}" CommandParameter="{x:Static helpers:ClientFunctions.ReadInputRegister}" Content="Read input&#xa;register" />
-                <Button Grid.Row="0" Grid.Column="4" Command="{Binding ExecuteClientFunctionCommand}" Style="{StaticResource MultiLineButtonStyle}" CommandParameter="{x:Static helpers:ClientFunctions.WriteSingleCoil}" Content="Write&#xa;single coil" />
-                <Button Grid.Row="0" Grid.Column="5" Command="{Binding ExecuteClientFunctionCommand}" Style="{StaticResource MultiLineButtonStyle}" CommandParameter="{x:Static helpers:ClientFunctions.WriteSingleRegister}" Content="Write single&#xa;register" />
-                <Button Grid.Row="0" Grid.Column="6" Command="{Binding ExecuteClientFunctionCommand}" Style="{StaticResource MultiLineButtonStyle}" CommandParameter="{x:Static helpers:ClientFunctions.WriteMultipleCoils}" Content="Write&#xa;multiple coils" />
-                <Button Grid.Row="0" Grid.Column="7" Command="{Binding ExecuteClientFunctionCommand}" Style="{StaticResource MultiLineButtonStyle}" CommandParameter="{x:Static helpers:ClientFunctions.WriteMultipleRegister}" Content="Write multiple&#xa;register" />
-                <StackPanel Grid.Row="1" Grid.ColumnSpan="8" Grid.Column="0" Orientation="Horizontal" >
-                    <CheckBox Margin="6,0,0,0" IsChecked="{Binding ClientPollingActive}" Content="Poll" VerticalContentAlignment="Center"/>
-                    <TextBox Text="{Binding ClientPollInterval, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="50" VerticalAlignment="Center" />
-                    <TextBlock Text="ms" Width="50" VerticalAlignment="Center"/>
-                </StackPanel>
-
-            </Grid>
-
         </GroupBox>
         <TabControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding DataTabItems}"
                     SelectedItem="{Binding SelectedDataTabItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -317,8 +313,8 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
-                <StackPanel  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" >
-                    <ToggleButton IsChecked="{Binding LogPaused}" Padding="6" Margin="6">
+                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" >
+                    <ToggleButton IsChecked="{Binding LogPaused}" Padding="6" Margin="6,0">
                         <ToggleButton.Style>
                             <Style TargetType="{x:Type ToggleButton}">
                                 <Setter Property="Content" Value="Pause" />
@@ -330,7 +326,7 @@
                             </Style>
                         </ToggleButton.Style>
                     </ToggleButton>
-                    <Button Content="Clear" Margin="6,6,0,6"  Command="{Binding LogClearCommand}" />
+                    <Button Content="Clear" Margin="6,0,0,0"  Command="{Binding LogClearCommand}" />
                 </StackPanel>
                 <ListBox Grid.Row="1"
                          ItemsSource="{Binding CommLogEntries}"

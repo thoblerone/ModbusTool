@@ -30,7 +30,7 @@
                     <TextBlock 
                         VerticalAlignment="Center"
                         Text="{Binding RegisterNumber}" />
-                    <TextBlock Text="{Binding CoilNumber, StringFormat={}(Coil {0})}" 
+                    <TextBlock Text="{Binding CoilNumber, StringFormat={}(Bit {0})}" 
                                VerticalAlignment="Center"
                                Margin="6,0,16,0"/>
                 </StackPanel>
@@ -105,7 +105,7 @@
 
                     <Label Content="First Register:" />
                     <cc:ReturnKeyTextBox VerticalContentAlignment="Center" MinWidth="30"
-                                             Text="{Binding StartAddress, UpdateSourceTrigger=Explicit, Mode=TwoWay}"/>
+                                             Text="{Binding StartAddress, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"/>
 
                     <Label Content="Register Count:" />
                     <cc:ReturnKeyTextBox Text="{Binding DataLength, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"  MinWidth="30" 
@@ -120,16 +120,17 @@
                 </WrapPanel>
             </Grid>
             <GroupBox Header="Registers" Grid.Row="1">
-                <DockPanel>
+                <DockPanel><ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden" Padding="0,0,0,0">
                     <ItemsControl 
                         ItemsSource="{Binding RegisterModels}"
                         ItemTemplateSelector="{StaticResource RegisterDisplayTemplateSelector}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <WrapPanel Orientation="Vertical" MaxWidth="800" />
+                                <WrapPanel Orientation="Vertical" MaxHeight="{Binding ViewportHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ScrollViewer}}}" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
-                    </ItemsControl>
+                        </ItemsControl>
+                    </ScrollViewer>
                 </DockPanel>
             </GroupBox>
         </Grid>
