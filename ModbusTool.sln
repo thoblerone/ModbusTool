@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModbusWpf.Client", "ModbusW
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModbusWpf.Server", "ModbusWpf\ModbusWpf.Server\ModbusWpf.Server.csproj", "{06167668-056E-4794-8814-5C771FD9C9F2}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ModbusWpf.Setup", "ModbusWpf\ModbusWpf.Setup\ModbusWpf.Setup.vdproj", "{05CA996A-EAC7-455D-8B3D-19EB66958ED3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -137,6 +139,12 @@ Global
 		{06167668-056E-4794-8814-5C771FD9C9F2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{06167668-056E-4794-8814-5C771FD9C9F2}.Release|x86.ActiveCfg = Release|Any CPU
 		{06167668-056E-4794-8814-5C771FD9C9F2}.Release|x86.Build.0 = Release|Any CPU
+		{05CA996A-EAC7-455D-8B3D-19EB66958ED3}.Debug|Any CPU.ActiveCfg = Debug
+		{05CA996A-EAC7-455D-8B3D-19EB66958ED3}.Debug|Mixed Platforms.ActiveCfg = Debug
+		{05CA996A-EAC7-455D-8B3D-19EB66958ED3}.Debug|x86.ActiveCfg = Debug
+		{05CA996A-EAC7-455D-8B3D-19EB66958ED3}.Release|Any CPU.ActiveCfg = Release
+		{05CA996A-EAC7-455D-8B3D-19EB66958ED3}.Release|Mixed Platforms.ActiveCfg = Release
+		{05CA996A-EAC7-455D-8B3D-19EB66958ED3}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -147,6 +155,7 @@ Global
 		{54D557CE-0D9E-42E7-A50D-6101B6A2BDB4} = {699ED452-3141-4FE6-912E-262B0218849A}
 		{AE684047-6F9F-4E8F-9F54-1091D36E6BDD} = {699ED452-3141-4FE6-912E-262B0218849A}
 		{06167668-056E-4794-8814-5C771FD9C9F2} = {699ED452-3141-4FE6-912E-262B0218849A}
+		{05CA996A-EAC7-455D-8B3D-19EB66958ED3} = {699ED452-3141-4FE6-912E-262B0218849A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CE69B5B1-644C-441B-8D07-10A46FEAA1E7}
