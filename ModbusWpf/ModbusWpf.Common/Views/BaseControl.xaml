@@ -12,9 +12,7 @@
              xmlns:viewModels="clr-namespace:ModbusWpf.Common.ViewModels"
              xmlns:helpers="clr-namespace:ModbusWpf.Common.Helpers"
              mc:Ignorable="d" 
-             d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type viewModels:BaseViewModel}}"
-             
-             >
+             d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type viewModels:BaseViewModel}}">
     <catel:UserControl.Resources>
         <ResourceDictionary>
             <converters:EnumBooleanConverter x:Key="EnumBooleanConverter" />
@@ -64,8 +62,9 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="2*"/>
-            <RowDefinition/>
+            <RowDefinition Height="2*"  MinHeight="190"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition  MinHeight="100"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="635" />
@@ -164,16 +163,50 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
-            <Button Grid.Row="0" Content="Listen" Visibility="{Binding ServerOptionsVisibility}"
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="120"/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"  BorderBrush="{x:Null}"
+                            Background="{x:Null}" BorderThickness="0" ToolTipService.ShowOnDisabled="True"
+                            ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="60000" HorizontalAlignment="Right">
+                <Path Data="{Binding IconPath}" HorizontalAlignment="Right" Stretch="Uniform" Width="75" Height="75">
+                    <Path.Fill>
+                        <LinearGradientBrush>
+                            <GradientStop Color="{Binding IconColor}" Offset="0" />
+                            <GradientStop Color="{DynamicResource {x:Static SystemColors.ControlDarkDarkColorKey}}" Offset="1" />
+                            <LinearGradientBrush.Transform>
+                                <MatrixTransform Matrix="0.75,0,0,0.75,0,0" />
+                            </LinearGradientBrush.Transform>
+                        </LinearGradientBrush>
+                    </Path.Fill>
+                </Path>
+                <Border.ToolTip>
+                    <ToolTip MaxWidth="450">
+                        <TextBlock TextWrapping="Wrap"><Bold>Client/Server Terminology:</Bold><LineBreak />
+                            The Modbus Organization replaced 'Master-Slave' with 'Client-Server' in July 2020.<LineBreak />
+                            https://www.modbus.org/docs/Client-ServerPR-07-2020-final.docx.pdf <LineBreak />
+                            The new Modbus terminology replaces Master with Client, and Slave with Server, 
+                            thus a Modbus network has a single client (ex-master) with multiple servers (ex-slaves). 
+                            This has caused some confusion as a usual office PC computer network would have a single 
+                            server with multiple clients (i.e. PC users), and is the reverse of, for example, Python, 
+                            where Master was replaced with Server. <LineBreak/>
+                            <Bold>In the case of Modbus, the client (main controller) 
+                            is the only device on the network that can initiate a transfer requesting the data, and 
+                            the servers (e.g. sensors) are the ones serving the data in response.</Bold></TextBlock>
+                    </ToolTip>
+                </Border.ToolTip>
+            </Border>
+            <Button Grid.Row="0" Grid.Column="1" Content="Listen" Visibility="{Binding ServerOptionsVisibility}"
                     Command="{Binding ServerListenCommand}"
-                    Padding="0"  Height="24" Width="143" HorizontalAlignment="Right" />
-            <Button Grid.Row="0" Content="Connect" Visibility="{Binding ClientOptionsVisibility}" 
+                    Padding="0"  Height="24" Width="100" HorizontalAlignment="Right" />
+            <Button Grid.Row="0" Grid.Column="1" Content="Connect" Visibility="{Binding ClientOptionsVisibility}" 
                     Command="{Binding ClientListenCommand}"
-                    Padding="0"  Height="24" Width="143" HorizontalAlignment="Right" />
-            <Button Grid.Row="1" Content="Disconnect" Padding="0" Height="24"
-                    Command="{Binding DisconnectCommand}" HorizontalAlignment="Right" Width="143" />
+                    Padding="0"  Height="24" Width="100" HorizontalAlignment="Right" />
+            <Button Grid.Row="1" Grid.Column="1" Content="Disconnect" Padding="0" Height="24" Width="100"
+                    Command="{Binding DisconnectCommand}" HorizontalAlignment="Right"  />
 
-            <StackPanel Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                 <GroupBox Header="If you find this useful ..." >
                     <Button Command="{Binding DonateCommand}">
                         <Image Source="btn_donateCC_LG.gif" Width="147" Height="47" />
@@ -199,36 +232,7 @@
                     <TextBox Grid.Row="0" Grid.Column="1" MinWidth="30" Text="{Binding ServerId}"/>
                     <Label Content="Server Delay (ms):" Grid.Row="1" Grid.Column="0"  Visibility="{Binding ServerOptionsVisibility}"/>
                     <TextBox Grid.Row="1" Grid.Column="1" MinWidth="30" Text="{Binding ServerDelay}"  Visibility="{Binding ServerOptionsVisibility}"/>
-                    <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Padding="3,0, 10,0" BorderBrush="{x:Null}"
-                            Background="{x:Null}" BorderThickness="0" ToolTipService.ShowOnDisabled="True"
-                            ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="60000" HorizontalAlignment="Center">
-                        <Path Data="{Binding IconPath}" HorizontalAlignment="Right" Stretch="Uniform" Width="75" Height="75">
-                            <Path.Fill>
-                                <LinearGradientBrush>
-                                    <GradientStop Color="{Binding IconColor}" Offset="0" />
-                                    <GradientStop Color="{DynamicResource {x:Static SystemColors.ControlDarkDarkColorKey}}" Offset="1" />
-                                    <LinearGradientBrush.Transform>
-                                        <MatrixTransform Matrix="0.75,0,0,0.75,0,0" />
-                                    </LinearGradientBrush.Transform>
-                                </LinearGradientBrush>
-                            </Path.Fill>
-                        </Path>
-                        <Border.ToolTip>
-                            <ToolTip MaxWidth="450">
-                                <TextBlock TextWrapping="Wrap"><Bold>Client/Server Terminology:</Bold><LineBreak />
-                            The Modbus Organization replaced 'Master-Slave' with 'Client-Server' in July 2020.<LineBreak />
-                            https://www.modbus.org/docs/Client-ServerPR-07-2020-final.docx.pdf <LineBreak />
-                            The new Modbus terminology replaces Master with Client, and Slave with Server, 
-                            thus a Modbus network has a single client (ex-master) with multiple servers (ex-slaves). 
-                            This has caused some confusion as a usual office PC computer network would have a single 
-                            server with multiple clients (i.e. PC users), and is the reverse of, for example, Python, 
-                            where Master was replaced with Server. <LineBreak/>
-                            <Bold>In the case of Modbus, the client (main controller) 
-                            is the only device on the network that can initiate a transfer requesting the data, and 
-                            the servers (e.g. sensors) are the ones serving the data in response.</Bold></TextBlock>
-                            </ToolTip>
-                        </Border.ToolTip>
-                    </Border>
+
                 </Grid>
             </GroupBox>
             <GroupBox Header="Functions" Grid.Row="1" Grid.Column="0" Visibility="{Binding ClientOptionsVisibility}">
@@ -264,11 +268,11 @@
             </GroupBox>
         </DockPanel>
         <GroupBox Header="CSV File I/O" IsEnabled="{Binding HasConnected, Converter={catel:BooleanToOppositeBooleanConverter}, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Stretch" Width="197">
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Right">
-                    <Button Content="Import Tab Data ..." Command="{Binding ImportCurrentTabDataCommand}" Style="{StaticResource MultiLineButtonStyle}"/>
-                    <Button Content="Export Tab Data ..." Command="{Binding ExportCurrentTabDataCommand}" Style="{StaticResource MultiLineButtonStyle}"/>
-                </StackPanel>
-            </GroupBox>
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Right" >
+                <Button Content="Import Tab Data ..." Command="{Binding ImportCurrentTabDataCommand}" Style="{StaticResource MultiLineButtonStyle}"/>
+                <Button Content="Export Tab Data ..." Command="{Binding ExportCurrentTabDataCommand}" Style="{StaticResource MultiLineButtonStyle}"/>
+            </StackPanel>
+        </GroupBox>
         <TabControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding DataTabItems}"
                     SelectedItem="{Binding SelectedDataTabItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     IsSynchronizedWithCurrentItem="True"
@@ -304,7 +308,17 @@
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>
-        <GroupBox Header="Communication Log" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
+        <GridSplitter Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Height="5" HorizontalAlignment="Stretch" 
+                      ResizeDirection="Rows" ShowsPreview="True" 
+                      BorderThickness="1" >
+            <GridSplitter.Background>
+                <LinearGradientBrush EndPoint="0.5,0" StartPoint="0.5,1">
+                    <GradientStop Color="DarkGray" Offset="0"/>
+                    <GradientStop Color="White" Offset="1"/>
+                </LinearGradientBrush>
+            </GridSplitter.Background>
+        </GridSplitter>
+        <GroupBox Header="Communication Log" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
