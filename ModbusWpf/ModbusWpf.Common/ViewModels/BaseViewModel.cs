@@ -166,9 +166,9 @@ namespace ModbusWpf.Common.ViewModels
                 if (registerDataService is null)
                 {
                     registerDataService = new RegisterDataService();
-                    ServiceLocator.Default.RegisterInstance(registerDataService);
                 }
             }
+            ServiceLocator.Default.RegisterInstance(registerDataService);
 
             dispatcherService ??= ServiceLocator.Default.ResolveType<IDispatcherService>();
 
