@@ -1,37 +1,30 @@
 ﻿using System.Threading.Tasks;
 using Catel.Data;
-using Catel.MVVM.Converters;
-using Microsoft.Xaml.Behaviors.Core;
 
 namespace ModbusWpf.Common.Helpers
 {
-
-    public interface ISomeInterface
-    {
-        //...
-
-        // Indexer declaration:
-        string this[int index]
-        {
-            get;
-            set;
-        }
-    }
     public interface IRegisterDataService
     {
-        RegisterDataValue[] RegisterData { get; set; }
+        IRegisterDataValue[] RegisterData { get; set; }
         ushort this[int index] { get; set; }
     }
 
+    public delegate void RegisterValueChangedHandler(ushort oldValue, ushort newValue);
 
-    public class RegisterDataValue : ModelBase
+    public interface IRegisterDataValue
+    {
+        event RegisterValueChangedHandler RegisterValueChanged;
+        ushort RegisterValue { get; set; }
+        string ToString();
+    }
+
+    public class RegisterDataValue : ModelBase, IRegisterDataValue
     {
         public RegisterDataValue(ushort value)
         {
             RegisterValue = value;
         }
 
-        public delegate void RegisterValueChangedHandler(ushort oldValue, ushort newValue);
         public event RegisterValueChangedHandler RegisterValueChanged;
 
         private ushort _registerValue;
@@ -60,7 +53,7 @@ namespace ModbusWpf.Common.Helpers
 
         public RegisterDataService()
         {
-            RegisterData = new RegisterDataValue[NumRegistersHeld];
+            RegisterData = new IRegisterDataValue[NumRegistersHeld];
 
             Parallel.For(0, NumRegistersHeld, i =>
             {
@@ -68,7 +61,7 @@ namespace ModbusWpf.Common.Helpers
             });
         }
 
-        public RegisterDataValue[] RegisterData { get; set; }
+        public IRegisterDataValue[] RegisterData { get; set; }
 
         public ushort this[int index]
         {
