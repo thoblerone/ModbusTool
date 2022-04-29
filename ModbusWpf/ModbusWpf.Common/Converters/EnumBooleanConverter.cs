@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Data;
-using Modbus.Common;
 
 namespace ModbusWpf.Common.Converters
 {
