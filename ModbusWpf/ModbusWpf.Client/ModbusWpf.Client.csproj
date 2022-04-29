@@ -124,6 +124,10 @@
       <Project>{54d557ce-0d9e-42e7-a50d-6101b6a2bdb4}</Project>
       <Name>ModbusWpfCustomControls</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Modbus.IoC\Modbus.Ioc.csproj">
+      <Project>{DD6700FA-A81A-44B5-AF7B-1FB1AF29D3A3}</Project>
+      <Name>Modbus.Ioc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ModbusWpf.Common\ModbusWpf.Common.csproj">
       <Project>{DD6700FA-A81A-44B5-AF7B-1FB1AF29D3A2}</Project>
       <Name>ModbusWpf.Common</Name>

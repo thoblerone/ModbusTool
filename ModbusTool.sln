@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModbusWpf.Server", "ModbusW
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ModbusWpf.Setup", "ModbusWpf\ModbusWpf.Setup\ModbusWpf.Setup.vdproj", "{05CA996A-EAC7-455D-8B3D-19EB66958ED3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modbus.Ioc", "ModbusWpf\Modbus.IoC\Modbus.Ioc.csproj", "{DD6700FA-A81A-44B5-AF7B-1FB1AF29D3A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -145,6 +147,18 @@ Global
 		{05CA996A-EAC7-455D-8B3D-19EB66958ED3}.Release|Any CPU.ActiveCfg = Release
 		{05CA996A-EAC7-455D-8B3D-19EB66958ED3}.Release|Mixed Platforms.ActiveCfg = Release
 		{05CA996A-EAC7-455D-8B3D-19EB66958ED3}.Release|x86.ActiveCfg = Release
+		{DD6700FA-A81A-44B5-AF7B-1FB1AF29D3A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD6700FA-A81A-44B5-AF7B-1FB1AF29D3A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD6700FA-A81A-44B5-AF7B-1FB1AF29D3A3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DD6700FA-A81A-44B5-AF7B-1FB1AF29D3A3}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DD6700FA-A81A-44B5-AF7B-1FB1AF29D3A3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DD6700FA-A81A-44B5-AF7B-1FB1AF29D3A3}.Debug|x86.Build.0 = Debug|Any CPU
+		{DD6700FA-A81A-44B5-AF7B-1FB1AF29D3A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD6700FA-A81A-44B5-AF7B-1FB1AF29D3A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD6700FA-A81A-44B5-AF7B-1FB1AF29D3A3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DD6700FA-A81A-44B5-AF7B-1FB1AF29D3A3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DD6700FA-A81A-44B5-AF7B-1FB1AF29D3A3}.Release|x86.ActiveCfg = Release|Any CPU
+		{DD6700FA-A81A-44B5-AF7B-1FB1AF29D3A3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -156,6 +170,7 @@ Global
 		{AE684047-6F9F-4E8F-9F54-1091D36E6BDD} = {699ED452-3141-4FE6-912E-262B0218849A}
 		{06167668-056E-4794-8814-5C771FD9C9F2} = {699ED452-3141-4FE6-912E-262B0218849A}
 		{05CA996A-EAC7-455D-8B3D-19EB66958ED3} = {699ED452-3141-4FE6-912E-262B0218849A}
+		{DD6700FA-A81A-44B5-AF7B-1FB1AF29D3A3} = {699ED452-3141-4FE6-912E-262B0218849A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CE69B5B1-644C-441B-8D07-10A46FEAA1E7}

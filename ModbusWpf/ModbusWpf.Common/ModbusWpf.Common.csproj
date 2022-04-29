@@ -73,8 +73,7 @@
     <Compile Include="Converters\IpAddressStringConverter.cs" />
     <Compile Include="Helpers\ClientFunctions.cs" />
     <Compile Include="Helpers\RegisterDisplayTemplateSelector.cs" />
-    <Compile Include="Helpers\IRegisterDataService.cs" />
-    <Compile Include="Models\RegisterModel.cs" />
+    <Compile Include="Models\RegisterDisplayModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\DataTabControlViewModel.cs" />
     <Compile Include="ViewModels\ReusingBaseViewModel.cs" />
@@ -135,6 +134,10 @@
     <ProjectReference Include="..\CustomControls\ModbusWpfCustomControls.csproj">
       <Project>{54D557CE-0D9E-42E7-A50D-6101B6A2BDB4}</Project>
       <Name>ModbusWpfCustomControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Modbus.IoC\Modbus.Ioc.csproj">
+      <Project>{DD6700FA-A81A-44B5-AF7B-1FB1AF29D3A3}</Project>
+      <Name>Modbus.Ioc</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

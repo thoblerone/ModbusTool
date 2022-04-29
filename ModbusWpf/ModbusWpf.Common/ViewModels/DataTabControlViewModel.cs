@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 using Catel.IoC;
 using Catel.MVVM;
 using Modbus.Common;
-using ModbusWpf.Common.Helpers;
+using Modbus.Ioc.Interfaces;
+using Modbus.Ioc.Models;
 using ModbusWpf.Common.Models;
 
 namespace ModbusWpf.Common.ViewModels

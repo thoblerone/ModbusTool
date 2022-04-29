@@ -10,6 +10,7 @@ using System.Windows.Media;
 using Catel.IoC;
 using Catel.Services;
 using Modbus.Common;
+using Modbus.Ioc.Interfaces;
 using ModbusLib;
 using ModbusLib.Protocols;
 using ModbusWpf.Common.Helpers;

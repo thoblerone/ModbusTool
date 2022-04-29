@@ -18,6 +18,8 @@ using Catel.MVVM;
 using Catel.Services;
 using Microsoft.Win32;
 using Modbus.Common;
+using Modbus.Ioc.Interfaces;
+using Modbus.Ioc.Models;
 using ModbusWpf.Common.Helpers;
 using ModbusWpf.Common.Models;
 using ModbusWpf.Common.Properties;
@@ -29,8 +31,6 @@ namespace ModbusWpf.Common.ViewModels
         // used in derived client and server classes
         protected Socket _socket;
         protected SerialPort _uart;
-
-
         protected readonly IDispatcherService _dispatcherService;
 
         #region Properties
