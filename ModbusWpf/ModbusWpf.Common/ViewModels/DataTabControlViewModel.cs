@@ -6,6 +6,7 @@ using Catel.MVVM;
 using Modbus.Common;
 using Modbus.Ioc.Interfaces;
 using Modbus.Ioc.Models;
+using Modbus.Ioc.Services;
 using ModbusWpf.Common.Models;
 
 namespace ModbusWpf.Common.ViewModels

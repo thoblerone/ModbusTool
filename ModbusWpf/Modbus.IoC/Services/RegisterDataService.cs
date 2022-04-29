@@ -1,7 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Modbus.Ioc.Interfaces;
+using Modbus.Ioc.Models;
 
-namespace Modbus.Ioc.Models
+namespace Modbus.Ioc.Services
 {
     public class RegisterDataService : IRegisterDataService
     {

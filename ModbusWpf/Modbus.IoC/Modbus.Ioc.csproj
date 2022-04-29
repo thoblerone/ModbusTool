@@ -44,22 +44,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.OracleClient" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Net" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Security" />
-    <Reference Include="System.ServiceProcess" />
-    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -68,7 +55,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\RegisterDataService.cs" />
+    <Compile Include="Services\ModbusDataService.cs" />
+    <Compile Include="Services\RegisterDataService.cs" />
     <Compile Include="Models\RegisterDataValue.cs" />
     <Compile Include="Interfaces\IRegisterDataService.cs" />
   </ItemGroup>
@@ -99,27 +87,27 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\CommonControls\Modbus.Common.csproj">
-      <Project>{08dffa18-cfb1-477b-b5ab-fde3123007ff}</Project>
-      <Name>Modbus.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CustomControls\ModbusWpfCustomControls.csproj">
-      <Project>{54D557CE-0D9E-42E7-A50D-6101B6A2BDB4}</Project>
-      <Name>ModbusWpfCustomControls</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Catel.Fody">
-      <Version>4.7.0</Version>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Catel.MVVM">
-      <Version>5.12.22</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="FodyWeavers.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <PackageReference Include="Catel.Core">
+      <Version>5.12.22</Version>
+    </PackageReference>
+    <PackageReference Include="Catel.Fody">
+      <Version>4.7.0</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CommonControls\Modbus.Common.csproj">
+      <Project>{08DFFA18-CFB1-477B-B5AB-FDE3123007FF}</Project>
+      <Name>Modbus.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ModbusLib\ModbusLib.csproj">
+      <Project>{85C7E0A0-B14A-40C8-AD52-2475111AE822}</Project>
+      <Name>ModbusLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -20,6 +20,7 @@ using Microsoft.Win32;
 using Modbus.Common;
 using Modbus.Ioc.Interfaces;
 using Modbus.Ioc.Models;
+using Modbus.Ioc.Services;
 using ModbusWpf.Common.Helpers;
 using ModbusWpf.Common.Models;
 using ModbusWpf.Common.Properties;
