@@ -22,10 +22,10 @@ namespace ModbusWpf.Common.Converters
                 return "[uups1 ...]";
             }
 
-            var displayFormat = values[0] as DisplayFormat?;
-            if (displayFormat is null)
+            if (values[0] is not DisplayFormat)
             {
-                // the first parameter is not of enum type DisplayFormat
+                // the first parameter is null (true for the "new tab" tab)
+                // resp. not of enum type DisplayFormat
                 return "...";
             }
 
