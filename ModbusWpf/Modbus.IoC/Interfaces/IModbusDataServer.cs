@@ -4,7 +4,7 @@ using Modbus.Common;
 
 namespace Modbus.Ioc.Interfaces
 {
-    public interface IModbusDataService
+    public interface IModbusDataServer
     {
         CommunicationMode CommunicationMode { get; set; }
         string PortName { get; set; }

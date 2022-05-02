@@ -14,13 +14,13 @@ using ModbusLib.Protocols;
 
 namespace Modbus.Ioc.Services
 {
-    public class ModbusDataService : IModbusDataService
+    public class ModbusDataServer : IModbusDataServer
     {
-        public ModbusDataService() : this (null, null)
+        public ModbusDataServer() : this (null, null)
         {
         }
 
-        public ModbusDataService(IRegisterDataService registerData, ILog logger)
+        public ModbusDataServer(IRegisterDataService registerData, ILog logger)
         {
             Logger = logger ?? LogManager.GetCurrentClassLogger();
 
@@ -29,7 +29,7 @@ namespace Modbus.Ioc.Services
             registerData ??= ServiceLocator.Default.ResolveType<IRegisterDataService>();
             if (registerData is null)
             {
-                Logger.Warning($"no {nameof(IRegisterDataService)} was specified for the {nameof(ModbusDataService)} constructor. Creating and registering a default implementation.");
+                Logger.Warning($"no {nameof(IRegisterDataService)} was specified for the {nameof(ModbusDataServer)} constructor. Creating and registering a default implementation.");
                 registerData =  new RegisterDataService();
                 ServiceLocator.Default.RegisterInstance(registerData);
             }
@@ -81,7 +81,7 @@ namespace Modbus.Ioc.Services
                         _listener.Start();
 
                         //AppendLog($"Connected using RTU to {PortName}");
-                        Logger.Info($"Connected using RTU to {PortName}");
+                        Logger.Status($"Connected using RTU to {PortName}");
                         break;
 
                     case CommunicationMode.UDP:
@@ -95,8 +95,7 @@ namespace Modbus.Ioc.Services
                         _listener = _socket.GetUdpListener(udpServer);
                         _listener.ServeCommand += listener_ServeCommand;
                         _listener.Start();
-                        //AppendLog($"Listening to UDP port {TcpPort}");
-                        Logger.Info($"Listening to UDP port {TcpPort}");
+                        Logger.Status($"Listening to UDP port {TcpPort}");
                         break;
 
                     case CommunicationMode.TCP:
@@ -107,11 +106,11 @@ namespace Modbus.Ioc.Services
                         //create a server driver
                         _tcpServerThread = new Thread(TcpThreadWorker)
                         {
-                            Name = $"{nameof(ModbusDataService)}.{nameof(TcpThreadWorker)}"
+                            Name = $"{nameof(ModbusDataServer)}.{nameof(TcpThreadWorker)}"
                         };
                         _tcpServerThread.Start();
                         //AppendLog($"Listening to TCP port {TcpPort}");
-                        Logger.Info($"Listening to TCP port {TcpPort}");
+                        Logger.Status($"Listening to TCP port {TcpPort}");
                         break;
                 }
             }
@@ -161,7 +160,7 @@ namespace Modbus.Ioc.Services
 
             HasConnected = false;
 
-            Logger.Debug("Disconnected");
+            Logger.Status("Disconnected");
 
             await Task.CompletedTask;
         }
@@ -222,7 +221,6 @@ namespace Modbus.Ioc.Services
                     break;
                 default:
                     var msg = $"Illegal Function, expecting a valid function code {command.FunctionCode}.";
-                    // AppendLog(msg);
                     Logger.Error(msg);
                     //return an exception
                     command.ExceptionCode = ModbusCommand.ErrorIllegalFunction;
@@ -235,7 +233,6 @@ namespace Modbus.Ioc.Services
             for (var i = 0; i < command.Count; i++)
                 command.Data[i] = RegisterDataService[command.Offset + i];
 
-            //AppendLog($"Sent data: Function code:{command.FunctionCode}, length = {command.Count}.");
             Logger.Info($"Sent data: Function code:{command.FunctionCode}, length = {command.Count}.");
 
         }
@@ -246,8 +243,7 @@ namespace Modbus.Ioc.Services
             if (command.Count + dataAddress > RegisterDataService.RegisterData.Length)
             {
                 var msgErr = $"Received data exceeds maintained range, Received address: {dataAddress}, length={command.Count}.";
-                //AppendLog(msg);
-                Logger.Info(msgErr);
+                Logger.Error(msgErr);
                 return;
             }
             for (var i = 0; i < command.Data.Length; i++)
@@ -256,7 +252,6 @@ namespace Modbus.Ioc.Services
             }
 
             var msgData = $"Received data: Function code: {command.FunctionCode}, length = {command.Data.Length}.";
-            // AppendLog(msg);
             Logger.Info(msgData);
         }
         #endregion // Server Functionality
@@ -273,7 +268,7 @@ namespace Modbus.Ioc.Services
             {
                 hex.AppendFormat("{0:x2} ", data[i]);
             }
-            Logger.Debug($"RX: {hex}");
+            Logger.Info($"RX: {hex}");
         }
 
         protected void LogOutgoingData(byte[] data)
@@ -283,7 +278,7 @@ namespace Modbus.Ioc.Services
             var hex = new StringBuilder(data.Length * 2);
             foreach (byte b in data)
                 hex.AppendFormat("{0:x2} ", b);
-            Logger.Debug($"TX: {hex}");
+            Logger.Info($"TX: {hex}");
         }
         #endregion
     }
