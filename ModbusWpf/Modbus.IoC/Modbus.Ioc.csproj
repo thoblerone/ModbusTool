@@ -55,6 +55,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IModbusDataService.cs" />
     <Compile Include="Services\ModbusDataService.cs" />
     <Compile Include="Services\RegisterDataService.cs" />
     <Compile Include="Models\RegisterDataValue.cs" />

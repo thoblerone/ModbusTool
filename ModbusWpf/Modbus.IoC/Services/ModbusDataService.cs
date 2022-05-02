@@ -14,7 +14,7 @@ using ModbusLib.Protocols;
 
 namespace Modbus.Ioc.Services
 {
-    public class ModbusDataService
+    public class ModbusDataService : IModbusDataService
     {
         public ModbusDataService() : this (null, null)
         {
@@ -22,14 +22,14 @@ namespace Modbus.Ioc.Services
 
         public ModbusDataService(IRegisterDataService registerData, ILog logger)
         {
-            Log = logger ?? LogManager.GetCurrentClassLogger();
+            Logger = logger ?? LogManager.GetCurrentClassLogger();
 
             // if the register data service is null, either take the
             // pre-registered one or instantiate the default implementation
             registerData ??= ServiceLocator.Default.ResolveType<IRegisterDataService>();
             if (registerData is null)
             {
-                Log.Warning($"no {nameof(IRegisterDataService)} was specified for the {nameof(ModbusDataService)} constructor. Creating and registering a default implementation.");
+                Logger.Warning($"no {nameof(IRegisterDataService)} was specified for the {nameof(ModbusDataService)} constructor. Creating and registering a default implementation.");
                 registerData =  new RegisterDataService();
                 ServiceLocator.Default.RegisterInstance(registerData);
             }
@@ -41,9 +41,9 @@ namespace Modbus.Ioc.Services
         #region Server Functionality
         private ICommServer _listener;
         private Thread _tcpServerThread;
-        public IRegisterDataService RegisterDataService { get; set; }
+        private IRegisterDataService RegisterDataService { get; }
 
-        public  ILog Log { get; set; }
+        private ILog Logger { get; }
 
         private Socket _socket;
         private SerialPort _uart;
@@ -60,10 +60,10 @@ namespace Modbus.Ioc.Services
         public StopBits StopBits { get; set; }
         public byte ServerId { get; set; }
         public int TcpPort { get; set; }
-        public bool HasConnected { get; set; }
+        public bool HasConnected { get; private set; }
         public int ServerDelay { get; set; }
 
-        protected async Task OnServerListenCommandExecuteAsync()
+        public async Task ConnectAndListenAsync()
         {
             try
             {
@@ -81,7 +81,7 @@ namespace Modbus.Ioc.Services
                         _listener.Start();
 
                         //AppendLog($"Connected using RTU to {PortName}");
-                        Log.Info($"Connected using RTU to {PortName}");
+                        Logger.Info($"Connected using RTU to {PortName}");
                         break;
 
                     case CommunicationMode.UDP:
@@ -96,7 +96,7 @@ namespace Modbus.Ioc.Services
                         _listener.ServeCommand += listener_ServeCommand;
                         _listener.Start();
                         //AppendLog($"Listening to UDP port {TcpPort}");
-                        Log.Info($"Listening to UDP port {TcpPort}");
+                        Logger.Info($"Listening to UDP port {TcpPort}");
                         break;
 
                     case CommunicationMode.TCP:
@@ -111,14 +111,14 @@ namespace Modbus.Ioc.Services
                         };
                         _tcpServerThread.Start();
                         //AppendLog($"Listening to TCP port {TcpPort}");
-                        Log.Info($"Listening to TCP port {TcpPort}");
+                        Logger.Info($"Listening to TCP port {TcpPort}");
                         break;
                 }
             }
             catch (Exception ex)
             {
                 // AppendLog(ex.Message);
-                Log.Error(ex.Message);
+                Logger.Error(ex.Message);
                 return;
             }
 
@@ -127,15 +127,7 @@ namespace Modbus.Ioc.Services
             await Task.CompletedTask;
         }
 
-        protected async Task OnDisconnectCommandExecuteAsync()
-        {
-            await DoDisconnectAsync().ConfigureAwait(false);
-            
-            Log.Debug("Disconnected");
-            // AppendLog("Disconnected");
-        }
-
-        private async Task DoDisconnectAsync()
+        public async Task DoDisconnectAsync()
         {
             if (_listener != null)
             {
@@ -169,6 +161,8 @@ namespace Modbus.Ioc.Services
 
             HasConnected = false;
 
+            Logger.Debug("Disconnected");
+
             await Task.CompletedTask;
         }
 
@@ -190,7 +184,7 @@ namespace Modbus.Ioc.Services
                     _listener.ServeCommand += listener_ServeCommand;
                     _listener.Start();
                     // AppendLog("Accepted connection.");
-                    Log.Info("Accepted connection.");
+                    Logger.Info("Accepted connection.");
                     Thread.Sleep(1);
                 }
             }
@@ -198,7 +192,7 @@ namespace Modbus.Ioc.Services
             {
                 string msg = ex.Message;
                 // AppendLog(msg);
-                Log.Error(msg);
+                Logger.Error(msg);
             }
 
         }
@@ -229,7 +223,7 @@ namespace Modbus.Ioc.Services
                 default:
                     var msg = $"Illegal Function, expecting a valid function code {command.FunctionCode}.";
                     // AppendLog(msg);
-                    Log.Error(msg);
+                    Logger.Error(msg);
                     //return an exception
                     command.ExceptionCode = ModbusCommand.ErrorIllegalFunction;
                     break;
@@ -242,7 +236,7 @@ namespace Modbus.Ioc.Services
                 command.Data[i] = RegisterDataService[command.Offset + i];
 
             //AppendLog($"Sent data: Function code:{command.FunctionCode}, length = {command.Count}.");
-            Log.Info($"Sent data: Function code:{command.FunctionCode}, length = {command.Count}.");
+            Logger.Info($"Sent data: Function code:{command.FunctionCode}, length = {command.Count}.");
 
         }
 
@@ -253,7 +247,7 @@ namespace Modbus.Ioc.Services
             {
                 var msgErr = $"Received data exceeds maintained range, Received address: {dataAddress}, length={command.Count}.";
                 //AppendLog(msg);
-                Log.Info(msgErr);
+                Logger.Info(msgErr);
                 return;
             }
             for (var i = 0; i < command.Data.Length; i++)
@@ -263,7 +257,7 @@ namespace Modbus.Ioc.Services
 
             var msgData = $"Received data: Function code: {command.FunctionCode}, length = {command.Data.Length}.";
             // AppendLog(msg);
-            Log.Info(msgData);
+            Logger.Info(msgData);
         }
         #endregion // Server Functionality
 
@@ -279,7 +273,7 @@ namespace Modbus.Ioc.Services
             {
                 hex.AppendFormat("{0:x2} ", data[i]);
             }
-            Log.Debug($"RX: {hex}");
+            Logger.Debug($"RX: {hex}");
         }
 
         protected void LogOutgoingData(byte[] data)
@@ -289,7 +283,7 @@ namespace Modbus.Ioc.Services
             var hex = new StringBuilder(data.Length * 2);
             foreach (byte b in data)
                 hex.AppendFormat("{0:x2} ", b);
-            Log.Debug($"TX: {hex}");
+            Logger.Debug($"TX: {hex}");
         }
         #endregion
     }

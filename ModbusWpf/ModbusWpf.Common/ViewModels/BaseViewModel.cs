@@ -540,8 +540,6 @@ namespace ModbusWpf.Common.ViewModels
 
         #region Logging
 
-        public delegate void AppendLogDelegate(string log);
-
         protected void LogIncomingData(byte[] data, int len)
         {
             if (LogPaused)
