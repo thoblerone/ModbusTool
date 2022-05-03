@@ -15,6 +15,24 @@ namespace ModbusWpf.CustomControl
             // defaults for layout convenience
             VerticalContentAlignment = VerticalAlignment.Center;
             HorizontalContentAlignment = HorizontalAlignment.Right;
+
+            LostFocus += (sender, args) => IsInEditMode = false;
+        }
+
+        /// <summary>
+        /// Dependency property to get/set flag that the editing mode is active 
+        /// </summary>  
+        public static readonly DependencyProperty IsInEditModeProperty =
+            DependencyProperty.Register(nameof(IsInEditMode), typeof(bool), typeof(ReturnKeyTextBox));
+        public bool IsInEditMode
+        {
+            get => (bool)GetValue(IsInEditModeProperty);
+            set
+            {
+                SetValue(IsInEditModeProperty, value);
+
+                FontStyle = value ? FontStyles.Italic : FontStyles.Normal;
+            }
         }
 
         protected override void OnKeyUp(KeyEventArgs e)
@@ -23,6 +41,11 @@ namespace ModbusWpf.CustomControl
             if (e.Key == Key.Return)
             {
                 GetBindingExpression(TextProperty)?.UpdateSource();
+                    IsInEditMode = false;
+            }
+            else if (e.Key != Key.Tab)
+            {
+                IsInEditMode = true;
             }
         }
     }
