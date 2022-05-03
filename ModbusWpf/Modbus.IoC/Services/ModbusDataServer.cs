@@ -4,11 +4,10 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using Catel.IoC;
 using Catel.Logging;
-using Modbus.Common;
 using Modbus.Ioc.Interfaces;
+using Modbus.Ioc.Models;
 using ModbusLib;
 using ModbusLib.Protocols;
 

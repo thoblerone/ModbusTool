@@ -6,11 +6,11 @@
              xmlns:local="clr-namespace:ModbusWpf.Common.Views"
              xmlns:catel="http://schemas.catelproject.com"
              xmlns:converters="clr-namespace:ModbusWpf.Common.Converters"
-             xmlns:common="clr-namespace:Modbus.Common;assembly=Modbus.Common"
              xmlns:cc="clr-namespace:ModbusWpf.CustomControl;assembly=ModbusWpf.CustomControl"
              xmlns:ports="clr-namespace:System.IO.Ports;assembly=System"
              xmlns:viewModels="clr-namespace:ModbusWpf.Common.ViewModels"
              xmlns:helpers="clr-namespace:ModbusWpf.Common.Helpers"
+             xmlns:common="clr-namespace:Modbus.Ioc.Models;assembly=ModbusWpf.Ioc"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type viewModels:BaseViewModel}}">
     <catel:UserControl.Resources>

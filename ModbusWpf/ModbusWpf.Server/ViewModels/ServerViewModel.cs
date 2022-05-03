@@ -1,20 +1,16 @@
 ﻿using System;
 using System.IO.Ports;
-using System.Net;
-using System.Net.Sockets;
 using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using Catel.IoC;
+using Catel.Logging;
 using Catel.Services;
-using Modbus.Common;
 using Modbus.Ioc.Interfaces;
-using ModbusLib;
-using ModbusLib.Protocols;
-using ModbusWpf.Common.Helpers;
+using Modbus.Ioc.Services;
 using ModbusWpf.Common.ViewModels;
+using Modbus.Ioc.Models;
 
 namespace ModbusWpf.Server.ViewModels
 {

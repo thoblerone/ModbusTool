@@ -13,8 +13,8 @@ using ModbusLib;
 using ModbusLib.Protocols;
 using ModbusWpf.Common.Helpers;
 using ModbusWpf.Common.ViewModels;
-using Modbus.Common;
 using Modbus.Ioc.Interfaces;
+using Modbus.Ioc.Models;
 
 namespace ModbusWpf.Client.ViewModels
 {

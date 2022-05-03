@@ -3,10 +3,9 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Catel.IoC;
 using Catel.MVVM;
-using Modbus.Common;
 using Modbus.Ioc.Interfaces;
-using Modbus.Ioc.Models;
 using Modbus.Ioc.Services;
+using ModbusWpf.Common.Helpers;
 using ModbusWpf.Common.Models;
 
 namespace ModbusWpf.Common.ViewModels
@@ -23,7 +22,7 @@ namespace ModbusWpf.Common.ViewModels
             ApplyAddressSelectionCommand = new TaskCommand(() => ApplyAddressSelectionExecuteAsync());
 
             DisplayFormat = new DisplayFormat();
-            DisplayFormat = Modbus.Common.DisplayFormat.Integer;
+            DisplayFormat = Helpers.DisplayFormat.Integer;
 
             ClearDataCommand = new TaskCommand(() => ClearDataExecuteAsync());
             DisplayFormatItemSource = Enum.GetValues(typeof(DisplayFormat));
@@ -66,7 +65,7 @@ namespace ModbusWpf.Common.ViewModels
             }
         }
 
-        private int _startAddress = 0;
+        private int _startAddress;
         private ushort _dataLength = 32;
 
         public int StartAddress
@@ -129,7 +128,7 @@ namespace ModbusWpf.Common.ViewModels
                 i < DataLength + StartAddress;
                 i++)
             {
-                var nCoils = (Modbus.Common.DisplayFormat.LED == DisplayFormat) ? 16 : 1;
+                var nCoils = (ModbusWpf.Common.Helpers.DisplayFormat.LED == DisplayFormat) ? 16 : 1;
 
                 var model = new RegisterDisplayModel(RegisterDataService, i)
                 {
@@ -150,7 +149,7 @@ namespace ModbusWpf.Common.ViewModels
                 }
                 // the floating point representation consumes
                 // two registers for each value, so skip every second
-                if (DisplayFormat.Value == Modbus.Common.DisplayFormat.FloatReverse)
+                if (DisplayFormat.Value == ModbusWpf.Common.Helpers.DisplayFormat.FloatReverse)
                     i++;
             }
 

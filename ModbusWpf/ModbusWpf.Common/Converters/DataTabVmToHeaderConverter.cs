@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using Modbus.Common;
+using ModbusWpf.Common.Helpers;
 
 namespace ModbusWpf.Common.Converters
 {

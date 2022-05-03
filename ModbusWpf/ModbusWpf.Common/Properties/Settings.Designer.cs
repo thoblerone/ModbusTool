@@ -170,9 +170,9 @@ namespace ModbusWpf.Common.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Integer")]
-        public global::Modbus.Common.DisplayFormat DisplayFormat {
+        public global::ModbusWpf.Common.Helpers.DisplayFormat DisplayFormat {
             get {
-                return ((global::Modbus.Common.DisplayFormat)(this["DisplayFormat"]));
+                return ((global::ModbusWpf.Common.Helpers.DisplayFormat)(this["DisplayFormat"]));
             }
             set {
                 this["DisplayFormat"] = value;

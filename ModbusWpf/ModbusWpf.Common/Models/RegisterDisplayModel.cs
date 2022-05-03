@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using Catel.Data;
-using Modbus.Common;
 using Modbus.Ioc.Interfaces;
 using ModbusWpf.Common.Helpers;
 

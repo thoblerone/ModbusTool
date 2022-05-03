@@ -1,6 +1,5 @@
 ﻿using System.IO.Ports;
-using System.Threading.Tasks;
-using Modbus.Common;
+using Modbus.Ioc.Models;
 
 namespace Modbus.Ioc.Interfaces
 {

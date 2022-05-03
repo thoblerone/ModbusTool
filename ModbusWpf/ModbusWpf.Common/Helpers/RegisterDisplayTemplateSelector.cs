@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using Modbus.Common;
 using ModbusWpf.Common.Models;
 
 namespace ModbusWpf.Common.Helpers
