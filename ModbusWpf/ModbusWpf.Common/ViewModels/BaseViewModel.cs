@@ -17,7 +17,6 @@ using Catel.IoC;
 using Catel.MVVM;
 using Catel.Services;
 using Microsoft.Win32;
-using Modbus.Common;
 using Modbus.Ioc.Interfaces;
 using Modbus.Ioc.Models;
 using Modbus.Ioc.Services;
@@ -407,40 +406,40 @@ namespace ModbusWpf.Common.ViewModels
 
             using (var s = saveFileDialog.OpenFile())
             {
-                using (var w = new StreamWriter(s))
+                using (var streamWriter = new StreamWriter(s))
                 {
                     var regLast = SelectedDataTabItem.RegisterModels.Last();
 
                     foreach (var register in SelectedDataTabItem.RegisterModels)
                     {
-                        w.Write(register.RegisterNumber);
-                        await w.WriteAsync(':').ConfigureAwait(false);
-                        var data = register.TargetRegisterValue;//_registerData[StartAddress + x];
+                        await streamWriter.WriteAsync($"{register.RegisterNumber}").ConfigureAwait(false);
+                        await streamWriter.WriteAsync(':').ConfigureAwait(false);
+
                         switch (SelectedDataTabItem.DisplayFormat)
                         {
                             case DisplayFormat.Integer:
-                                w.Write(register.TargetRegisterValue.ToString());
+                                await streamWriter.WriteAsync(register.TargetRegisterValue.ToString()).ConfigureAwait(false);
                                 break;
                             case DisplayFormat.Hex:
-                                await w.WriteAsync($"0x{register.HexString}").ConfigureAwait(false);
+                                await streamWriter.WriteAsync($"0x{register.HexString}").ConfigureAwait(false);
                                 break;
                             case DisplayFormat.Binary:
                             case DisplayFormat.LED:
-                                await w.WriteAsync(register.BinaryString).ConfigureAwait(false);
+                                await streamWriter.WriteAsync(register.BinaryString).ConfigureAwait(false);
                                 break;
                             case DisplayFormat.FloatReverse:
-                                await w.WriteAsync(register.FloatReverseString).ConfigureAwait(false);
+                                await streamWriter.WriteAsync(register.FloatReverseString).ConfigureAwait(false);
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException();
                         }
 
                         if (register.RegisterNumber < regLast.RegisterNumber)
-                            await w.WriteAsync(CultureInfo.CurrentUICulture.TextInfo.ListSeparator).ConfigureAwait(false);
+                            await streamWriter.WriteAsync(CultureInfo.CurrentUICulture.TextInfo.ListSeparator).ConfigureAwait(false);
                     }
 
-                    await w.FlushAsync().ConfigureAwait(false);
-                    w.Close();
+                    await streamWriter.FlushAsync().ConfigureAwait(false);
+                    streamWriter.Close();
                 }
 
                 s.Close();

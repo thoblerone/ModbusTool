@@ -230,7 +230,7 @@ namespace ModbusWpf.Client.ViewModels
                         _uart = new SerialPort(PortName, Baud, Parity, DataBits, StopBits);
                         _uart.Open();
                         _portClient = _uart.GetClient();
-                        _driver = new ModbusLib.Protocols.ModbusClient(new ModbusRtuCodec()) { Address = ServerId };
+                        _driver = new ModbusClient(new ModbusRtuCodec()) { Address = ServerId };
                         _driver.OutgoingData += LogOutgoingData;
                         _driver.IncommingData += LogIncomingData;
                         AppendLog($"Connected using RTU to {PortName}");
@@ -240,7 +240,7 @@ namespace ModbusWpf.Client.ViewModels
                         _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
                         _socket.Connect(new IPEndPoint(IpAddress, TcpPort));
                         _portClient = _socket.GetClient();
-                        _driver = new ModbusLib.Protocols.ModbusClient(new ModbusTcpCodec()) { Address = ServerId };
+                        _driver = new ModbusClient(new ModbusTcpCodec()) { Address = ServerId };
                         _driver.OutgoingData += LogOutgoingData;
                         _driver.IncommingData += LogIncomingData;
                         AppendLog($"Connected using UDP to {_socket.RemoteEndPoint}");
@@ -253,7 +253,7 @@ namespace ModbusWpf.Client.ViewModels
                         _socket.ReceiveTimeout = 2000;
                         _socket.Connect(new IPEndPoint(IpAddress, TcpPort));
                         _portClient = _socket.GetClient();
-                        _driver = new ModbusLib.Protocols.ModbusClient(new ModbusTcpCodec()) { Address = ServerId };
+                        _driver = new ModbusClient(new ModbusTcpCodec()) { Address = ServerId };
                         _driver.OutgoingData += LogOutgoingData;
                         _driver.IncommingData += LogIncomingData;
                         AppendLog($"Connected using TCP to {_socket.RemoteEndPoint}");
