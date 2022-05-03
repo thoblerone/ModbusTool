@@ -16,7 +16,8 @@ namespace Modbus.Ioc.Interfaces
         bool HasConnected { get; }
         int ServerDelay { get; set; }
         bool LogTransmissionsPaused { get; set; }
-        Task ConnectAndListenAsync();
-        Task DoDisconnectAsync();
+        
+        void ConnectAndListen();
+        void Disconnect();
     }
 }

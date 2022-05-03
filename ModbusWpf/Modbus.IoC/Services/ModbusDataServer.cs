@@ -62,7 +62,7 @@ namespace Modbus.Ioc.Services
         public bool HasConnected { get; private set; }
         public int ServerDelay { get; set; }
 
-        public async Task ConnectAndListenAsync()
+        public void ConnectAndListen()
         {
             try
             {
@@ -121,11 +121,9 @@ namespace Modbus.Ioc.Services
             }
 
             HasConnected = true;
-
-            await Task.CompletedTask;
         }
 
-        public async Task DoDisconnectAsync()
+        public void Disconnect()
         {
             if (_listener != null)
             {
@@ -160,8 +158,6 @@ namespace Modbus.Ioc.Services
             HasConnected = false;
 
             Logger.Status("Disconnected");
-
-            await Task.CompletedTask;
         }
 
 

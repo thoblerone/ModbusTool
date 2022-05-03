@@ -17,16 +17,46 @@ namespace ModbusWpf.Server.ViewModels
     public class ServerViewModel : BaseViewModel
     {
         #region Constuctors
-        public ServerViewModel() : this(null, null)
+
+        public ServerViewModel() : this(null, null, null)
         {
         }
 
-        public ServerViewModel(IDispatcherService dispatcherService, IRegisterDataService registerDataService) 
+        public ServerViewModel(IDispatcherService dispatcherService,
+            IRegisterDataService registerDataService,
+            IModbusDataServer serverService) 
             : base(dispatcherService, registerDataService)
         {
             // base class ensures the register data service is available
-            _registerDataService = ServiceLocator.Default.ResolveType<IRegisterDataService>();
+            registerDataService = ServiceLocator.Default.ResolveType<IRegisterDataService>();
+
+            // if not injected via dependency injection, use the standard ModbusDataServer implementation
+            if (serverService is null)
+            {
+                var logger = LogManager.GetCurrentClassLogger();
+                serverService = new ModbusDataServer(registerDataService, logger);
+                
+                logger.LogMessage += LoggerOnLogMessage;
+                LogManager.IsDebugEnabled = true;
+                LogManager.IsInfoEnabled = true;
+                LogManager.IsStatusEnabled = true;
+                LogManager.IsWarningEnabled = true;
+                LogManager.IsErrorEnabled = true;
+            }
+
+            Server = serverService;
         }
+
+        /// <summary>
+        /// Catel LogManager callback to recieve the ModbusDataServer logging events
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void LoggerOnLogMessage(object sender, LogMessageEventArgs e)
+        {
+            AppendLog($"{e.LogEvent}: {e.Message}");
+        }
+
         #endregion // Constructors
 
         #region Catel overrides
@@ -41,67 +71,42 @@ namespace ModbusWpf.Server.ViewModels
         }
         protected override async Task OnClosingAsync()
         {
-            await DoDisconnectAsync().ConfigureAwait(false);
-
-            AppendLog("Closed");
-
+            Disconnect();
             await base.OnClosingAsync();
         }
         #endregion // Catel overrides
 
         #region Server Functionality
-        private ICommServer _listener;
-        private Thread _tcpServerThread;
-        private readonly IRegisterDataService _registerDataService;
+
+        protected readonly IModbusDataServer Server;
 
         protected override async Task OnServerListenCommandExecuteAsync()
         {
             try
             {
+                Server.CommunicationMode = CommunicationMode;
+                Server.ServerId = ServerId;
+
+                // setup mode depended parameters
                 switch (CommunicationMode)
                 {
                     case CommunicationMode.RTU:
-                        _uart = new SerialPort(PortName, Baud, Parity, DataBits, StopBits);
-                        _uart.Open();
-                        var rtuServer = new ModbusServer(new ModbusRtuCodec()) { Address = ServerId };
-                        rtuServer.OutgoingData += LogOutgoingData;
-                        rtuServer.IncommingData += LogIncomingData;
-
-                        _listener = _uart.GetListener(rtuServer);
-                        _listener.ServeCommand += listener_ServeCommand;
-                        _listener.Start();
-
-                        AppendLog($"Connected using RTU to {PortName}");
+                        Server.PortName = PortName;
+                        Server.Baud = Baud;
+                        Server.Parity = Parity.Even;
+                        Server.DataBits = DataBits;
+                        Server.StopBits = StopBits;
                         break;
 
                     case CommunicationMode.UDP:
-                        _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-                        _socket.Bind(new IPEndPoint(IPAddress.Any, TcpPort));
-                        //create a server driver
-                        var udpServer = new ModbusServer(new ModbusTcpCodec()) { Address = ServerId };
-                        udpServer.OutgoingData += LogOutgoingData;
-                        udpServer.IncommingData += LogIncomingData;
-                        //listen for an incoming request
-                        _listener = _socket.GetUdpListener(udpServer);
-                        _listener.ServeCommand += listener_ServeCommand;
-                        _listener.Start();
-                        AppendLog($"Listening to UDP port {TcpPort}");
-                        break;
-
                     case CommunicationMode.TCP:
-                        _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                        _socket.Bind(new IPEndPoint(IPAddress.Any, TcpPort));
-                        _socket.Listen(10);
-
-                        //create a server driver
-                        _tcpServerThread = new Thread(TcpThreadWorker)
-                        {
-                            Name = $"{nameof(ServerViewModel)}.{nameof(TcpThreadWorker)}"
-                        };
-                        _tcpServerThread.Start();
-                        AppendLog($"Listening to TCP port {TcpPort}");
+                        Server.TcpPort = TcpPort;
                         break;
+                    
                 }
+
+                // Start the Server
+                Server.ConnectAndListen();
             }
             catch (Exception ex)
             {
@@ -116,132 +121,17 @@ namespace ModbusWpf.Server.ViewModels
 
         protected override async Task OnDisconnectCommandExecuteAsync()
         {
-            await DoDisconnectAsync().ConfigureAwait(false);
-            
-            AppendLog("Disconnected");
-        }
-
-        private async Task DoDisconnectAsync()
-        {
-            if (_listener != null)
-            {
-                _listener.Abort();
-                _listener = null;
-            }
-
-            if (_uart != null)
-            {
-                _uart.Close();
-                _uart.Dispose();
-                _uart = null;
-            }
-
-            if (_tcpServerThread?.IsAlive == true)
-            {
-                if (_tcpServerThread.Join(2000) == false)
-                {
-                    _socket?.Close(0);
-                    _tcpServerThread.Abort();
-                }
-
-                _tcpServerThread = null;
-            }
-
-            if (_socket != null)
-            {
-                _socket.Dispose();
-                _socket = null;
-            }
-
-            HasConnected = false;
+            Disconnect();
 
             await Task.CompletedTask;
         }
 
-
-        /// <summary>
-        /// Running thread handler
-        /// </summary>
-        protected void TcpThreadWorker()
+        private void Disconnect()
         {
-            var server = new ModbusServer(new ModbusTcpCodec()) { Address = ServerId };
-            server.IncommingData += LogIncomingData;
-            server.OutgoingData += LogOutgoingData;
-            try
-            {
-                while (_tcpServerThread.ThreadState == ThreadState.Running)
-                {
-                    //wait for an incoming connection
-                    _listener = _socket.GetTcpListener(server);
-                    _listener.ServeCommand += listener_ServeCommand;
-                    _listener.Start();
-                    AppendLog("Accepted connection.");
-                    Thread.Sleep(1);
-                }
-            }
-            catch (Exception ex)
-            {
-                string msg = ex.Message;
-                AppendLog(msg);
-            }
-
+            Server.Disconnect();
+            HasConnected = false;
         }
 
-        private void listener_ServeCommand(object sender, ServeCommandEventArgs e)
-        {
-            var command = (ModbusCommand)e.Data.UserData;
-
-            Thread.Sleep(ServerDelay);
-
-            //take the proper function command handler
-            switch (command.FunctionCode)
-            {
-                case ModbusCommand.FuncReadCoils:
-                case ModbusCommand.FuncReadInputDiscretes:
-                case ModbusCommand.FuncReadInputRegisters:
-                case ModbusCommand.FuncReadMultipleRegisters:
-                case ModbusCommand.FuncReadCustom:
-                    DoRead(command);
-                    break;
-
-                case ModbusCommand.FuncWriteCoil:
-                case ModbusCommand.FuncForceMultipleCoils:
-                case ModbusCommand.FuncWriteMultipleRegisters:
-                case ModbusCommand.FuncWriteSingleRegister:
-                    DoWrite(command);
-                    break;
-                default:
-                    AppendLog($"Illegal Function, expecting a valid function code {command.FunctionCode}.");
-                    //return an exception
-                    command.ExceptionCode = ModbusCommand.ErrorIllegalFunction;
-                    break;
-            }
-        }
-
-        private void DoRead(ModbusCommand command)
-        {
-            for (int i = 0; i < command.Count; i++)
-                command.Data[i] = _registerDataService[command.Offset + i];
-
-            AppendLog($"Sent data: Function code:{command.FunctionCode}, length = {command.Count}.");
-
-        }
-
-        private void DoWrite(ModbusCommand command)
-        {
-            var dataAddress = command.Offset;
-            if (command.Count + dataAddress > _registerDataService.RegisterData.Length)
-            {
-                AppendLog($"Received data exceeds maintained range, Received address: {dataAddress}, length={command.Count}.");
-                return;
-            }
-            for (int i = 0; i < command.Data.Length; i++)
-            {
-                _registerDataService[i + dataAddress] = command.Data[i];
-            }
-
-            AppendLog($"Received data: Function code: {command.FunctionCode}, length = {command.Data.Length}.");
-        }
         #endregion // Server Functionality
 
         #region BaseViewModel overrides
