@@ -26,11 +26,11 @@ namespace ModbusWpf.Common.Models
     {
         private int _registerNumber;
 
-        public RegisterDisplayModel(IRegisterDataService registerDataService, int registerNumber)
+        public RegisterDisplayModel(IModbusRegisterDataService modbusRegisterDataService, int registerNumber)
         {
-            RegisterDataService = registerDataService;
+            ModbusRegisterDataService = modbusRegisterDataService;
             RegisterNumber = registerNumber;
-            RegisterDataService.RegisterData[_registerNumber].RegisterValueChanged += OnRegisterValueChanged;
+            ModbusRegisterDataService.RegisterData[_registerNumber].RegisterValueChanged += OnRegisterValueChanged;
         }
 
         /// <summary>
@@ -45,25 +45,25 @@ namespace ModbusWpf.Common.Models
                 var oldValue = _registerNumber;
                 if (value != oldValue)
                 {
-                    if (RegisterDataService is not null)
+                    if (ModbusRegisterDataService is not null)
                     {
-                        if (RegisterDataService.RegisterData.Length < value + 1)
+                        if (ModbusRegisterDataService.RegisterData.Length < value + 1)
                             throw new IndexOutOfRangeException();
 
                         // remove register value changed handlers
-                        RegisterDataService.RegisterData[_registerNumber].RegisterValueChanged -= OnRegisterValueChanged;
+                        ModbusRegisterDataService.RegisterData[_registerNumber].RegisterValueChanged -= OnRegisterValueChanged;
 
-                        if (RegisterNumber < RegisterDataService.RegisterData.Length - 1)
-                            RegisterDataService.RegisterData[_registerNumber+1].RegisterValueChanged -= OnNextRegisterValueChanged;
+                        if (RegisterNumber < ModbusRegisterDataService.RegisterData.Length - 1)
+                            ModbusRegisterDataService.RegisterData[_registerNumber+1].RegisterValueChanged -= OnNextRegisterValueChanged;
                     }
 
                     _registerNumber = value;
 
-                    if (RegisterDataService is not null)
+                    if (ModbusRegisterDataService is not null)
                     {
-                        RegisterDataService.RegisterData[_registerNumber].RegisterValueChanged += OnRegisterValueChanged;
-                        if (RegisterNumber < RegisterDataService.RegisterData.Length - 1)
-                            RegisterDataService.RegisterData[_registerNumber+1].RegisterValueChanged += OnNextRegisterValueChanged;
+                        ModbusRegisterDataService.RegisterData[_registerNumber].RegisterValueChanged += OnRegisterValueChanged;
+                        if (RegisterNumber < ModbusRegisterDataService.RegisterData.Length - 1)
+                            ModbusRegisterDataService.RegisterData[_registerNumber+1].RegisterValueChanged += OnNextRegisterValueChanged;
                     }
                 }
             }
@@ -108,7 +108,7 @@ namespace ModbusWpf.Common.Models
 
         public DisplayFormat RepresentationKind { get; set; }
 
-        public IRegisterDataService RegisterDataService { get; }
+        public IModbusRegisterDataService ModbusRegisterDataService { get; }
 
         public override string ToString() => StringRepresentation;
 
@@ -136,7 +136,7 @@ namespace ModbusWpf.Common.Models
         {
             get
             {
-                ushort dataByte = RegisterDataService[RegisterNumber];
+                ushort dataByte = ModbusRegisterDataService[RegisterNumber];
 
                 return (dataByte & (1 << CoilNumber)) != 0;
             }
@@ -144,30 +144,30 @@ namespace ModbusWpf.Common.Models
             {
                 if (value)
                 {
-                    RegisterDataService[RegisterNumber] |= (ushort) (1 << CoilNumber);
+                    ModbusRegisterDataService[RegisterNumber] |= (ushort) (1 << CoilNumber);
                 }
                 else
                 {
-                    RegisterDataService[RegisterNumber] &= (ushort) ~(1 << CoilNumber);
+                    ModbusRegisterDataService[RegisterNumber] &= (ushort) ~(1 << CoilNumber);
                 }
             }
         }
 
         public ushort TargetRegisterValue
         {
-            get => RegisterDataService[RegisterNumber];
-            set => RegisterDataService[RegisterNumber] = value;
+            get => ModbusRegisterDataService[RegisterNumber];
+            set => ModbusRegisterDataService[RegisterNumber] = value;
         }
 
         public string FloatString
         {
             get
             {
-                if (RegisterNumber >= RegisterDataService.RegisterData.Length-1)
+                if (RegisterNumber >= ModbusRegisterDataService.RegisterData.Length-1)
                     return float.NaN.ToString();
 
-                ushort dataUshort1 = RegisterDataService[RegisterNumber];
-                ushort dataUshort2 = RegisterDataService[RegisterNumber + 1];
+                ushort dataUshort1 = ModbusRegisterDataService[RegisterNumber];
+                ushort dataUshort2 = ModbusRegisterDataService[RegisterNumber + 1];
 
                 var bytes = new byte[4];
 
@@ -180,7 +180,7 @@ namespace ModbusWpf.Common.Models
             }
             set
             {
-                if (RegisterNumber >= RegisterDataService.RegisterData.Length - 1)
+                if (RegisterNumber >= ModbusRegisterDataService.RegisterData.Length - 1)
                     throw new IndexOutOfRangeException();
 
                 if (!float.TryParse(value, NumberStyles.Any, CultureInfo.CurrentUICulture, out var fVal))
@@ -188,8 +188,8 @@ namespace ModbusWpf.Common.Models
 
                 var bytes = BitConverter.GetBytes(fVal);
 
-                RegisterDataService[RegisterNumber] = (ushort)((bytes[1] << 8) + bytes[0]);
-                RegisterDataService[RegisterNumber + 1] = (ushort)((bytes[3] << 8) + bytes[2]);
+                ModbusRegisterDataService[RegisterNumber] = (ushort)((bytes[1] << 8) + bytes[0]);
+                ModbusRegisterDataService[RegisterNumber + 1] = (ushort)((bytes[3] << 8) + bytes[2]);
             }
         }
 
@@ -197,11 +197,11 @@ namespace ModbusWpf.Common.Models
         {
             get
             {
-                if (RegisterNumber >= RegisterDataService.RegisterData.Length - 1)
+                if (RegisterNumber >= ModbusRegisterDataService.RegisterData.Length - 1)
                     return float.NaN.ToString();
 
-                ushort dataUshort1 = RegisterDataService[RegisterNumber];
-                ushort dataUshort2 = RegisterDataService[RegisterNumber + 1];
+                ushort dataUshort1 = ModbusRegisterDataService[RegisterNumber];
+                ushort dataUshort2 = ModbusRegisterDataService[RegisterNumber + 1];
 
                 var bytes = new byte[4];
 
@@ -214,7 +214,7 @@ namespace ModbusWpf.Common.Models
             }
             set
             {
-                if (RegisterNumber >= RegisterDataService.RegisterData.Length - 1)
+                if (RegisterNumber >= ModbusRegisterDataService.RegisterData.Length - 1)
                     throw new IndexOutOfRangeException();
 
                 if (!float.TryParse(value, out var fVal))
@@ -222,20 +222,20 @@ namespace ModbusWpf.Common.Models
 
                 var bytes = BitConverter.GetBytes(fVal);
 
-                RegisterDataService[RegisterNumber] = (ushort) ((bytes[3] << 8) + bytes[2]);
-                RegisterDataService[RegisterNumber + 1] = (ushort) ((bytes[1] << 8) + bytes[0]);
+                ModbusRegisterDataService[RegisterNumber] = (ushort) ((bytes[3] << 8) + bytes[2]);
+                ModbusRegisterDataService[RegisterNumber + 1] = (ushort) ((bytes[1] << 8) + bytes[0]);
             }
         }
 
         public string BinaryString
         {
-            get => Convert.ToString(RegisterDataService[RegisterNumber], 2).PadLeft(16, '0');
-            set => RegisterDataService[RegisterNumber] = Convert.ToUInt16(value, 2);
+            get => Convert.ToString(ModbusRegisterDataService[RegisterNumber], 2).PadLeft(16, '0');
+            set => ModbusRegisterDataService[RegisterNumber] = Convert.ToUInt16(value, 2);
         }
         public string HexString
         {
-            get => RegisterDataService[RegisterNumber].ToString("x4");
-            set => RegisterDataService[RegisterNumber] = Convert.ToUInt16(value, 16);
+            get => ModbusRegisterDataService[RegisterNumber].ToString("x4");
+            set => ModbusRegisterDataService[RegisterNumber] = Convert.ToUInt16(value, 16);
         }
     }
 }

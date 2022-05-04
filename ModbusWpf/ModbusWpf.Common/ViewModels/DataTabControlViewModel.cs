@@ -17,7 +17,7 @@ namespace ModbusWpf.Common.ViewModels
         public DataTabControlViewModel() : this(null)
         {
         }
-        public DataTabControlViewModel(IRegisterDataService registerDataService)
+        public DataTabControlViewModel(IModbusRegisterDataService modbusRegisterDataService)
         {
             ApplyAddressSelectionCommand = new TaskCommand(() => ApplyAddressSelectionExecuteAsync());
 
@@ -28,21 +28,21 @@ namespace ModbusWpf.Common.ViewModels
             DisplayFormatItemSource = Enum.GetValues(typeof(DisplayFormat));
 
 
-            if (registerDataService is null)
+            if (modbusRegisterDataService is null)
             {
-                registerDataService = ServiceLocator.Default.TryResolveType<IRegisterDataService>();
-                if (registerDataService is null)
+                modbusRegisterDataService = ServiceLocator.Default.TryResolveType<IModbusRegisterDataService>();
+                if (modbusRegisterDataService is null)
                 {
-                    registerDataService = new RegisterDataService();
-                    ServiceLocator.Default.RegisterInstance(typeof(IRegisterDataService), registerDataService);
+                    modbusRegisterDataService = new ModbusRegisterDataService();
+                    ServiceLocator.Default.RegisterInstance(typeof(IModbusRegisterDataService), modbusRegisterDataService);
                 }
             }
             
-            RegisterDataService = registerDataService;
+            ModbusRegisterDataService = modbusRegisterDataService;
             RegisterModels = new ObservableCollection<RegisterDisplayModel>();
         }
 
-        public IRegisterDataService RegisterDataService { get; }
+        public IModbusRegisterDataService ModbusRegisterDataService { get; }
 
         #endregion
 
@@ -109,9 +109,9 @@ namespace ModbusWpf.Common.ViewModels
 
         private async Task ClearDataExecuteAsync()
         {
-            for (var i = StartAddress; i + StartAddress < RegisterDataService.RegisterData.Length && i < DataLength+ StartAddress; i++)
+            for (var i = StartAddress; i + StartAddress < ModbusRegisterDataService.RegisterData.Length && i < DataLength+ StartAddress; i++)
             {
-                RegisterDataService[i] = 0;
+                ModbusRegisterDataService[i] = 0;
             }
 
             await Task.CompletedTask;
@@ -124,13 +124,13 @@ namespace ModbusWpf.Common.ViewModels
 
             RegisterModels.Clear();
             for (var i = StartAddress;
-                i < RegisterDataService.RegisterData.Length &&
+                i < ModbusRegisterDataService.RegisterData.Length &&
                 i < DataLength + StartAddress;
                 i++)
             {
                 var nCoils = (ModbusWpf.Common.Helpers.DisplayFormat.LED == DisplayFormat) ? 16 : 1;
 
-                var model = new RegisterDisplayModel(RegisterDataService, i)
+                var model = new RegisterDisplayModel(ModbusRegisterDataService, i)
                 {
                     RepresentationKind = DisplayFormat.Value,
                     CoilNumber = 0
@@ -140,7 +140,7 @@ namespace ModbusWpf.Common.ViewModels
                 // Add further coils, if display format is LED
                 for (var coil = 1; coil < nCoils; coil++)
                 {
-                    model = new RegisterDisplayModel(RegisterDataService, i)
+                    model = new RegisterDisplayModel(ModbusRegisterDataService, i)
                     {
                         RepresentationKind = DisplayFormat.Value,
                         CoilNumber = coil

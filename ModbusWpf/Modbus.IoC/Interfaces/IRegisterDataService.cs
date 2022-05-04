@@ -4,7 +4,7 @@ using Modbus.Ioc.Models;
 namespace Modbus.Ioc.Interfaces
 {
 
-    public interface IRegisterDataService
+    public interface IModbusRegisterDataService
     {
         IRegisterDataValue[] RegisterData { get; set; }
         ushort this[int index] { get; set; }

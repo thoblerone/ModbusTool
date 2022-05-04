@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Net;
+using System.Windows.Controls;
 using System.Windows.Data;
 
 namespace ModbusWpf.Common.Converters
@@ -11,6 +12,7 @@ namespace ModbusWpf.Common.Converters
         {
             if (value is not IPAddress address)
             {
+                //return Binding.DoNothing;
                 throw new ArgumentException("must specify a property of type IPAddress", nameof(value));
             }
 
@@ -23,7 +25,9 @@ namespace ModbusWpf.Common.Converters
                 return IPAddress.None;
 
             if (!IPAddress.TryParse(value as string, out var address))
-                throw new ArgumentException($"Could not parse '{value}' as type IPAddress", nameof(value));
+            {
+                return new ValidationResult(false, $"Could not parse '{value}' as type IPAddress");
+            }
 
             return address;
         }

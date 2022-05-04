@@ -158,17 +158,17 @@ namespace ModbusWpf.Common.ViewModels
         {
         }
 
-        public BaseViewModel(IDispatcherService dispatcherService, IRegisterDataService registerDataService)
+        public BaseViewModel(IDispatcherService dispatcherService, IModbusRegisterDataService modbusRegisterDataService)
         {
-            if (registerDataService is null)
+            if (modbusRegisterDataService is null)
             {
-                registerDataService = ServiceLocator.Default.TryResolveType<IRegisterDataService>();
-                if (registerDataService is null)
+                modbusRegisterDataService = ServiceLocator.Default.TryResolveType<IModbusRegisterDataService>();
+                if (modbusRegisterDataService is null)
                 {
-                    registerDataService = new RegisterDataService();
+                    modbusRegisterDataService = new ModbusRegisterDataService();
                 }
             }
-            ServiceLocator.Default.RegisterInstance(registerDataService);
+            ServiceLocator.Default.RegisterInstance(modbusRegisterDataService);
 
             dispatcherService ??= ServiceLocator.Default.ResolveType<IDispatcherService>();
 
@@ -189,7 +189,7 @@ namespace ModbusWpf.Common.ViewModels
             CommLogEntries = new ();
             DataTabItems = new()
             {
-                new DataTabControlViewModel(registerDataService)
+                new DataTabControlViewModel(modbusRegisterDataService)
                 {
                     StartAddress = Settings.Default.StartAddress,
                     DataLength = Settings.Default.DataLength,
@@ -203,9 +203,9 @@ namespace ModbusWpf.Common.ViewModels
                 AppendLog("first design mode log entry");
                 AppendLog("second design mode log entry");
 
-                DataTabItems.Add(new DataTabControlViewModel(registerDataService) {StartAddress = 1000, DisplayFormat = DisplayFormat.FloatReverse, DataLength = 32});
-                DataTabItems.Add(new DataTabControlViewModel(registerDataService) {StartAddress = 1500, DisplayFormat = DisplayFormat.Hex, DataLength = 16});
-                DataTabItems.Add(new DataTabControlViewModel(registerDataService) {StartAddress = 2000, DisplayFormat = DisplayFormat.LED, DataLength = 2});
+                DataTabItems.Add(new DataTabControlViewModel(modbusRegisterDataService) {StartAddress = 1000, DisplayFormat = DisplayFormat.FloatReverse, DataLength = 32});
+                DataTabItems.Add(new DataTabControlViewModel(modbusRegisterDataService) {StartAddress = 1500, DisplayFormat = DisplayFormat.Hex, DataLength = 16});
+                DataTabItems.Add(new DataTabControlViewModel(modbusRegisterDataService) {StartAddress = 2000, DisplayFormat = DisplayFormat.LED, DataLength = 2});
             }
 #endif
 
@@ -293,7 +293,7 @@ namespace ModbusWpf.Common.ViewModels
                 Multiselect = false
             };
 
-            var registerDataService = ServiceLocator.Default.TryResolveType<IRegisterDataService>();
+            var registerDataService = ServiceLocator.Default.TryResolveType<IModbusRegisterDataService>();
 
             if (registerDataService is null)
                 return;
