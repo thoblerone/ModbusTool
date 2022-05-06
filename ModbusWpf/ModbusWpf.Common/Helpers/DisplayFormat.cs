@@ -7,7 +7,7 @@
         Hex,
         Integer,
         FloatReverse,
-        // TODO_Float
+        Float,
         // TODO_Text
     }
 }

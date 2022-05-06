@@ -329,7 +329,7 @@ namespace ModbusWpf.Common.ViewModels
                             registerImportModel.HexString = strValue;
                         }
                         else if (v[1].Contains(CultureInfo.CurrentUICulture.NumberFormat.CurrencyDecimalSeparator)) // found decimal point -> must be 2 register float
-                        // bug: there's no way do distinguish between FloatReverse and the not yet implemented Float"Normal" representation
+                        // bug: there's no way do distinguish between FloatReverse and the Float"Normal" representation
                         {
                             fmt = DisplayFormat.FloatReverse;
                             registerImportModel.FloatReverseString = strValue;
@@ -356,8 +356,10 @@ namespace ModbusWpf.Common.ViewModels
                     r.Close();
                     SelectedDataTabItem.DataLength = Convert.ToUInt16(registerNumberValuePairs.Length);
 
-                    if (SelectedDataTabItem.DisplayFormat == DisplayFormat.FloatReverse)
+                    if (SelectedDataTabItem.DisplayFormat is (DisplayFormat?)DisplayFormat.FloatReverse or (DisplayFormat?)DisplayFormat.Float)
+                    {
                         SelectedDataTabItem.DataLength *= 2;
+                    }
 
                     SelectedDataTabItem.ApplyAddressSelectionCommand.Execute();
                 }
@@ -386,6 +388,7 @@ namespace ModbusWpf.Common.ViewModels
                 DisplayFormat.Binary => "_Binary_",
                 DisplayFormat.LED => "_LED_",
                 DisplayFormat.FloatReverse => "_FloatReverse_",
+                DisplayFormat.Float => "_Float_",
                 _ => throw new ArgumentOutOfRangeException()
             };
 
@@ -429,6 +432,9 @@ namespace ModbusWpf.Common.ViewModels
                                 break;
                             case DisplayFormat.FloatReverse:
                                 await streamWriter.WriteAsync(register.FloatReverseString).ConfigureAwait(false);
+                                break;
+                            case DisplayFormat.Float:
+                                await streamWriter.WriteAsync(register.FloatString).ConfigureAwait(false);
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException();

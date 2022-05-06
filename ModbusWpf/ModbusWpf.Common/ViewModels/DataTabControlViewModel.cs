@@ -147,9 +147,9 @@ namespace ModbusWpf.Common.ViewModels
                     };
                     RegisterModels.Add(model);
                 }
-                // the floating point representation consumes
+                // the floating point representations consume
                 // two registers for each value, so skip every second
-                if (DisplayFormat.Value == ModbusWpf.Common.Helpers.DisplayFormat.FloatReverse)
+                if (DisplayFormat.Value is ModbusWpf.Common.Helpers.DisplayFormat.FloatReverse or ModbusWpf.Common.Helpers.DisplayFormat.Float)
                     i++;
             }
 
