@@ -88,6 +88,9 @@ namespace ModbusWpf.Common.Models
                 case DisplayFormat.FloatReverse:
                     RaisePropertyChanged(nameof(FloatReverseString));
                     break;
+                case DisplayFormat.Float:
+                    RaisePropertyChanged(nameof(FloatString));
+                    break;
             }
             RaisePropertyChanged(nameof(StringRepresentation));
             //RaisePropertyChanged(nameof(FloatString));
@@ -96,11 +99,11 @@ namespace ModbusWpf.Common.Models
         // for floating point representations (requiring two registers)
         private void OnNextRegisterValueChanged(ushort oldValue, ushort newValue)
         {
-            if (RepresentationKind == DisplayFormat.FloatReverse)
+            if (RepresentationKind is DisplayFormat.FloatReverse or DisplayFormat.Float)
             {
                 RaisePropertyChanged(nameof(StringRepresentation));
                 RaisePropertyChanged(nameof(FloatReverseString));
-                //RaisePropertyChanged(nameof(FloatString));
+                RaisePropertyChanged(nameof(FloatString));
             }
         }
 
@@ -123,6 +126,7 @@ namespace ModbusWpf.Common.Models
                     DisplayFormat.Hex => $"{RepresentationKind}: {TargetRegisterValue:x4}",
                     DisplayFormat.Integer => $"{RepresentationKind}: {TargetRegisterValue}",
                     DisplayFormat.FloatReverse => $"{RepresentationKind}: {FloatReverseString}",
+                    DisplayFormat.Float => $"{RepresentationKind}: {FloatString}",
                     //case DisplayFormat.TODO_Float:
                     //    break;
                     //case DisplayFormat.TODO_Text:

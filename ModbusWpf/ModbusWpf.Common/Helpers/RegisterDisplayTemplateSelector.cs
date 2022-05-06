@@ -9,6 +9,7 @@ namespace ModbusWpf.Common.Helpers
         public DataTemplate LedTemplate { get; set; }
         public DataTemplate BinaryTemplate { get; set; }
         public DataTemplate FloatReverseTemplate { get; set; }
+        public DataTemplate FloatTemplate { get; set; }
         public DataTemplate HexTemplate { get; set; }
         public DataTemplate IntegerTemplate { get; set; }
 
@@ -23,6 +24,7 @@ namespace ModbusWpf.Common.Helpers
                 DisplayFormat.LED => LedTemplate,
                 DisplayFormat.Binary => BinaryTemplate,
                 DisplayFormat.FloatReverse => FloatReverseTemplate,
+                DisplayFormat.Float=> FloatTemplate,
                 DisplayFormat.Hex => HexTemplate,
                 DisplayFormat.Integer => IntegerTemplate,
                 _ => IntegerTemplate

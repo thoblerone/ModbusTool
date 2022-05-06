@@ -78,12 +78,21 @@
                     <TextBlock Text="(rFloat)" FontSize="8" Margin="3,0,0,0" VerticalAlignment="Center"/>
                 </StackPanel>
             </DataTemplate>
+            <DataTemplate x:Key="FloatTemplate">
+                <StackPanel Orientation="Horizontal" Margin="6,0,6,6" >
+                    <Label Content="{Binding RegisterNumber}" ContentStringFormat="{}{0}:" MinWidth="40" HorizontalContentAlignment="Right"/>
+                    <cc:ReturnKeyTextBox MinWidth="80"
+                                         Text="{Binding FloatString}" Margin="6,0,0,0"/>
+                    <TextBlock Text="(rFloat)" FontSize="8" Margin="3,0,0,0" VerticalAlignment="Center"/>
+                </StackPanel>
+            </DataTemplate>
 
             <helpers:RegisterDisplayTemplateSelector 
                 x:Key="RegisterDisplayTemplateSelector"
                 LedTemplate="{StaticResource LedTemplate}"
                 BinaryTemplate="{StaticResource BinaryTemplate}"
                 FloatReverseTemplate="{StaticResource FloatReverseTemplate}"
+                FloatTemplate="{StaticResource FloatTemplate}"
                 HexTemplate="{StaticResource HexTemplate}"
                 IntegerTemplate="{StaticResource UshortTemplate}"
             />
