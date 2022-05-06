@@ -19,20 +19,20 @@ namespace Modbus.Ioc.Services
         {
         }
 
-        public ModbusDataServer(IRegisterDataService registerData, ILog logger)
+        public ModbusDataServer(IModbusRegisterDataService modbusRegisterData, ILog logger)
         {
             Logger = logger ?? LogManager.GetCurrentClassLogger();
 
             // if the register data service is null, either take the
             // pre-registered one or instantiate the default implementation
-            registerData ??= ServiceLocator.Default.ResolveType<IRegisterDataService>();
-            if (registerData is null)
+            modbusRegisterData ??= ServiceLocator.Default.ResolveType<IModbusRegisterDataService>();
+            if (modbusRegisterData is null)
             {
-                Logger.Warning($"no {nameof(IRegisterDataService)} was specified for the {nameof(ModbusDataServer)} constructor. Creating and registering a default implementation.");
-                registerData =  new RegisterDataService();
-                ServiceLocator.Default.RegisterInstance(registerData);
+                Logger.Warning($"no {nameof(IModbusRegisterDataService)} was specified for the {nameof(ModbusDataServer)} constructor. Creating and registering a default implementation.");
+                modbusRegisterData =  new ModbusRegisterDataService();
+                ServiceLocator.Default.RegisterInstance(modbusRegisterData);
             }
-            RegisterDataService = registerData;
+            ModbusRegisterDataService = modbusRegisterData;
 
         }
 
@@ -40,7 +40,7 @@ namespace Modbus.Ioc.Services
         #region Server Functionality
         private ICommServer _listener;
         private Thread _tcpServerThread;
-        private IRegisterDataService RegisterDataService { get; }
+        private IModbusRegisterDataService ModbusRegisterDataService { get; }
 
         private ILog Logger { get; }
 
@@ -226,7 +226,7 @@ namespace Modbus.Ioc.Services
         private void DoRead(ModbusCommand command)
         {
             for (var i = 0; i < command.Count; i++)
-                command.Data[i] = RegisterDataService[command.Offset + i];
+                command.Data[i] = ModbusRegisterDataService[command.Offset + i];
 
             Logger.Info($"Sent data: Function code:{command.FunctionCode}, length = {command.Count}.");
 
@@ -235,7 +235,7 @@ namespace Modbus.Ioc.Services
         private void DoWrite(ModbusCommand command)
         {
             var dataAddress = command.Offset;
-            if (command.Count + dataAddress > RegisterDataService.RegisterData.Length)
+            if (command.Count + dataAddress > ModbusRegisterDataService.RegisterData.Length)
             {
                 var msgErr = $"Received data exceeds maintained range, Received address: {dataAddress}, length={command.Count}.";
                 Logger.Error(msgErr);
@@ -243,7 +243,7 @@ namespace Modbus.Ioc.Services
             }
             for (var i = 0; i < command.Data.Length; i++)
             {
-                RegisterDataService[i + dataAddress] = command.Data[i];
+                ModbusRegisterDataService[i + dataAddress] = command.Data[i];
             }
 
             var msgData = $"Received data: Function code: {command.FunctionCode}, length = {command.Data.Length}.";

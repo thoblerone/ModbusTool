@@ -4,11 +4,11 @@ using Modbus.Ioc.Models;
 
 namespace Modbus.Ioc.Services
 {
-    public class RegisterDataService : IRegisterDataService
+    public class ModbusRegisterDataService : IModbusRegisterDataService
     {
         public static int NumRegistersHeld = 65600;
 
-        public RegisterDataService()
+        public ModbusRegisterDataService()
         {
             RegisterData = new IRegisterDataValue[NumRegistersHeld];
 

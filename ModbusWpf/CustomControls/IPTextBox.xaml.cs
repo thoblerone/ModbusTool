@@ -24,10 +24,14 @@ namespace ModbusWpf.CustomControl
     /// ]]></example>
     public partial class IPTextBox : UserControl
     {
-        private static readonly List<Key> DigitKeys = new List<Key> { Key.D0, Key.D1, Key.D2, Key.D3, Key.D4, Key.D5, Key.D6, Key.D7, Key.D8, Key.D9 };
+        private static readonly List<Key> DigitKeys = new List<Key>
+        {
+            Key.D0, Key.D1, Key.D2, Key.D3, Key.D4, Key.D5, Key.D6, Key.D7, Key.D8, Key.D9,
+            Key.NumPad0, Key.NumPad1, Key.NumPad2, Key.NumPad3, Key.NumPad4, Key.NumPad5, Key.NumPad6, Key.NumPad7, Key.NumPad8, Key.NumPad9 
+        };
         private static readonly List<Key> MoveForwardKeys = new List<Key> { Key.Right };
         private static readonly List<Key> MoveBackwardKeys = new List<Key> { Key.Left };
-        private static readonly List<Key> OtherAllowedKeys = new List<Key> { Key.Tab, Key.Delete };
+        private static readonly List<Key> OtherAllowedKeys = new List<Key> { Key.Tab, Key.Delete, Key.Home, Key.End };
 
         private readonly List<TextBox> _segments = new List<TextBox>();
 
