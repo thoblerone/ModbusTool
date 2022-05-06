@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interfaces\IModbusDataServer.cs" />
+    <Compile Include="Interfaces\IModbusRegisterDataService.cs" />
     <Compile Include="Models\CommunicationMode.cs" />
     <Compile Include="Services\ModbusDataServer.cs" />
     <Compile Include="Services\RegisterDataService.cs" />

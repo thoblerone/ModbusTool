@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Threading.Tasks;
 using Modbus.Ioc.Interfaces;
 using Modbus.Ioc.Models;
@@ -96,7 +95,7 @@ namespace Modbus.Ioc.Services
 
             return (dataUshort1 << 16) + dataUshort2;
         }
-
+        >>>>> TODO: neues Projekt für Modbus Testfälle anlegen >>>
         public void SetIntValue(int index, int value)
         {
             if (index >= RegisterData.Length - 1)
