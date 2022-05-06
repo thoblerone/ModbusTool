@@ -8,6 +8,14 @@ namespace Modbus.Ioc.Interfaces
     {
         IRegisterDataValue[] RegisterData { get; set; }
         ushort this[int index] { get; set; }
+
+        float GetFloatValue(int index);
+        void SetFloatValue(int index, float value);
+        float GetFloatReverseValue(int index);
+        void SetFloatReverseValue(int index, float value);
+        int GetIntValue(int index);
+        void SetIntValue(int index, int value);
+
     }
 
     public delegate void RegisterValueChangedHandler(ushort oldValue, ushort newValue);
