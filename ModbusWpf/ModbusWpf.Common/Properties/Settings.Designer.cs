@@ -169,7 +169,7 @@ namespace ModbusWpf.Common.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Integer")]
+        [global::System.Configuration.DefaultSettingValueAttribute("FloatReverse")]
         public global::ModbusWpf.Common.Helpers.DisplayFormat DisplayFormat {
             get {
                 return ((global::ModbusWpf.Common.Helpers.DisplayFormat)(this["DisplayFormat"]));

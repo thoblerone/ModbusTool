@@ -22,7 +22,7 @@ namespace ModbusWpf.Common.ViewModels
             ApplyAddressSelectionCommand = new TaskCommand(() => ApplyAddressSelectionExecuteAsync());
 
             DisplayFormat = new DisplayFormat();
-            DisplayFormat = Helpers.DisplayFormat.Integer;
+            DisplayFormat = Helpers.DisplayFormat.UInt16;
 
             ClearDataCommand = new TaskCommand(() => ClearDataExecuteAsync());
             DisplayFormatItemSource = Enum.GetValues(typeof(DisplayFormat));
@@ -149,7 +149,9 @@ namespace ModbusWpf.Common.ViewModels
                 }
                 // the floating point representations consume
                 // two registers for each value, so skip every second
-                if (DisplayFormat.Value is ModbusWpf.Common.Helpers.DisplayFormat.FloatReverse or ModbusWpf.Common.Helpers.DisplayFormat.Float)
+                if (DisplayFormat.Value is ModbusWpf.Common.Helpers.DisplayFormat.FloatReverse 
+                                        or ModbusWpf.Common.Helpers.DisplayFormat.Float
+                                        or ModbusWpf.Common.Helpers.DisplayFormat.Int32)
                     i++;
             }
 

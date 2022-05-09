@@ -59,7 +59,7 @@ namespace ModbusWpf.Common.ViewModels
 
         public StopBits StopBits { get; set; }
 
-        internal DisplayFormat NewTabDisplayFormat { get; set; } = DisplayFormat.Integer;
+        internal DisplayFormat NewTabDisplayFormat { get; set; } = DisplayFormat.UInt16;
 
         public CommunicationMode CommunicationMode { get; set; } = CommunicationMode.TCP;
 
@@ -341,7 +341,7 @@ namespace ModbusWpf.Common.ViewModels
                         }
                         else
                         {
-                            fmt = DisplayFormat.Integer;
+                            fmt = DisplayFormat.UInt16;
                             registerImportModel.TargetRegisterValue = Convert.ToUInt16(v[1], 10);
                         }
 
@@ -356,7 +356,7 @@ namespace ModbusWpf.Common.ViewModels
                     r.Close();
                     SelectedDataTabItem.DataLength = Convert.ToUInt16(registerNumberValuePairs.Length);
 
-                    if (SelectedDataTabItem.DisplayFormat is (DisplayFormat?)DisplayFormat.FloatReverse or (DisplayFormat?)DisplayFormat.Float)
+                    if (SelectedDataTabItem.DisplayFormat is DisplayFormat.FloatReverse or DisplayFormat.Float or DisplayFormat.Int32)
                     {
                         SelectedDataTabItem.DataLength *= 2;
                     }
@@ -383,12 +383,13 @@ namespace ModbusWpf.Common.ViewModels
 
             string suffix = SelectedDataTabItem.DisplayFormat switch
             {
-                DisplayFormat.Integer => "_Decimal_",
+                DisplayFormat.UInt16 => "_Decimal_",
                 DisplayFormat.Hex => "_HEX_",
                 DisplayFormat.Binary => "_Binary_",
                 DisplayFormat.LED => "_LED_",
                 DisplayFormat.FloatReverse => "_FloatReverse_",
                 DisplayFormat.Float => "_Float_",
+                DisplayFormat.Int32 => "_Int32_",
                 _ => throw new ArgumentOutOfRangeException()
             };
 
@@ -420,7 +421,7 @@ namespace ModbusWpf.Common.ViewModels
 
                         switch (SelectedDataTabItem.DisplayFormat)
                         {
-                            case DisplayFormat.Integer:
+                            case DisplayFormat.UInt16:
                                 await streamWriter.WriteAsync(register.TargetRegisterValue.ToString()).ConfigureAwait(false);
                                 break;
                             case DisplayFormat.Hex:
@@ -435,6 +436,9 @@ namespace ModbusWpf.Common.ViewModels
                                 break;
                             case DisplayFormat.Float:
                                 await streamWriter.WriteAsync(register.FloatString).ConfigureAwait(false);
+                                break;
+                            case DisplayFormat.Int32:
+                                await streamWriter.WriteAsync(register.Int32String).ConfigureAwait(false);
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException();

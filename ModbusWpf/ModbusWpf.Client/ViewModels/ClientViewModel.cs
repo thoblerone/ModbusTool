@@ -25,7 +25,7 @@ namespace ModbusWpf.Client.ViewModels
         {
         }
 
-        public ClientViewModel(IDispatcherService dispatcherService, IRegisterDataService registerDataService)
+        public ClientViewModel(IDispatcherService dispatcherService, IModbusRegisterDataService registerDataService)
             : base(dispatcherService, registerDataService)
         {
             _pollingTimer = new DispatcherTimer();
@@ -115,7 +115,7 @@ namespace ModbusWpf.Client.ViewModels
         {
             try
             {
-                var registerDataService = ServiceLocator.Default.ResolveType<IRegisterDataService>();
+                var registerDataService = ServiceLocator.Default.ResolveType<IModbusRegisterDataService>();
 
                 var command = new ModbusCommand(function)
                 {
@@ -149,7 +149,7 @@ namespace ModbusWpf.Client.ViewModels
 
         private Task ExecuteReadCommandAsync(byte function)
         {
-            var registerDataService = ServiceLocator.Default.ResolveType<IRegisterDataService>();
+            var registerDataService = ServiceLocator.Default.ResolveType<IModbusRegisterDataService>();
 
             try
             {

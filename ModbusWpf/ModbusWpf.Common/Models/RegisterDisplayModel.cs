@@ -6,18 +6,6 @@ using ModbusWpf.Common.Helpers;
 
 namespace ModbusWpf.Common.Models
 {
-    public enum RepresentationKinds
-    {
-        FloatReverse,
-        Led,
-        Binary,
-        Hex,
-        Integer,
-        TODISCUSS_Float,
-        TODISCUSS_Text
-    }
-
-
     /// <summary>
     /// This class represents the information
     /// how to display the register data
@@ -82,7 +70,7 @@ namespace ModbusWpf.Common.Models
                 case DisplayFormat.Hex:
                     RaisePropertyChanged(nameof(HexString));
                     break;
-                case DisplayFormat.Integer:
+                case DisplayFormat.UInt16:
                     RaisePropertyChanged(nameof(TargetRegisterValue));
                     break;
                 case DisplayFormat.FloatReverse:
@@ -90,6 +78,9 @@ namespace ModbusWpf.Common.Models
                     break;
                 case DisplayFormat.Float:
                     RaisePropertyChanged(nameof(FloatString));
+                    break;
+                case DisplayFormat.Int32:
+                    RaisePropertyChanged(nameof(Int32String));
                     break;
             }
             RaisePropertyChanged(nameof(StringRepresentation));
@@ -99,11 +90,12 @@ namespace ModbusWpf.Common.Models
         // for floating point representations (requiring two registers)
         private void OnNextRegisterValueChanged(ushort oldValue, ushort newValue)
         {
-            if (RepresentationKind is DisplayFormat.FloatReverse or DisplayFormat.Float)
+            if (RepresentationKind is DisplayFormat.FloatReverse or DisplayFormat.Float or DisplayFormat.Int32)
             {
                 RaisePropertyChanged(nameof(StringRepresentation));
                 RaisePropertyChanged(nameof(FloatReverseString));
                 RaisePropertyChanged(nameof(FloatString));
+                RaisePropertyChanged(nameof(Int32String));
             }
         }
 
@@ -124,9 +116,10 @@ namespace ModbusWpf.Common.Models
                     DisplayFormat.LED => $"{RepresentationKind}: {BoolValue}",
                     DisplayFormat.Binary => $"{RepresentationKind}: {Convert.ToString(TargetRegisterValue, 2).PadLeft(16, '0')}",
                     DisplayFormat.Hex => $"{RepresentationKind}: {TargetRegisterValue:x4}",
-                    DisplayFormat.Integer => $"{RepresentationKind}: {TargetRegisterValue}",
+                    DisplayFormat.UInt16 => $"{RepresentationKind}: {TargetRegisterValue}",
                     DisplayFormat.FloatReverse => $"{RepresentationKind}: {FloatReverseString}",
                     DisplayFormat.Float => $"{RepresentationKind}: {FloatString}",
+                    DisplayFormat.Int32=> $"{RepresentationKind}: {Int32String}",
                     //case DisplayFormat.TODO_Float:
                     //    break;
                     //case DisplayFormat.TODO_Text:
@@ -175,10 +168,10 @@ namespace ModbusWpf.Common.Models
 
                 var bytes = new byte[4];
 
-                bytes[0] = (byte) (dataUshort1 % 255);
-                bytes[1] = (byte) ((dataUshort1 >> 8) % 255);
-                bytes[2] = (byte) (dataUshort2 % 255);
-                bytes[3] = (byte) ((dataUshort2 >> 8) % 255);
+                bytes[0] = (byte) (dataUshort1 % 256);
+                bytes[1] = (byte) ((dataUshort1 >> 8) % 256);
+                bytes[2] = (byte) (dataUshort2 % 256);
+                bytes[3] = (byte) ((dataUshort2 >> 8) % 256);
 
                 return System.BitConverter.ToSingle(bytes, 0).ToString("e3");
             }
@@ -228,6 +221,37 @@ namespace ModbusWpf.Common.Models
 
                 ModbusRegisterDataService[RegisterNumber] = (ushort) ((bytes[3] << 8) + bytes[2]);
                 ModbusRegisterDataService[RegisterNumber + 1] = (ushort) ((bytes[1] << 8) + bytes[0]);
+            }
+        }
+
+        public string Int32String
+        {
+            get
+            {
+                ushort dataUshort1 = ModbusRegisterDataService[RegisterNumber];
+                ushort dataUshort2 = ModbusRegisterDataService[RegisterNumber + 1];
+
+                var bytes = new byte[4];
+
+                bytes[0] = (byte)(dataUshort2 % 256);
+                bytes[1] = (byte)((dataUshort2 >> 8) % 256);
+                bytes[2] = (byte)(dataUshort1 % 256);
+                bytes[3] = (byte)((dataUshort1 >> 8) % 256);
+
+                return System.BitConverter.ToInt32(bytes, 0).ToString();
+            }
+            set
+            {
+                if (RegisterNumber >= ModbusRegisterDataService.RegisterData.Length - 1)
+                    throw new IndexOutOfRangeException();
+
+                if (!int.TryParse(value, NumberStyles.Any, CultureInfo.CurrentUICulture, out var iVal))
+                    iVal = 0;
+
+                var bytes = BitConverter.GetBytes(iVal);
+
+                ModbusRegisterDataService[RegisterNumber] = (ushort)((bytes[3] << 8) + bytes[2]);
+                ModbusRegisterDataService[RegisterNumber + 1] = (ushort)((bytes[1] << 8) + bytes[0]);
             }
         }
 

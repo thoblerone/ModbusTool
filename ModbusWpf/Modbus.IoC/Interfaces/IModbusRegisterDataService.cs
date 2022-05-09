@@ -9,8 +9,8 @@
         void SetFloatValue(int index, float value);
         float GetFloatReverseValue(int index);
         void SetFloatReverseValue(int index, float value);
-        int GetIntValue(int index);
-        void SetIntValue(int index, int value);
+        int GetInt32Value(int index);
+        void SetInt32Value(int index, int value);
 
     }
 }

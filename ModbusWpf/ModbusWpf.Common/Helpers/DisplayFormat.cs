@@ -5,7 +5,8 @@
         LED,
         Binary,
         Hex,
-        Integer,
+        UInt16,
+        Int32,
         FloatReverse,
         Float,
         // TODO_Text

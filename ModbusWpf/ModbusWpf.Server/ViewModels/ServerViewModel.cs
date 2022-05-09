@@ -23,12 +23,12 @@ namespace ModbusWpf.Server.ViewModels
         }
 
         public ServerViewModel(IDispatcherService dispatcherService,
-            IRegisterDataService registerDataService,
+            IModbusRegisterDataService registerDataService,
             IModbusDataServer serverService) 
             : base(dispatcherService, registerDataService)
         {
             // base class ensures the register data service is available
-            registerDataService = ServiceLocator.Default.ResolveType<IRegisterDataService>();
+            registerDataService = ServiceLocator.Default.ResolveType<IModbusRegisterDataService>();
 
             // if not injected via dependency injection, use the standard ModbusDataServer implementation
             if (serverService is null)

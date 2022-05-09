@@ -42,7 +42,7 @@
                         Text="{Binding TargetRegisterValue, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
                         Margin="12,0,0,0" 
                         MinWidth="40" />
-                    <TextBlock Text="(Ushort)" FontSize="8" Margin="3,0,0,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="(UInt16)" FontSize="8" Margin="3,0,0,0" VerticalAlignment="Center"/>
                 </StackPanel>
             </DataTemplate>
             <DataTemplate x:Key="BinaryTemplate">
@@ -55,7 +55,7 @@
                         VerticalContentAlignment="Center"/>
                     <cc:ReturnKeyTextBox Text="{Binding BinaryString}" 
                                          Margin="6,0,0,0" />
-                    <TextBlock Text="(binary)" FontSize="8" Margin="3,0,0,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="(bin)" FontSize="8" Margin="3,0,0,0" VerticalAlignment="Center"/>
                 </StackPanel>
             </DataTemplate>
             <DataTemplate x:Key="HexTemplate">
@@ -83,7 +83,15 @@
                     <Label Content="{Binding RegisterNumber}" ContentStringFormat="{}{0}:" MinWidth="40" HorizontalContentAlignment="Right"/>
                     <cc:ReturnKeyTextBox MinWidth="80"
                                          Text="{Binding FloatString}" Margin="6,0,0,0"/>
-                    <TextBlock Text="(rFloat)" FontSize="8" Margin="3,0,0,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="(Float)" FontSize="8" Margin="3,0,0,0" VerticalAlignment="Center"/>
+                </StackPanel>
+            </DataTemplate>            
+            <DataTemplate x:Key="Int32Template">
+                <StackPanel Orientation="Horizontal" Margin="6,0,6,6" >
+                    <Label Content="{Binding RegisterNumber}" ContentStringFormat="{}{0}:" MinWidth="40" HorizontalContentAlignment="Right"/>
+                    <cc:ReturnKeyTextBox MinWidth="80"
+                                         Text="{Binding Int32String}" Margin="6,0,0,0"/>
+                    <TextBlock Text="(Int32)" FontSize="8" Margin="3,0,0,0" VerticalAlignment="Center"/>
                 </StackPanel>
             </DataTemplate>
 
@@ -94,7 +102,8 @@
                 FloatReverseTemplate="{StaticResource FloatReverseTemplate}"
                 FloatTemplate="{StaticResource FloatTemplate}"
                 HexTemplate="{StaticResource HexTemplate}"
-                IntegerTemplate="{StaticResource UshortTemplate}"
+                UshortTemplate="{StaticResource UshortTemplate}"
+                Int32Template="{StaticResource Int32Template}"
             />
             
         </ResourceDictionary>
