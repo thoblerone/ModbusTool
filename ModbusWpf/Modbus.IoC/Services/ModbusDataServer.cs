@@ -15,9 +15,8 @@ namespace Modbus.Ioc.Services
 {
     public class ModbusDataServer : IModbusDataServer
     {
-        public ModbusDataServer() : this (null, null)
-        {
-        }
+        public ModbusDataServer() : this (null, null) { }
+        public ModbusDataServer(IModbusRegisterDataService modbusRegisterData) : this(modbusRegisterData, null){}
 
         public ModbusDataServer(IModbusRegisterDataService modbusRegisterData, ILog logger)
         {
