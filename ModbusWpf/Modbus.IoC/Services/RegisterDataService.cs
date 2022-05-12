@@ -15,7 +15,7 @@ namespace Modbus.Ioc.Services
 
             Parallel.For(0, NumRegistersHeld, i =>
             {
-                RegisterData[i] = new RegisterDataValue((ushort)i);
+                RegisterData[i] = new RegisterDataValue(0);
             });
         }
 
