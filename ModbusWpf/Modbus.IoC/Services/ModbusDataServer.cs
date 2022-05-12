@@ -79,7 +79,7 @@ namespace Modbus.Ioc.Services
                         _listener.Start();
 
                         //AppendLog($"Connected using RTU to {PortName}");
-                        Logger.Status($"Connected using RTU to {PortName}");
+                        Logger.Status($"{nameof(ModbusDataServer)} connected using RTU to {PortName}");
                         break;
 
                     case CommunicationMode.UDP:
@@ -93,7 +93,7 @@ namespace Modbus.Ioc.Services
                         _listener = _socket.GetUdpListener(udpServer);
                         _listener.ServeCommand += listener_ServeCommand;
                         _listener.Start();
-                        Logger.Status($"Listening to UDP port {TcpPort}");
+                        Logger.Status($"{nameof(ModbusDataServer)} is listening to UDP port {TcpPort}");
                         break;
 
                     case CommunicationMode.TCP:
@@ -108,7 +108,7 @@ namespace Modbus.Ioc.Services
                         };
                         _tcpServerThread.Start();
                         //AppendLog($"Listening to TCP port {TcpPort}");
-                        Logger.Status($"Listening to TCP port {TcpPort}");
+                        Logger.Status($"{nameof(ModbusDataServer)} is listening to TCP port {TcpPort}");
                         break;
                 }
             }
@@ -156,7 +156,7 @@ namespace Modbus.Ioc.Services
 
             HasConnected = false;
 
-            Logger.Status("Disconnected");
+            Logger.Status($"{nameof(ModbusDataServer)} disconnected");
         }
 
 
@@ -177,11 +177,15 @@ namespace Modbus.Ioc.Services
                     _listener.ServeCommand += listener_ServeCommand;
                     _listener.Start();
                     // AppendLog("Accepted connection.");
-                    Logger.Info("Accepted connection.");
+                    Logger.Info($"{nameof(ModbusDataServer)} accepted a connection.");
                     Thread.Sleep(1);
                 }
             }
-            catch (Exception ex)
+            catch (ThreadAbortException _)
+            {
+                Logger.Info($"{nameof(ModbusDataServer)} TCP worker thread aborted.");
+            }
+            catch (Exception ex) 
             {
                 string msg = ex.Message;
                 // AppendLog(msg);
@@ -227,7 +231,7 @@ namespace Modbus.Ioc.Services
             for (var i = 0; i < command.Count; i++)
                 command.Data[i] = ModbusRegisterDataService[command.Offset + i];
 
-            Logger.Info($"Sent data: Function code:{command.FunctionCode}, length = {command.Count}.");
+            Logger.Info($"{nameof(ModbusDataServer)} sent data: function code = {command.FunctionCode}, length = {command.Count}.");
 
         }
 
@@ -236,7 +240,7 @@ namespace Modbus.Ioc.Services
             var dataAddress = command.Offset;
             if (command.Count + dataAddress > ModbusRegisterDataService.RegisterData.Length)
             {
-                var msgErr = $"Received data exceeds maintained range, Received address: {dataAddress}, length={command.Count}.";
+                var msgErr = $"{nameof(ModbusDataServer)} received data exceeds maintained range, received address: {dataAddress}, length={command.Count}.";
                 Logger.Error(msgErr);
                 return;
             }
@@ -245,7 +249,7 @@ namespace Modbus.Ioc.Services
                 ModbusRegisterDataService[i + dataAddress] = command.Data[i];
             }
 
-            var msgData = $"Received data: Function code: {command.FunctionCode}, length = {command.Data.Length}.";
+            var msgData = $"{nameof(ModbusDataServer)} received data: function code = {command.FunctionCode}, length = {command.Data.Length}.";
             Logger.Info(msgData);
         }
         #endregion // Server Functionality
@@ -262,7 +266,7 @@ namespace Modbus.Ioc.Services
             {
                 hex.AppendFormat("{0:x2} ", data[i]);
             }
-            Logger.Info($"RX: {hex}");
+            Logger.Info($"{nameof(ModbusDataServer)} RX: {hex}");
         }
 
         protected void LogOutgoingData(byte[] data)
@@ -272,7 +276,7 @@ namespace Modbus.Ioc.Services
             var hex = new StringBuilder(data.Length * 2);
             foreach (byte b in data)
                 hex.AppendFormat("{0:x2} ", b);
-            Logger.Info($"TX: {hex}");
+            Logger.Info($"{nameof(ModbusDataServer)} TX: {hex}");
         }
         #endregion
     }
