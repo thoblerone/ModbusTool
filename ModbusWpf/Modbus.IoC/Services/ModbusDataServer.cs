@@ -60,6 +60,7 @@ namespace Modbus.Ioc.Services
         public int TcpPort { get; set; }
         public bool HasConnected { get; private set; }
         public int ServerDelay { get; set; }
+        public int TcpIdleTimeoutSeconds { get; set; }
 
         public void ConnectAndListen()
         {
@@ -173,7 +174,7 @@ namespace Modbus.Ioc.Services
                 while (_tcpServerThread.ThreadState == ThreadState.Running)
                 {
                     //wait for an incoming connection
-                    _listener = _socket.GetTcpListener(server);
+                    _listener = _socket.GetTcpListener(server, TcpIdleTimeoutSeconds);
                     _listener.ServeCommand += listener_ServeCommand;
                     _listener.Start();
                     // AppendLog("Accepted connection.");

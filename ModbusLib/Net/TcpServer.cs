@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Net.Sockets;
 using System.Threading;
 using ModbusLib.Protocols;
@@ -28,16 +29,19 @@ namespace ModbusLib
     {
         public TcpServer(
             Socket port,
-            IProtocol protocol)
+            IProtocol protocol,
+            int idleTimeoutSeconds)
             : base(port, protocol)
         {
+            IdleTimeoutSeconds = idleTimeoutSeconds;
         }
 
 
 
         private const int CacheSize = 300;
 
-        internal int IdleTimeout = 60;
+        // if there are no (further) incoming requests for this period of time, the server thread closes. Use 0 do keep listen without timeout
+        internal int IdleTimeoutSeconds;
 
         /// <summary>
         /// Running thread handler
@@ -46,7 +50,7 @@ namespace ModbusLib
         {
             Debug.Print("start");
             //start the local timer, which gets the session dying
-            int counter = IdleTimeout;
+            int counter = IdleTimeoutSeconds;
 
             using (var timer = new Timer(_ => counter--, null, 1000, 1000))
             {
@@ -54,7 +58,7 @@ namespace ModbusLib
                 ByteArrayWriter writer = null;
                 var buffer = new byte[CacheSize];
                 //loop, until the host closes, or the timer expires
-                while (_closing == false && counter > 0)
+                while (_closing == false && (counter > 0 || IdleTimeoutSeconds == 0))
                 {
                     //look for incoming data
                     int length = Port.Available;
@@ -90,7 +94,7 @@ namespace ModbusLib
                                     }
 
                                     //reset the timer
-                                    counter = IdleTimeout;
+                                    counter = IdleTimeoutSeconds;
                                     writer = null;
                                 }
                                 break;
@@ -100,6 +104,10 @@ namespace ModbusLib
                         }
                     }
                     Thread.Sleep(100);
+                }
+                if (counter == 0)
+                {
+                    Debug.Print($"{nameof(TcpServer)} idle timeout");
                 }
             }
             Port.Close();

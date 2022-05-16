@@ -15,6 +15,7 @@ namespace Modbus.Ioc.Interfaces
         int TcpPort { get; set; }
         bool HasConnected { get; }
         int ServerDelay { get; set; }
+        int TcpIdleTimeoutSeconds { get; set; }
         bool LogTransmissionsPaused { get; set; }
         
         void ConnectAndListen();

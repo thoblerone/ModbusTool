@@ -1,6 +1,7 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Net.Sockets;
-
+using System.Runtime.InteropServices;
 using ModbusLib.Protocols;
 
 /*
@@ -34,23 +35,23 @@ namespace ModbusLib
         }
 
 
-
         /// <summary>
         /// Return a concrete implementation of a TCP listener
         /// </summary>
         /// <param name="port"></param>
         /// <param name="protocol"></param>
+        /// <param name="idleTimeoutSeconds">if there are no (further) incoming requests for this period of time, the server thread closes</param>
         /// <returns></returns>
         public static ICommServer GetTcpListener(
             this Socket port,
-            IProtocol protocol)
+            IProtocol protocol, int idleTimeoutSeconds)
         {
             var client = port.Accept();
             Debug.Print("open");
 
             return new TcpServer(
                 client,
-                protocol);
+                protocol, idleTimeoutSeconds);
         }
 
 
