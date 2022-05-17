@@ -356,7 +356,7 @@ namespace ModbusWpf.Common.ViewModels
                     r.Close();
                     SelectedDataTabItem.DataLength = Convert.ToUInt16(registerNumberValuePairs.Length);
 
-                    if (SelectedDataTabItem.DisplayFormat is DisplayFormat.FloatReverse or DisplayFormat.Float or DisplayFormat.Int32)
+                    if (SelectedDataTabItem.DisplayFormat is DisplayFormat.FloatReverse /*or DisplayFormat.Float*/ or DisplayFormat.Int32)
                     {
                         SelectedDataTabItem.DataLength *= 2;
                     }
@@ -388,7 +388,7 @@ namespace ModbusWpf.Common.ViewModels
                 DisplayFormat.Binary => "_Binary_",
                 DisplayFormat.LED => "_LED_",
                 DisplayFormat.FloatReverse => "_FloatReverse_",
-                DisplayFormat.Float => "_Float_",
+                //DisplayFormat.Float => "_Float_",
                 DisplayFormat.Int32 => "_Int32_",
                 _ => throw new ArgumentOutOfRangeException()
             };
@@ -434,9 +434,10 @@ namespace ModbusWpf.Common.ViewModels
                             case DisplayFormat.FloatReverse:
                                 await streamWriter.WriteAsync(register.FloatReverseString).ConfigureAwait(false);
                                 break;
-                            case DisplayFormat.Float:
+                            /* TODO: Questionable
+                             case DisplayFormat.Float:
                                 await streamWriter.WriteAsync(register.FloatString).ConfigureAwait(false);
-                                break;
+                                break;*/
                             case DisplayFormat.Int32:
                                 await streamWriter.WriteAsync(register.Int32String).ConfigureAwait(false);
                                 break;

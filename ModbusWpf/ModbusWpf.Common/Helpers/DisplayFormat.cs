@@ -8,7 +8,7 @@
         UInt16,
         Int32,
         FloatReverse,
-        Float,
+        // Questionable: Float,
         // TODO_Text
     }
 }

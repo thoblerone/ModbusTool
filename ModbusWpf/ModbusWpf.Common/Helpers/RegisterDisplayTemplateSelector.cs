@@ -26,7 +26,7 @@ namespace ModbusWpf.Common.Helpers
                 DisplayFormat.LED => LedTemplate,
                 DisplayFormat.Binary => BinaryTemplate,
                 DisplayFormat.FloatReverse => FloatReverseTemplate,
-                DisplayFormat.Float=> FloatTemplate,
+                //DisplayFormat.Float=> FloatTemplate,
                 DisplayFormat.Hex => HexTemplate,
                 DisplayFormat.UInt16 => UshortTemplate,
                 DisplayFormat.Int32 => Int32Template,
