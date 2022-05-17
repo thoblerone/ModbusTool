@@ -111,7 +111,7 @@ namespace ModbusServer
                 while (_thread.ThreadState == ThreadState.Running)
                 {
                     //wait for an incoming connection
-                    _listener = _socket.GetTcpListener(server);
+                    _listener = _socket.GetTcpListener(server, 60);
                     _listener.ServeCommand += listener_ServeCommand;
                     _listener.Start();
                     AppendLog(String.Format("Accepted connection."));
