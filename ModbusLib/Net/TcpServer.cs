@@ -110,6 +110,7 @@ namespace ModbusLib
                     Debug.Print($"{nameof(TcpServer)} idle timeout");
                 }
             }
+            Port.Shutdown(SocketShutdown.Both);
             Port.Close();
             Debug.Print("close");
         }

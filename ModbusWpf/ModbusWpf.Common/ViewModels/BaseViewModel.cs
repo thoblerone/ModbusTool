@@ -184,7 +184,7 @@ namespace ModbusWpf.Common.ViewModels
 
             ExportCurrentTabDataCommand = new TaskCommand(OnExportCurrentTabDataCommandExecuteAsync);
             ImportCurrentTabDataCommand = new TaskCommand(OnImportCurrentTabDataCommandExecuteAsync);
-            ExecuteClientFunctionCommand = new TaskCommand<ClientFunctions>(OnExecuteClientFunctionCommandExecuteAsync);
+            ExecuteClientFunctionCommand = new TaskCommand<ClientFunctions>(OnExecuteClientFunctionCommandExecuteAsync, canDo => HasConnected);
 
             CommLogEntries = new ();
             DataTabItems = new()

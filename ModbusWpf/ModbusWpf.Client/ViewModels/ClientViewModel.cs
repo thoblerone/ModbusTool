@@ -147,7 +147,7 @@ namespace ModbusWpf.Client.ViewModels
             return Task.CompletedTask;
         }
 
-        private Task ExecuteReadCommandAsync(byte function)
+        private async Task ExecuteReadCommandAsync(byte function)
         {
             var registerDataService = ServiceLocator.Default.ResolveType<IModbusRegisterDataService>();
 
@@ -155,8 +155,8 @@ namespace ModbusWpf.Client.ViewModels
             {
                 var command = new ModbusCommand(function)
                 {
-                    Offset = SelectedDataTabItem.StartAddress, 
-                    Count = SelectedDataTabItem.DataLength, 
+                    Offset = SelectedDataTabItem.StartAddress,
+                    Count = SelectedDataTabItem.DataLength,
                     TransId = _transactionId++,
                     Data = new ushort[SelectedDataTabItem.DataLength]
                 };
@@ -183,12 +183,22 @@ namespace ModbusWpf.Client.ViewModels
                     AppendLog($"Failed to execute Read: Error code = {result.Status}");
                 }
             }
+            catch (SocketException eSocket)
+            {
+                AppendLog(eSocket.Message);
+                if (eSocket.SocketErrorCode == SocketError.ConnectionAborted ||
+                    eSocket.SocketErrorCode == SocketError.ConnectionReset)
+                {
+                    await OnDisconnectCommandExecuteAsync().ConfigureAwait(false);
+
+                }
+            }
             catch (Exception ex)
             {
                 AppendLog(ex.Message);
             }
 
-            return Task.CompletedTask;
+            //return Task.CompletedTask;
         }
 
 
