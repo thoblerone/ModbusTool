@@ -15,31 +15,37 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_0A4204E68181B3785A0FAB11D39ED22A"
+        "OwnerKey" = "8:_6E7311B7313342CF98B8F51313908EB8"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_0A4204E68181B3785A0FAB11D39ED22A"
+        "OwnerKey" = "8:_D7F95E4E801F4D1A9F927C7C420C57AF"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_0D5337D4F71B4024908169444EF8235C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_7863574F3047416F97162D368F5A37F1"
-        "OwnerKey" = "8:_UNDEFINED"
+        "MsmKey" = "8:_38CFAF67EA62E290A58F1C44423443F8"
+        "OwnerKey" = "8:_6E7311B7313342CF98B8F51313908EB8"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_86461D06F423FEF774DF5B543CAC3133"
-        "OwnerKey" = "8:_7863574F3047416F97162D368F5A37F1"
+        "MsmKey" = "8:_38CFAF67EA62E290A58F1C44423443F8"
+        "OwnerKey" = "8:_D7F95E4E801F4D1A9F927C7C420C57AF"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_86461D06F423FEF774DF5B543CAC3133"
-        "OwnerKey" = "8:_8FC32883FCA44B838F587139E8E5FBA5"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8FC32883FCA44B838F587139E8E5FBA5"
+        "MsmKey" = "8:_6E7311B7313342CF98B8F51313908EB8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -51,38 +57,32 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_DF7C73FFDF25560FB1818E95BA83E7FD"
-        "OwnerKey" = "8:_7863574F3047416F97162D368F5A37F1"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_DF7C73FFDF25560FB1818E95BA83E7FD"
-        "OwnerKey" = "8:_8FC32883FCA44B838F587139E8E5FBA5"
+        "MsmKey" = "8:_D7F95E4E801F4D1A9F927C7C420C57AF"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7863574F3047416F97162D368F5A37F1"
+        "OwnerKey" = "8:_0A4204E68181B3785A0FAB11D39ED22A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_8FC32883FCA44B838F587139E8E5FBA5"
+        "OwnerKey" = "8:_D7F95E4E801F4D1A9F927C7C420C57AF"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_DF7C73FFDF25560FB1818E95BA83E7FD"
+        "OwnerKey" = "8:_6E7311B7313342CF98B8F51313908EB8"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_86461D06F423FEF774DF5B543CAC3133"
+        "OwnerKey" = "8:_38CFAF67EA62E290A58F1C44423443F8"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -180,6 +180,37 @@
         }
         "File"
         {
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_0A4204E68181B3785A0FAB11D39ED22A"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Modbus.Common, Version=2.0.3.0, Culture=neutral, processorArchitecture=x86"
+                "ScatterAssemblies"
+                {
+                    "_0A4204E68181B3785A0FAB11D39ED22A"
+                    {
+                    "Name" = "8:Modbus.Common.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Modbus.Common.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_85BB8A8B169440968CA0E59D16D1565F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0D5337D4F71B4024908169444EF8235C"
             {
             "SourcePath" = "8:..\\..\\ModbusSlave\\Server.ico"
@@ -200,20 +231,20 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_86461D06F423FEF774DF5B543CAC3133"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_38CFAF67EA62E290A58F1C44423443F8"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Modbus.Common, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ModbusLib, Version=2.0.3.0, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
-                    "_86461D06F423FEF774DF5B543CAC3133"
+                    "_38CFAF67EA62E290A58F1C44423443F8"
                     {
-                    "Name" = "8:Modbus.Common.dll"
+                    "Name" = "8:ModbusLib.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:Modbus.Common.dll"
+            "SourcePath" = "8:ModbusLib.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_85BB8A8B169440968CA0E59D16D1565F"
@@ -249,37 +280,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_DF7C73FFDF25560FB1818E95BA83E7FD"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ModbusLib, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_DF7C73FFDF25560FB1818E95BA83E7FD"
-                    {
-                    "Name" = "8:ModbusLib.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:ModbusLib.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_85BB8A8B169440968CA0E59D16D1565F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
         }
@@ -361,7 +361,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ModbusTool"
         "ProductCode" = "8:{383556CA-16FD-4BBB-89C9-5E185B750ACF}"
-        "PackageCode" = "8:{6C8B142D-4A1C-4D12-B618-354D3EC7B078}"
+        "PackageCode" = "8:{9AFF5013-F896-42B1-98D0-78103E84F222}"
         "UpgradeCode" = "8:{7D7D77ED-D9DE-4C93-B7AD-264588E42392}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -481,60 +481,60 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_058C0312FAA041D1B641C7928A0FC1E0"
-            {
-            "Name" = "8:ModbusMaster"
-            "Arguments" = "8:"
-            "Description" = "8:"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:_7863574F3047416F97162D368F5A37F1"
-            "Folder" = "8:_3EB18DE793814B61B06FBD93A18FAD27"
-            "WorkingFolder" = "8:_85BB8A8B169440968CA0E59D16D1565F"
-            "Icon" = "8:_BD5A154BDBC34CDD94DBB4B79A4C7492"
-            "Feature" = "8:"
-            }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_2EA3AA068587466C8C422591DB01CE4A"
-            {
-            "Name" = "8:ModbusMaster (Active)"
-            "Arguments" = "8:"
-            "Description" = "8:"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:_7863574F3047416F97162D368F5A37F1"
-            "Folder" = "8:_01C035EADBEE4F56AD9507E0824B0334"
-            "WorkingFolder" = "8:_85BB8A8B169440968CA0E59D16D1565F"
-            "Icon" = "8:_BD5A154BDBC34CDD94DBB4B79A4C7492"
-            "Feature" = "8:"
-            }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_47FDF3BC6D4E48ABB1D24AFCDBFAEA72"
-            {
-            "Name" = "8:ModbusSlave (Active)"
-            "Arguments" = "8:"
-            "Description" = "8:"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:_8FC32883FCA44B838F587139E8E5FBA5"
-            "Folder" = "8:_01C035EADBEE4F56AD9507E0824B0334"
-            "WorkingFolder" = "8:_85BB8A8B169440968CA0E59D16D1565F"
-            "Icon" = "8:_0D5337D4F71B4024908169444EF8235C"
-            "Feature" = "8:"
-            }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_679A0C68931E45C1A3A5DCB4963E745E"
             {
-            "Name" = "8:ModbusSlave"
+            "Name" = "8:Modbus Slave"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_8FC32883FCA44B838F587139E8E5FBA5"
+            "Target" = "8:_D7F95E4E801F4D1A9F927C7C420C57AF"
             "Folder" = "8:_3EB18DE793814B61B06FBD93A18FAD27"
             "WorkingFolder" = "8:_85BB8A8B169440968CA0E59D16D1565F"
             "Icon" = "8:_0D5337D4F71B4024908169444EF8235C"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_B39B774BB4C047068257A7E945B10D9D"
+            {
+            "Name" = "8:Modbus Master"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_6E7311B7313342CF98B8F51313908EB8"
+            "Folder" = "8:_3EB18DE793814B61B06FBD93A18FAD27"
+            "WorkingFolder" = "8:_85BB8A8B169440968CA0E59D16D1565F"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_BE7E2A7FA80D4C42A498A459CF9107B7"
+            {
+            "Name" = "8:Modbus Server"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_D7F95E4E801F4D1A9F927C7C420C57AF"
+            "Folder" = "8:_01C035EADBEE4F56AD9507E0824B0334"
+            "WorkingFolder" = "8:_85BB8A8B169440968CA0E59D16D1565F"
+            "Icon" = "8:_0D5337D4F71B4024908169444EF8235C"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_C9DD0AA81F634B648CBF5F07AE57F3C0"
+            {
+            "Name" = "8:Modbus Client"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_6E7311B7313342CF98B8F51313908EB8"
+            "Folder" = "8:_01C035EADBEE4F56AD9507E0824B0334"
+            "WorkingFolder" = "8:_85BB8A8B169440968CA0E59D16D1565F"
+            "Icon" = "8:_BD5A154BDBC34CDD94DBB4B79A4C7492"
             "Feature" = "8:"
             }
         }
@@ -550,7 +550,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_70014BE0BC734E3983260EF1137CC76B"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:Finished"
+                    "DisplayName" = "8:Fertig"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdAdminFinishedDlg.wid"
@@ -581,7 +581,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_4F5748439A794D4188C87CFD3101D9AE"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:Welcome"
+                    "DisplayName" = "8:Willkommen"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdWelcomeDlg.wid"
@@ -629,7 +629,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_53B7C05DB2E9499799E0E9CCC6C1F7BF"
                     {
                     "Sequence" = "3:300"
-                    "DisplayName" = "8:Confirm Installation"
+                    "DisplayName" = "8:Installation bestätigen"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdConfirmDlg.wid"
@@ -651,7 +651,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_C451B7C3FEB746A1AF8C41B6116A80E4"
                     {
                     "Sequence" = "3:200"
-                    "DisplayName" = "8:Installation Folder"
+                    "DisplayName" = "8:Installationsordner"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdFolderDlg.wid"
@@ -701,7 +701,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_83D3EABB0CA5405D8679A3A52FAA6777"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:Progress"
+                    "DisplayName" = "8:Status"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdAdminProgressDlg.wid"
@@ -745,7 +745,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_18D7C111EA714C5B89F72F967EAC45E5"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:Progress"
+                    "DisplayName" = "8:Status"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdProgressDlg.wid"
@@ -789,7 +789,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_1618FCE5029145639CF9CCA2E3497C26"
                     {
                     "Sequence" = "3:300"
-                    "DisplayName" = "8:Confirm Installation"
+                    "DisplayName" = "8:Installation bestätigen"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdAdminConfirmDlg.wid"
@@ -811,7 +811,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_1FB87BF866F94A049F0DED9A6F824658"
                     {
                     "Sequence" = "3:200"
-                    "DisplayName" = "8:Installation Folder"
+                    "DisplayName" = "8:Installationsordner"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdAdminFolderDlg.wid"
@@ -833,7 +833,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_38F15E3C018E4F3CBE151B8B6BFC6D95"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:Welcome"
+                    "DisplayName" = "8:Willkommen"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdAdminWelcomeDlg.wid"
@@ -890,7 +890,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_CD88FC11482E40EA9B4D19C3782E73BF"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:Finished"
+                    "DisplayName" = "8:Fertig"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdFinishedDlg.wid"
@@ -936,9 +936,9 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_7863574F3047416F97162D368F5A37F1"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_6E7311B7313342CF98B8F51313908EB8"
             {
-            "SourcePath" = "8:..\\..\\ModbusMaster\\obj\\Release\\ModbusMaster.exe"
+            "SourcePath" = "8:..\\..\\ModbusMaster\\obj\\x86\\Release\\ModbusClient.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_85BB8A8B169440968CA0E59D16D1565F"
@@ -964,9 +964,9 @@
                 {
                 }
             }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_8FC32883FCA44B838F587139E8E5FBA5"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_D7F95E4E801F4D1A9F927C7C420C57AF"
             {
-            "SourcePath" = "8:..\\..\\ModbusSlave\\obj\\Release\\ModbusSlave.exe"
+            "SourcePath" = "8:..\\..\\ModbusSlave\\obj\\x86\\Release\\ModbusServer.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_85BB8A8B169440968CA0E59D16D1565F"
