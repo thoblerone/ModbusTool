@@ -47,17 +47,14 @@ namespace ModbusWpf.CustomControl
         }
 
         public static readonly DependencyProperty AddressProperty = DependencyProperty.Register(
-            "Address", typeof(string), typeof(IPTextBox), new FrameworkPropertyMetadata(default(string), AddressChanged)
+            nameof(Address), typeof(string), typeof(IPTextBox), new FrameworkPropertyMetadata(default(string), AddressChanged)
             {
                 BindsTwoWayByDefault = true
             });
 
         private static void AddressChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
         {
-            var ipTextBox = dependencyObject as IPTextBox;
-            var text = e.NewValue as string;
-
-            if (text != null && ipTextBox != null)
+            if (e.NewValue is string text && dependencyObject is IPTextBox ipTextBox)
             {
                 ipTextBox._suppressAddressUpdate = true;
                 var i = 0;
