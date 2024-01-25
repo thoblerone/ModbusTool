@@ -32,6 +32,7 @@
             Modbus.Common.DataTab dataTab2;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BaseForm));
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.buttonSave = new System.Windows.Forms.Button();
             this.buttonPauseLog = new System.Windows.Forms.Button();
             this.listBoxCommLog = new System.Windows.Forms.ListBox();
             this.buttonClear = new System.Windows.Forms.Button();
@@ -89,8 +90,34 @@
             this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
+            // dataTab1
+            // 
+            dataTab1.DataLength = ((ushort)(127));
+            dataTab1.DisplayFormat = Modbus.Common.DisplayFormat.Integer;
+            dataTab1.Location = new System.Drawing.Point(3, 3);
+            dataTab1.Name = "dataTab1";
+            dataTab1.RegisterData = new ushort[0];
+            dataTab1.ShowDataLength = false;
+            dataTab1.Size = new System.Drawing.Size(839, 406);
+            dataTab1.StartAddress = ((ushort)(4100));
+            dataTab1.TabIndex = 0;
+            // 
+            // dataTab2
+            // 
+            dataTab2.DataLength = ((ushort)(127));
+            dataTab2.DisplayFormat = Modbus.Common.DisplayFormat.LED;
+            dataTab2.Location = new System.Drawing.Point(3, 3);
+            dataTab2.Name = "dataTab2";
+            dataTab2.RegisterData = new ushort[] {
+        ((ushort)(0))};
+            dataTab2.ShowDataLength = false;
+            dataTab2.Size = new System.Drawing.Size(839, 406);
+            dataTab2.StartAddress = ((ushort)(4100));
+            dataTab2.TabIndex = 0;
+            // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.buttonSave);
             this.groupBox4.Controls.Add(this.buttonPauseLog);
             this.groupBox4.Controls.Add(this.listBoxCommLog);
             this.groupBox4.Controls.Add(this.buttonClear);
@@ -101,9 +128,18 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Communication Log";
             // 
+            // buttonSave
+            // 
+            this.buttonSave.Location = new System.Drawing.Point(760, 19);
+            this.buttonSave.Name = "buttonSave";
+            this.buttonSave.Size = new System.Drawing.Size(86, 28);
+            this.buttonSave.TabIndex = 26;
+            this.buttonSave.Text = "Save";
+            this.buttonSave.Click += new System.EventHandler(this.buttonSaveLog_ClickAsync);
+            // 
             // buttonPauseLog
             // 
-            this.buttonPauseLog.Location = new System.Drawing.Point(660, 19);
+            this.buttonPauseLog.Location = new System.Drawing.Point(576, 19);
             this.buttonPauseLog.Name = "buttonPauseLog";
             this.buttonPauseLog.Size = new System.Drawing.Size(86, 28);
             this.buttonPauseLog.TabIndex = 25;
@@ -123,7 +159,7 @@
             // 
             // buttonClear
             // 
-            this.buttonClear.Location = new System.Drawing.Point(752, 19);
+            this.buttonClear.Location = new System.Drawing.Point(668, 19);
             this.buttonClear.Name = "buttonClear";
             this.buttonClear.Size = new System.Drawing.Size(86, 28);
             this.buttonClear.TabIndex = 24;
@@ -514,7 +550,7 @@
             // 
             // donate
             // 
-            this.donate.Image = global::Modbus.Common.Properties.Resources.btn_donateCC_LG;
+            this.donate.Image = global::Modbus.Common.Properties.Resources.default_yellowS2;
             this.donate.Location = new System.Drawing.Point(691, 77);
             this.donate.Name = "donate";
             this.donate.Size = new System.Drawing.Size(154, 61);
@@ -546,18 +582,6 @@
             this.tabPage1.Text = "Address1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // dataTab1
-            // 
-            dataTab1.DataLength = ((ushort)(127));
-            dataTab1.DisplayFormat = Modbus.Common.DisplayFormat.Integer;
-            dataTab1.Location = new System.Drawing.Point(3, 3);
-            dataTab1.Name = "dataTab1";
-            dataTab1.RegisterData = new ushort[0];
-            dataTab1.ShowDataLength = false;
-            dataTab1.Size = new System.Drawing.Size(839, 406);
-            dataTab1.StartAddress = ((ushort)(4100));
-            dataTab1.TabIndex = 0;
-            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(dataTab2);
@@ -568,19 +592,6 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "...";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // dataTab2
-            // 
-            dataTab2.DataLength = ((ushort)(127));
-            dataTab2.DisplayFormat = Modbus.Common.DisplayFormat.LED;
-            dataTab2.Location = new System.Drawing.Point(3, 3);
-            dataTab2.Name = "dataTab2";
-            dataTab2.RegisterData = new ushort[] {
-        ((ushort)(0))};
-            dataTab2.ShowDataLength = false;
-            dataTab2.Size = new System.Drawing.Size(839, 406);
-            dataTab2.StartAddress = ((ushort)(4100));
-            dataTab2.TabIndex = 0;
             // 
             // BaseForm
             // 
@@ -662,5 +673,6 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Button donate;
+        protected System.Windows.Forms.Button buttonSave;
     }
 }
