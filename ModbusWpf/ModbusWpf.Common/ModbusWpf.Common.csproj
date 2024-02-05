@@ -55,6 +55,7 @@
     <Compile Include="Helpers\DisplayFormat.cs" />
     <Compile Include="Helpers\RegisterDisplayTemplateSelector.cs" />
     <Compile Include="Models\RegisterDisplayModel.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\DataTabControlViewModel.cs" />
     <Compile Include="ViewModels\ReusingBaseViewModel.cs" />

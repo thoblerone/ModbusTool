@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Eventing.Reader;
 using System.Globalization;
 using Catel.Data;
 using Modbus.Ioc.Interfaces;
@@ -218,7 +219,26 @@ namespace ModbusWpf.Common.Models
                     throw new IndexOutOfRangeException();
 
                 if (!float.TryParse(value, out var fVal))
-                    fVal = 0;
+                {
+                    // special handling for +/- Infinity and NaN
+                    var valueUpperTrimmed = value.Trim().ToUpperInvariant();
+                    if (valueUpperTrimmed.Equals(CultureInfo.CurrentUICulture.NumberFormat.PositiveInfinitySymbol.ToUpperInvariant()))
+                    {
+                        fVal = float.PositiveInfinity;
+                    }
+                    else if(valueUpperTrimmed.Equals(CultureInfo.CurrentUICulture.NumberFormat.NegativeInfinitySymbol.ToUpperInvariant()))
+                    {
+                        fVal = float.NegativeInfinity;
+                    }
+                    else if (valueUpperTrimmed.Equals(CultureInfo.CurrentUICulture.NumberFormat.NaNSymbol.ToUpperInvariant()))
+                    {
+                        fVal = float.NaN;
+                    }
+                    else
+                    {
+                        fVal = 0;
+                    }
+                }
 
                 var bytes = BitConverter.GetBytes(fVal);
 
