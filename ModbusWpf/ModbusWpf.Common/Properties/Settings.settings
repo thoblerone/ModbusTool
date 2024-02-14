@@ -38,7 +38,7 @@
     <Setting Name="StopBits" Type="System.IO.Ports.StopBits" Scope="User">
       <Value Profile="(Default)">One</Value>
     </Setting>
-    <Setting Name="DisplayFormat" Type="ModbusWpf.Common.Helpers.DisplayFormat" Scope="User">
+    <Setting Name="DisplayFormat" Type="Modbus.Common.DisplayFormat" Scope="User">
       <Value Profile="(Default)">Int32</Value>
     </Setting>
   </Settings>
