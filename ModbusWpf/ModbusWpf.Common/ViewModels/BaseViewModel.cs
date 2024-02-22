@@ -460,29 +460,29 @@ namespace ModbusWpf.Common.ViewModels
         }
 
         // function templates for the Client implementation
-        #pragma warning disable 1998
+        //#pragma warning disable 1998
         public TaskCommand ClientListenCommand { get; }
-        protected virtual async Task OnClientListenCommandExecuteAsync()
+        protected virtual Task OnClientListenCommandExecuteAsync()
         {
             throw new NotImplementedException("Implement in sub class");
         }
         public TaskCommand DisconnectCommand { get; }
-        protected virtual async Task OnDisconnectCommandExecuteAsync()
+        protected virtual Task OnDisconnectCommandExecuteAsync()
         {
             throw new NotImplementedException("Implement in sub class");
         }
 
         public TaskCommand ServerListenCommand { get; }
-        protected virtual async Task OnServerListenCommandExecuteAsync()
+        protected virtual Task OnServerListenCommandExecuteAsync()
         {
             throw new NotImplementedException("Implement in sub class");
         }
-        #pragma warning restore 1998
+        //#pragma warning restore 1998
 
         public TaskCommand DonateCommand { get; }
         private async Task OnDonateCommandExecuteAsync()
         {
-            string url = "https://paypal.me/classicdiy?country.x=CA&locale.x=en_US";
+            string url = "https://www.buymeacoffee.com/r4k2hib";
             Process.Start(url);
 
             await Task.CompletedTask;

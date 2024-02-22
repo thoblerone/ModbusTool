@@ -209,7 +209,7 @@
             <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                 <GroupBox Header="If you find this useful ..." >
                     <Button Command="{Binding DonateCommand}">
-                        <Image Source="btn_donateCC_LG.gif" Width="147" Height="47" />
+                        <Image Source="default-yellowS2.png" Width="147" Height="47" />
                     </Button>
                 </GroupBox>
             </StackPanel>
