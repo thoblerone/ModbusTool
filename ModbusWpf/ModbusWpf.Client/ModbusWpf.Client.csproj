@@ -104,10 +104,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\CommonControls\Modbus.Common.csproj">
-      <Project>{08DFFA18-CFB1-477B-B5AB-FDE3123007FF}</Project>
-      <Name>Modbus.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\ModbusLib\ModbusLib.csproj">
       <Project>{85C7E0A0-B14A-40C8-AD52-2475111AE822}</Project>
       <Name>ModbusLib</Name>
@@ -135,6 +131,10 @@
     </PackageReference>
     <PackageReference Include="Catel.MVVM">
       <Version>5.12.22</Version>
+    </PackageReference>
+    <PackageReference Include="Costura.Fody">
+      <Version>4.1.0</Version>
+      <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

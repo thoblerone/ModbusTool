@@ -135,5 +135,8 @@
       <Link>Views\btn_donateCC_LG.gif</Link>
     </Resource>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\default-yellowS2.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
