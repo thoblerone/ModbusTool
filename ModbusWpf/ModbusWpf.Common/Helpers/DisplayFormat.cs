@@ -9,6 +9,6 @@
         Int32,
         FloatReverse,
         // Questionable: Float,
-        // TODO_Text
+        Text
     }
 }

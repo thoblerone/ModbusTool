@@ -15,6 +15,8 @@ namespace ModbusWpf.Common.Helpers
 
         public DataTemplate Int32Template { get; set; }
 
+        public DataTemplate TextTemplate { get; set; }
+
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             var model = item as RegisterDisplayModel;
@@ -30,6 +32,7 @@ namespace ModbusWpf.Common.Helpers
                 DisplayFormat.Hex => HexTemplate,
                 DisplayFormat.UInt16 => UshortTemplate,
                 DisplayFormat.Int32 => Int32Template,
+                DisplayFormat.Text => TextTemplate,
                 _ => UshortTemplate
             };
         }

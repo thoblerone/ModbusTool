@@ -84,6 +84,9 @@ namespace ModbusWpf.Common.Models
                 case DisplayFormat.Int32:
                     RaisePropertyChanged(nameof(Int32String));
                     break;
+                case DisplayFormat.Text:
+                    RaisePropertyChanged(nameof(TextString));
+                    break;
             }
             RaisePropertyChanged(nameof(StringRepresentation));
             //RaisePropertyChanged(nameof(FloatString));
@@ -125,6 +128,7 @@ namespace ModbusWpf.Common.Models
                     //TODO: Questionable
                     //DisplayFormat.Float => $"{RepresentationKind}: {FloatString}",
                     DisplayFormat.Int32=> $"{RepresentationKind}: {Int32String}",
+                    DisplayFormat.Text=> $"{RepresentationKind}: {TextString}",
                     //case DisplayFormat.TODO_Text:
                     //    break;
                     _ => throw new ArgumentOutOfRangeException(),
@@ -287,6 +291,30 @@ namespace ModbusWpf.Common.Models
         {
             get => ModbusRegisterDataService[RegisterNumber].ToString("x4");
             set => ModbusRegisterDataService[RegisterNumber] = Convert.ToUInt16(value, 16);
+        }
+
+        public string TextString
+        {
+            get
+            {
+                var c = (char) ModbusRegisterDataService[RegisterNumber];
+                if (c != (char) 0)
+                {
+                    return c.ToString();
+                }
+                else
+                {
+                    return "\\0";
+                }
+            }
+            set
+            {
+                var c = (char)0;
+                if (!string.IsNullOrEmpty(value) && value.Length >= 1 && !"\\0".Equals(value))
+                    c = value[0];
+
+                ModbusRegisterDataService[RegisterNumber] = Convert.ToUInt16(c);
+            }
         }
     }
 }

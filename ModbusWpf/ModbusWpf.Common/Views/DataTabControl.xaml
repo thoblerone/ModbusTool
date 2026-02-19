@@ -94,6 +94,14 @@
                     <TextBlock Text="(Int32)" FontSize="8" Margin="3,0,0,0" VerticalAlignment="Center"/>
                 </StackPanel>
             </DataTemplate>
+            <DataTemplate x:Key="TextTemplate">
+                <StackPanel Orientation="Horizontal" Margin="6,0,6,6" >
+                    <Label Content="{Binding RegisterNumber}" ContentStringFormat="{}{0}:" MinWidth="40" HorizontalContentAlignment="Right"/>
+                    <cc:ReturnKeyTextBox MinWidth="80"
+                                         Text="{Binding TextString}" Margin="6,0,0,0"/>
+                    <TextBlock Text="(Text)" FontSize="8" Margin="3,0,0,0" VerticalAlignment="Center"/>
+                </StackPanel>
+            </DataTemplate>
 
             <helpers:RegisterDisplayTemplateSelector 
                 x:Key="RegisterDisplayTemplateSelector"
@@ -104,6 +112,7 @@
                 HexTemplate="{StaticResource HexTemplate}"
                 UshortTemplate="{StaticResource UshortTemplate}"
                 Int32Template="{StaticResource Int32Template}"
+                TextTemplate="{StaticResource TextTemplate}"
             />
             
         </ResourceDictionary>
